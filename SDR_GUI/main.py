@@ -33,7 +33,7 @@ from mttkinter import mtTkinter
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import Gauge
+import gauge
 import RelaySwitch
 import PandID
 
@@ -194,11 +194,13 @@ if __name__ == '__main__':
     global a, b, c, d # tkinter window rows
     global g1, g2, g3, g4 # gauge objects
 
+
 	###########################################################
 	# Main application local variables                        #
 	###########################################################
     pad = 10 # Spacing constants within GUI
     gridLen = 85
+
 
 	###########################################################
 	# Object and windows initialization                       #
@@ -256,16 +258,16 @@ if __name__ == '__main__':
     off.pack(pady=pad)
 
 	# Sensor gauges
-    g1 = Gauge.Gauge(g, 'black', 5)
+    g1 = gauge.gauge(g, 'black', 5)
     g1.setText("Nan", "A0")
     g1.getWidget().pack(side="left")
-    g2 = Gauge.Gauge(g, 'black', 5)
+    g2 = gauge.gauge(g, 'black', 5)
     g2.setText("Nan", "A1")
     g2.getWidget().pack(side="left")
-    g3 = Gauge.Gauge(h, 'black', 5)
+    g3 = gauge.gauge(h, 'black', 5)
     g3.setText("Nan", "A2")
     g3.getWidget().pack(side="left")
-    g4 = Gauge.Gauge(h, 'black', 5)
+    g4 = gauge.gauge(h, 'black', 5)
     g4.setText("Nan", "A3")
     g4.getWidget().pack(side="right")
     g.pack()

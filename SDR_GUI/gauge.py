@@ -1,13 +1,25 @@
-# !/usr/bin/env python3
+###############################################################
+#                                                             #
+# gauge.py -- contains gauge object for displaying sensor     #
+#             data on GUI                                     #
+#                                                             #
+# Author: Nitish Chennoju, Colton Acosta                      #
+# Date: 6/12/2022                                             #
+# Sun Devil Rocketry Avionics                                 #
+#                                                             #
+###############################################################
+
+
+###############################################################
+# Standard Imports                                            #
+###############################################################
 from tkinter import *
 
-#UNCOMMENT IF TESTING
-'''import tkinter as tk
-import time
-import math
-import random'''
 
-class Gauge:
+###############################################################
+# Objects                                                     #
+###############################################################
+class gauge:
 
     def __init__(self, root, background, max):
         self.startAngle = -30
@@ -43,28 +55,3 @@ class Gauge:
     def setText(self, str, label):
         self.c.itemconfig(self.readout, text=str)
         self.c.itemconfig(self.label, text=label)
-
-
-
-
-#GAUGE TEST CODE
-'''win = tk.Tk()
-win.title("Gauge ELement")
-win.geometry("800x200")
-win.configure(bg='black')
-
-g = Gauge(win, 'black', 5)
-g.getWidget().pack(side='bottom')
-while True:
-
-    for i in range(6):
-        g.setAngle(i)
-        time.sleep(0.1)
-        win.update()
-
-    for i in range(6):
-        g.setAngle(5-i)
-        time.sleep(0.1)
-        win.update()
-
-win.mainloop()'''
