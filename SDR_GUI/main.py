@@ -200,15 +200,18 @@ if __name__ == '__main__':
     pad = 10 # Spacing constants within GUI
     gridLen = 85
 
+	###########################################################
+	# Object and windows initialization                       #
+	###########################################################
+
     #ACTION HANDLER THREAD (checks for startup button press)
     thread = threading.Thread(target=actionHandler)
     thread.start()
 
     # Initialize GUI Windows
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  # P&ID diagram window
-
-    root = tk.Tk(mt_debug = 1)
-    root.title("Engine Dashboard");
+    root = tk.Tk(mt_debug = 1) # root window
+    root.title("Engine Dashboard")
     root.configure(background="black")
 
     tk.Label(root, text="Engine Dashboard", bg="black", fg="white", font="Arial 30").pack(pady=40)
@@ -221,7 +224,6 @@ if __name__ == '__main__':
         arduinoSwitchbox = serial.Serial(status.split()[0], 115200)
         connectionLabel.configure(text='CONNECTED ' + status, fg="#41d94d")
     connectionLabel.pack()
-
 
     # RELAY Switches created
     a = tk.Frame(root, bg='black')  # represents tow 1
@@ -244,18 +246,16 @@ if __name__ == '__main__':
 
     g = tk.Frame(root)
     h = tk.Frame(root)
+
+	# Sequence control buttons
     s = tk.Button(root, text="STARTUP", padx=40, pady=10, font="Verdana 14", bg="yellow", command=startup,
                   activebackground="yellow")
     off = tk.Button(root, text="All OFF", padx=30, pady=10, font="Verdana 14", bg="RED", command=allOff,
                     activebackground="RED")
-
-
     s.pack(pady=pad)
     off.pack(pady=pad)
 
-
-    # ------------------------ DATA LOGGER GAUGE ELEMENTS -----------------------------
-    # consists of two rows of 2 gauges
+	# Sensor gauges
     g1 = Gauge.Gauge(g, 'black', 5)
     g1.setText("Nan", "A0")
     g1.getWidget().pack(side="left")
@@ -272,9 +272,9 @@ if __name__ == '__main__':
     h.pack()
 
 
-    '''----------------------------
-    ------ MAIN PROGRAM LOOP ------
-    ----------------------------'''
+	###########################################################
+	# Main Program Loop                                       #
+	###########################################################
     prevCon = True
     while True:
         # ARDUINO CONNECTION CHECK
