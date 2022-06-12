@@ -192,8 +192,11 @@ def actionHandler():
                 time.sleep(0.1)
             
 
+###############################################################
+# Main application entry point                                #
+###############################################################
 if __name__ == '__main__':
-    global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, a, b, c, d, off, g1, g2, g3, g4, connectionLabel, plumbing, fileName, arduinoSwitchbox, prevCon
+    global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, a, b, c, d, off, g1, g2, g3, g4, connectionLabel, plumbing, arduinoSwitchbox, prevCon
 
     #ACTION HANDLER THREAD (checks for startup button press)
     thread = threading.Thread(target=actionHandler)
