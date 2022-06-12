@@ -1,3 +1,0 @@
-pyserial
-mttkinter
-python-tk
