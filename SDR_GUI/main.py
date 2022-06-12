@@ -183,15 +183,26 @@ def actionHandler():
 # Main application entry point                                #
 ###############################################################
 if __name__ == '__main__':
-    global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, a, b, c, d, off, g1, g2, g3, g4, connectionLabel, plumbing, arduinoSwitchbox, prevCon
+
+	###########################################################
+	# Main application global variables                       #
+	###########################################################
+    global root, off, plumbing, arduinoSwitchbox # misc
+    global connectionLabel, prevCon # serial connections
+    global switch1, switch2, switch3, switch4 # switch objects
+    global switch5, switch6, switch7, switch8 
+    global a, b, c, d # tkinter window rows
+    global g1, g2, g3, g4 # gauge objects
+
+	###########################################################
+	# Main application local variables                        #
+	###########################################################
+    pad = 10 # Spacing constants within GUI
+    gridLen = 85
 
     #ACTION HANDLER THREAD (checks for startup button press)
     thread = threading.Thread(target=actionHandler)
     thread.start()
-
-    # Spacing constants within GUI
-    pad = 10
-    gridLen = 85
 
     # Initialize GUI Windows
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  # P&ID diagram window
