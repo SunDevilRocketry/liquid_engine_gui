@@ -23,47 +23,128 @@ from tkinter import *
 # Gauge for displaying sensor data
 class gauge:
 
-    def __init__(self, # gauge class 
-                 root,       # window to draw gauge on
-                 background, # background color
-                 max_val     # maximum value to display on 
-                             # gauge
+	###########################################################
+	# Class attribute initializations                         #
+	###########################################################
+    def __init__(self,          # gauge class 
+                 root,          # window to draw gauge on
+                 background,    # background color
+                 max_sensor_val # maximum value to display on 
+                                # gauge
                  ):
 		
-		#######################################################
-		# Class attribute initializations                     #
-		#######################################################
-        self.startAngle = -30      # minimum value guage angle
-        self.endAngle   =  210     # maximum value guage angle
-        self.max_val    =  max_val # maximum display value
+		# simple variables
+        self.startAngle     = -30             # minimum value 
+                                              # guage angle
+        self.endAngle       =  210            # maximum value 
+                                              # guage angle
+        self.max_sensor_val =  max_sensor_val # maximum display 
+                                              # value
+        size                =  180            # size of gauge
+
 		# Canvas widget for drawing
-        self.canvas = Canvas(root, width=190, height=250, bg=background, highlightthickness=0)
+        self.canvas = Canvas(root,          # parent window 
+                             width=190,     # canvas dimensions
+                             height=250, 
+                             bg=background, # background color 
+                             highlightthickness=0 
+                            )
 
-        size = 180
-        self.dark = self.canvas.create_arc(30, 20, size - 10, size - 10, style="arc", width=20, start=self.startAngle, extent=(self.endAngle - self.startAngle)/2.0,
-                            outline="#8a1919", tags=('arc1', 'arc2'))
-        #1f8749
-        self.light = self.canvas.create_arc(30, 20, size - 10, size - 10, width=20, style="arc", start=90, extent=(self.endAngle - self.startAngle)/2.0,
-                             outline="#ff0000", tags=('arc1', 'arc2'))
-        #00ff65
-        self.readout = self.canvas.create_text(100, 85, font=("Arial", int(size / 10), 'bold'), fill="white", text='')
-        self.label = self.canvas.create_text(100, 130, font=("Arial", int(size / 14), 'bold'), fill="white", text='')
+		# Base gauge arc -- always draws start angle to end angle
+        self.gauge_arc = self.canvas.create_arc(
+						30, 20,                 # upper left corner
+                                                # coordinates 
+						size - 10, size - 10,   # lower right corner
+                                                # coordinates 
+						style="arc", width=20,  # arc width 
+						start=self.startAngle,  # minimum drawing 
+                                                # angle 
+						# drawing angle
+						extent=(self.endAngle - self.startAngle)/2.0,
+                        outline="#8a1919",      # dark red hex code
+                        tags=('arc1', 'arc2')   # arc tags
+                                              )
+		
+		# Fill gauge arc -- draws start angle to display angle
+        self.gauge_fill_arc = self.canvas.create_arc(
+						30, 20,                 # upper left corner
+                                                # coordinates 
+						size - 10, size - 10,   # lower right corner
+												# coordinates 
+						width=20, style="arc",  # arc width 
+						start=90,               # minimum drawing angle 
+						# drawing angle 
+						extent=(self.endAngle - self.startAngle)/2.0,
+                        outline="#ff0000",      # light red hex code
+                        tags=('arc1', 'arc2')   # arc tags
+                                                    )
 
-    def setAngle(self, value):
-        #Gauge bounds set
-        theta = self.endAngle - ((value / self.max) * abs(self.endAngle - self.startAngle))
+        # Gauge text for sensor value
+        self.readout = self.canvas.create_text(
+                        100, 85,               # x-y coordinates
+                        font=("Arial",         # font properties
+                               int(size / 10), 
+                               'bold'), 
+                        fill="white",          # text color
+                        text=''                # text contents
+                                             )
 
-        if(theta > self.endAngle):
-            theta = self.endAngle
-        if(theta < self.startAngle):
-            theta = self.startAngle
+        # Gauge text for sensor name
+        self.label = self.canvas.create_text(
+						100, 130,             # x-y coordinates
+						font=("Arial",        # font properties
+                              int(size / 14), 
+							  'bold'), 
+                        fill="white",         # text color
+                        text=''               # text contents
+                                            )
 
-        self.canvas.itemconfig(self.dark, start=self.startAngle, extent=theta - self.startAngle)
-        self.canvas.itemconfig(self.light, start=theta, extent=self.endAngle - theta)
+	###########################################################
+	# API methods                                             #
+	###########################################################
 
+	# Set the gauge display angle from sensor values 
+    def setAngle(self,        # gauge class 
+                 sensor_value # sensor value
+                ):
+
+        # Set gauge diplay angle
+        gauge_angular_width = abs(self.endAngle - self.startAngle)
+        gauge_percent_fill = value/self.max_sensor_val  
+        gauge_angle = self.endAngle - (gauge_percent_fill*gauge_angular_width)
+
+		# Saturate gauge fill if sensor value goes out of bounds
+        if( gauge_angle > self.endAngle):
+            gauge_angle = self.endAngle
+			# TODO: log this failure condition
+        if( gauge_angle < self.startAngle):
+            gauge_angle = self.startAngle
+			# TODO: log this failure condition
+
+		# Draw gauge using sensor value
+        self.canvas.itemconfig(
+				self.gauge_arc,                      # arc object 
+                start=self.startAngle,               # start angle 
+                extent=gauge_angle - self.startAngle # angular width 
+                              )
+        self.canvas.itemconfig(
+				self.gauge_fill_arc,                # arc object 
+				start=gauge_angle,                  # start angle
+                extent=self.endAngle - gauge_angle  # angular width
+                              ) 
+
+	# Allow public access to canvas object
     def getWidget(self):
         return self.canvas
 
-    def setText(self, str, label):
-        self.canvas.itemconfig(self.readout, text=str)
-        self.canvas.itemconfig(self.label, text=label)
+	# Set the gauge text
+    def setText(self, 
+                sensor_val,  # sensor display value
+                sensor_label # sensor label
+               ):
+        self.canvas.itemconfig(self.readout, text=sensor_val)
+        self.canvas.itemconfig(self.label, text=sensor_label)
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################
