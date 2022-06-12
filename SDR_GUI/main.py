@@ -37,8 +37,6 @@ import Gauge
 import RelaySwitch
 import PandID
 
-msg=''
-
 
 # Returns list of all accessible serial ports
 def getPorts():
@@ -104,7 +102,8 @@ def allOff():
 # THREADING METHOD
 # Runs in parallel with the GUI main loop
 def actionHandler():
-    global msg
+    global msg 
+    msg = None
     global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, prevCon
     while True:
         time.sleep(0.001)
