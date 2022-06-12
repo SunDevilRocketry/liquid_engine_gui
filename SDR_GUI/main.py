@@ -39,18 +39,6 @@ import PandID
 
 msg=''
 
-# New test button
-def test_button():
-    global msg, arduinoSwitchbox
-
-    print("TEST BUTTON")
-
-    status = findArduino(getPorts())
-    arduinoSwitchbox = serial.Serial(status.split()[0], 115200)
-
-    message = 'T'
-    arduinoSwitchbox.write(bytes(message, 'utf-8'))
-
 
 # Returns list of all accessible serial ports
 def getPorts():
@@ -251,12 +239,9 @@ if __name__ == '__main__':
     off = tk.Button(root, text="All OFF", padx=30, pady=10, font="Verdana 14", bg="RED", command=allOff,
                     activebackground="RED")
 
-    testButton = tk.Button(root, text="TEST", padx=0, pady=0, font="Verdana 14", bg="WHITE", command=test_button,
-                    activebackground="WHITE")
 
     s.pack(pady=pad)
     off.pack(pady=pad)
-    testButton.pack(pady=pad)
 
 
     # ------------------------ DATA LOGGER GAUGE ELEMENTS -----------------------------
