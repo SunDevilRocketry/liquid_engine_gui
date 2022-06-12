@@ -1,8 +1,26 @@
-# !/usr/bin python3
+###############################################################
+#                                                             #
+# main.py -- main interface program for SDR's liquid engine   #
+#                                                             #
+# Author: Nitish Chennoju, Colton Acosta                      #
+# Date: 6/12/2022                                             #
+# Sun Devil Rocketry Avionics                                 #
+#                                                             #
+###############################################################
 
-__author__ = "Nitish Chennoju"
-__credits__ = ["Colton Acosta"]
 
+###############################################################
+# Developers                                                  #
+###############################################################
+__author__ =   "Nitish Chennoju"
+__credits__ = ["Colton Acosta",
+               "Katie Herrington",
+               "Ian Chandra"]
+
+
+###############################################################
+# Standard Imports                                            #
+###############################################################
 import threading
 import time
 import serial
@@ -12,13 +30,14 @@ import tkinter as tk
 from mttkinter import mtTkinter
 
 
-# Custom Classes
+###############################################################
+# Project Modules                                             #
+###############################################################
 import Gauge
 import RelaySwitch
 import PandID
 
-msg = ''
-
+msg=''
 
 # New test button
 def test_button():
@@ -173,24 +192,12 @@ def actionHandler():
                 time.sleep(0.1)
             
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, a, b, c, d, off, g1, g2, g3, g4, connectionLabel, plumbing, fileName, arduinoSwitchbox, prevCon
 
     #ACTION HANDLER THREAD (checks for startup button press)
     thread = threading.Thread(target=actionHandler)
     thread.start()
-
-    # Get file name from user
-    print("Enter file name (don't include file extension): ", end='')
-    fileName = input() + ".txt"
 
     # Spacing constants within GUI
     pad = 10
