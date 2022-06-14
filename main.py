@@ -51,7 +51,8 @@ if __name__ == '__main__':
     global connectionLabel, prevCon # serial connections
     global switch1, switch2, switch3, switch4 # switch objects
     global switch5, switch6, switch7, switch8 
-    global a, b, c, d # tkinter window rows
+    global sol_row1, sol_row2, sol_row3, sol_row4 # tkinter 
+                                                  # window rows
     global g1, g2, g3, g4 # gauge objects
 
 
@@ -92,20 +93,32 @@ if __name__ == '__main__':
     connectionLabel.pack()
 
     # Solenoid Switches
-    a = tk.Frame(root, bg='black')  # represents tow 1
-    b = tk.Frame(root, bg='black')  # represents tow 2
-    c = tk.Frame(root, bg='black')  # represents tow 3
-    d = tk.Frame(root, bg='black')  # represents tow 4
-    switch1 = RelaySwitch.Buttons(a,"Relay 1", plumbing.one)
-    switch2 = RelaySwitch.Buttons(b,"Relay 2", plumbing.two)
-    switch3 = RelaySwitch.Buttons(c,"Relay 3", plumbing.three)
-    switch4 = RelaySwitch.Buttons(d,"Relay 4", plumbing.four)
-    switch5 = RelaySwitch.Buttons(a,"Relay 5", plumbing.five)
-    switch6 = RelaySwitch.Buttons(b,"Relay 6", plumbing.six)
-    a.pack()
-    b.pack()
-    c.pack()
-    d.pack()
+    sol_row1 = tk.Frame(root, bg='black')  # represents tow 1
+    sol_row2 = tk.Frame(root, bg='black')  # represents tow 2
+    sol_row3 = tk.Frame(root, bg='black')  # represents tow 3
+    sol_row4 = tk.Frame(root, bg='black')  # represents tow 4
+    switch1 = RelaySwitch.Buttons(sol_row1,
+                                  "Relay 1", 
+                                  plumbing.one)
+    switch2 = RelaySwitch.Buttons(sol_row2,
+                                  "Relay 2", 
+                                  plumbing.two)
+    switch3 = RelaySwitch.Buttons(sol_row3,
+                                  "Relay 3", 
+                                  plumbing.three)
+    switch4 = RelaySwitch.Buttons(sol_row4,
+                                  "Relay 4", 
+                                  plumbing.four)
+    switch5 = RelaySwitch.Buttons(sol_row1,
+                                  "Relay 5", 
+                                  plumbing.five)
+    switch6 = RelaySwitch.Buttons(sol_row2,
+                                  "Relay 6", 
+                                  plumbing.six)
+    sol_row1.pack()
+    sol_row2.pack()
+    sol_row3.pack()
+    sol_row4.pack()
 
     g = tk.Frame(root)
     h = tk.Frame(root)
