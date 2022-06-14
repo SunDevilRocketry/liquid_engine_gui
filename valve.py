@@ -58,6 +58,31 @@ class Buttons:
     def getFrame(self):
         return self.switch
 
+class BV_button:
+    def __init__(self, root, text):
+        self.switch = tk.Frame(root, background = 'black')
+        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text, width, height)
+        self.state = 0
+        self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
+        self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
+        self.off_button.pack(side="right")
+        self.led.getWidget().pack(side="right")
+        self.on_button.pack(side="right")
+        self.switch.pack(side='left', padx=4*pad)
+
+    def actionOff(self):
+        self.led.setState(False)
+        self.symbol.setState(False)
+
+    def actionOn(self):
+        print("1 (ON)")
+
+    def setLedState(self, state):
+        self.led.setState(state)
+
+    def getFrame(self):
+        return self.switch
+
 
 class Switch:
 

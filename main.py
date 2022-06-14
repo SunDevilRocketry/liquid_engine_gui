@@ -35,7 +35,7 @@ from   PIL       import Image, ImageTk
 # Project Modules                                             #
 ###############################################################
 import gauge
-import RelaySwitch
+import valve
 import PandID
 import sequence
 
@@ -141,25 +141,29 @@ if __name__ == '__main__':
                                     font="Arial 14")
 
 
-	# Solenoid buttons
-    switch1 = RelaySwitch.Buttons(valve_button_row1,
+	# Valve buttons
+    switch1 = valve.Buttons(valve_button_row1,
                                   "Relay 1", 
                                   plumbing.one)
-    switch2 = RelaySwitch.Buttons(valve_button_row2,
+    switch2 = valve.Buttons(valve_button_row2,
                                   "Relay 2", 
                                   plumbing.two)
-    switch3 = RelaySwitch.Buttons(valve_button_row3,
+    switch3 = valve.Buttons(valve_button_row3,
                                   "Relay 3", 
                                   plumbing.three)
-    switch4 = RelaySwitch.Buttons(valve_button_row4,
+    switch4 = valve.Buttons(valve_button_row4,
                                   "Relay 4", 
                                   plumbing.four)
-    switch5 = RelaySwitch.Buttons(valve_button_row1,
+    switch5 = valve.Buttons(valve_button_row1,
                                   "Relay 5", 
                                   plumbing.five)
-    switch6 = RelaySwitch.Buttons(valve_button_row2,
+    switch6 = valve.Buttons(valve_button_row2,
                                   "Relay 6", 
                                   plumbing.six)
+    switch7 = valve.BV_button(valve_button_row3,
+                                  "Relay 7")
+    switch8 = valve.BV_button(valve_button_row4,
+                                  "Relay 8")
 
 	# Startup button
     startup_button = tk.Button(sequence_frame_row1, 
@@ -216,11 +220,11 @@ if __name__ == '__main__':
     valve_button_row3.pack()
     valve_button_row4.pack()
 
+	# Sequence button frames
     sequence_frame_row1.pack()
-	# Startup button
-    startup_button.pack(side="left", padx=60)
 
-	# All valves off button 
+	# Sequence frames
+    startup_button.pack(side="left", padx=60)
     off_button.pack(side="right",padx=60)
 
 	# Gauge frame rows 
