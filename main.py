@@ -78,11 +78,11 @@ if __name__ == '__main__':
     root = tk.Tk(mt_debug = 1)
     root.title("Engine Dashboard")
     root.configure(background="black")
-    tk.Label(root, 
-             text="Engine Dashboard", 
-             bg="black", 
-             fg="white", 
-             font="Arial 30").pack(pady=40)
+    main_window_title = tk.Label(root, 
+                                 text="Engine Dashboard", 
+                                 bg="black", 
+                                 fg="white", 
+                                 font="Arial 30")
 
     # GET ARDUINO STATUS / Update on GUI connection label
     connectionLabel = tk.Label(root, 
@@ -90,13 +90,14 @@ if __name__ == '__main__':
                                bg="black", 
                                fg="#ed3b3b", 
                                font="Arial 14")
-    connectionLabel.pack()
 
-    # Solenoid Switches
+    # Solenoid switch frame rows
     sol_row1 = tk.Frame(root, bg='black')  # represents tow 1
     sol_row2 = tk.Frame(root, bg='black')  # represents tow 2
     sol_row3 = tk.Frame(root, bg='black')  # represents tow 3
     sol_row4 = tk.Frame(root, bg='black')  # represents tow 4
+
+	# Solenoid switch objects
     switch1 = RelaySwitch.Buttons(sol_row1,
                                   "Relay 1", 
                                   plumbing.one)
@@ -115,10 +116,6 @@ if __name__ == '__main__':
     switch6 = RelaySwitch.Buttons(sol_row2,
                                   "Relay 6", 
                                   plumbing.six)
-    sol_row1.pack()
-    sol_row2.pack()
-    sol_row3.pack()
-    sol_row4.pack()
 
     g = tk.Frame(root)
     h = tk.Frame(root)
@@ -132,7 +129,6 @@ if __name__ == '__main__':
                   bg="yellow", 
                   command=sequence.startup,
                   activebackground="yellow")
-    s.pack(pady=pad)
 
 	# All off button
     off = tk.Button(root, 
@@ -143,7 +139,6 @@ if __name__ == '__main__':
                     bg="RED", 
                     command=sequence.allOff,
                     activebackground="RED")
-    off.pack(pady=pad)
 
 	# Sensor gauges
     g1 = gauge.gauge(g, 'black', 5)
@@ -158,6 +153,16 @@ if __name__ == '__main__':
     g4 = gauge.gauge(h, 'black', 5)
     g4.setText("Nan", "A3")
     g4.getWidget().pack(side="right")
+
+	# Print Solenoid switches to main window
+    main_window_title.pack(pady=40)
+    connectionLabel.pack()
+    sol_row1.pack()
+    sol_row2.pack()
+    sol_row3.pack()
+    sol_row4.pack()
+    s.pack(pady=pad)
+    off.pack(pady=pad)
     g.pack()
     h.pack()
 
