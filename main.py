@@ -47,13 +47,21 @@ if __name__ == '__main__':
 	###########################################################
 	# Main application global variables                       #
 	###########################################################
-    global root, off, plumbing, arduinoSwitchbox # misc
-    global connectionLabel, prevCon # serial connections
-    global switch1, switch2, switch3, switch4 # switch objects
-    global switch5, switch6, switch7, switch8 
-    global sol_row1, sol_row2, sol_row3, sol_row4 # tkinter 
-                                                  # window rows
-    global g1, g2, g3, g4 # gauge objects
+    global root                     # Main window object
+    global plumbing                 # Engine schematic object
+    global off_button               # All valves off button 
+                                    # button
+    global connectionLabel          # Label widget objects
+    global switch1, switch2         # valve button objects 
+    global switch3, switch4 
+    global switch5, switch6
+    global switch7, switch8 
+    global valve_button_row1        # valve button row frames
+    global valve_button_row2
+    global valve_button_row3
+    global valve_button_row4
+    global gauge1, gauge2           # sensor gauge objects
+    global gauge3, gauge4           
 
 
 	###########################################################
@@ -64,7 +72,33 @@ if __name__ == '__main__':
 
 
 	###########################################################
-	# Object and windows initialization                       #
+	# Window frames                                           #
+	###########################################################
+
+	# root window
+    root = tk.Tk(mt_debug = 1)         
+    root.title("Engine Dashboard")
+    root.configure(background="black")
+
+    # Valve button row frames
+    valve_button_row1 = tk.Frame(root,       
+                                 bg='black') 
+
+    valve_button_row2 = tk.Frame(root,       
+                                 bg='black') 
+
+    valve_button_row3 = tk.Frame(root,       
+                                 bg='black') 
+
+    valve_button_row4 = tk.Frame(root,       
+                                 bg='black') 
+
+	# Gauge row frames
+    gauge_frame_row1 = tk.Frame(root)
+    gauge_frame_row2 = tk.Frame(root)
+
+	###########################################################
+	# Widget initializations                                  #
 	###########################################################
 
     #ACTION HANDLER THREAD (checks for startup button press)
@@ -74,97 +108,104 @@ if __name__ == '__main__':
     # P&ID diagram window
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
 
-    # root window
-    root = tk.Tk(mt_debug = 1)
-    root.title("Engine Dashboard")
-    root.configure(background="black")
+	# Main window label
     main_window_title = tk.Label(root, 
                                  text="Engine Dashboard", 
                                  bg="black", 
                                  fg="white", 
                                  font="Arial 30")
 
-    # GET ARDUINO STATUS / Update on GUI connection label
+    # USB connection label
     connectionLabel = tk.Label(root, 
                                text='DISCONNECTED ', 
                                bg="black", 
                                fg="#ed3b3b", 
                                font="Arial 14")
 
-    # Solenoid switch frame rows
-    sol_row1 = tk.Frame(root, bg='black')  # represents tow 1
-    sol_row2 = tk.Frame(root, bg='black')  # represents tow 2
-    sol_row3 = tk.Frame(root, bg='black')  # represents tow 3
-    sol_row4 = tk.Frame(root, bg='black')  # represents tow 4
 
-	# Solenoid switch objects
-    switch1 = RelaySwitch.Buttons(sol_row1,
+	# Solenoid buttons
+    switch1 = RelaySwitch.Buttons(valve_button_row1,
                                   "Relay 1", 
                                   plumbing.one)
-    switch2 = RelaySwitch.Buttons(sol_row2,
+    switch2 = RelaySwitch.Buttons(valve_button_row2,
                                   "Relay 2", 
                                   plumbing.two)
-    switch3 = RelaySwitch.Buttons(sol_row3,
+    switch3 = RelaySwitch.Buttons(valve_button_row3,
                                   "Relay 3", 
                                   plumbing.three)
-    switch4 = RelaySwitch.Buttons(sol_row4,
+    switch4 = RelaySwitch.Buttons(valve_button_row4,
                                   "Relay 4", 
                                   plumbing.four)
-    switch5 = RelaySwitch.Buttons(sol_row1,
+    switch5 = RelaySwitch.Buttons(valve_button_row1,
                                   "Relay 5", 
                                   plumbing.five)
-    switch6 = RelaySwitch.Buttons(sol_row2,
+    switch6 = RelaySwitch.Buttons(valve_button_row2,
                                   "Relay 6", 
                                   plumbing.six)
 
-    g = tk.Frame(root)
-    h = tk.Frame(root)
 
 	# Startup button
-    s = tk.Button(root, 
-                  text="STARTUP", 
-                  padx=40, 
-                  pady=10, 
-                  font="Verdana 14", 
-                  bg="yellow", 
-                  command=sequence.startup,
-                  activebackground="yellow")
+    startup_button = tk.Button(root, 
+                               text="STARTUP", 
+                               padx=40, 
+                               pady=10, 
+                               font="Verdana 14", 
+                               bg="yellow", 
+                               command=sequence.startup,
+                               activebackground="yellow")
 
-	# All off button
-    off = tk.Button(root, 
-                    text="All OFF", 
-                    padx=30, 
-                    pady=10, 
-                    font="Verdana 14", 
-                    bg="RED", 
-                    command=sequence.allOff,
-                    activebackground="RED")
+	# All valves off button
+    off_button = tk.Button(root, 
+                           text="All OFF", 
+                           padx=30, 
+                           pady=10, 
+                           font="Verdana 14", 
+                           bg="RED", 
+                           command=sequence.allOff,
+                           activebackground="RED")
 
 	# Sensor gauges
-    g1 = gauge.gauge(g, 'black', 5)
-    g1.setText("Nan", "A0")
-    g1.getWidget().pack(side="left")
-    g2 = gauge.gauge(g, 'black', 5)
-    g2.setText("Nan", "A1")
-    g2.getWidget().pack(side="left")
-    g3 = gauge.gauge(h, 'black', 5)
-    g3.setText("Nan", "A2")
-    g3.getWidget().pack(side="left")
-    g4 = gauge.gauge(h, 'black', 5)
-    g4.setText("Nan", "A3")
-    g4.getWidget().pack(side="right")
+    gauge1 = gauge.gauge(gauge_frame_row1, 'black', 5)
+    gauge1.setText("Nan", "A0")
+    gauge2 = gauge.gauge(gauge_frame_row1, 'black', 5)
+    gauge2.setText("Nan", "A1")
+    gauge3 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge3.setText("Nan", "A2")
+    gauge3.getWidget().pack(side="left")
+    gauge4 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge4.setText("Nan", "A3")
 
-	# Print Solenoid switches to main window
+	###########################################################
+	# Initial window draw                                     #
+	###########################################################
+
+	# Main window title
     main_window_title.pack(pady=40)
+
+	# USB connection label
     connectionLabel.pack()
-    sol_row1.pack()
-    sol_row2.pack()
-    sol_row3.pack()
-    sol_row4.pack()
-    s.pack(pady=pad)
-    off.pack(pady=pad)
-    g.pack()
-    h.pack()
+
+	# Valve buttons
+    valve_button_row1.pack()
+    valve_button_row2.pack()
+    valve_button_row3.pack()
+    valve_button_row4.pack()
+
+	# Startup button
+    startup_button.pack(pady=pad)
+
+	# All valves off button 
+    off_button.pack(pady=pad)
+
+	# Gauge frame rows 
+    gauge_frame_row1.pack()
+    gauge_frame_row2.pack()
+
+	# Gauges
+    gauge1.getWidget().pack(side= "left"  )
+    gauge2.getWidget().pack(side= "right" )
+    gauge3.getWidget().pack(side= "left"  )
+    gauge4.getWidget().pack(side= "right" )
 
 
 	###########################################################
@@ -172,17 +213,23 @@ if __name__ == '__main__':
 	###########################################################
     prevCon = True
     while True:
+		# Update USB connection label
         connectionLabel.configure(text='DISCONNECTED ',
                                   fg="#ed3b3b")
-        g1.setText("Nan", "A0")
-        g2.setText("Nan", "A1")
-        g3.setText("Nan", "A2")
-        g4.setText("Nan", "A3")
-        prevCon = False
 
+		# Updated sensor gauge readings
+        gauge1.setText("Nan", "A0")
+        gauge2.setText("Nan", "A1")
+        gauge3.setText("Nan", "A2")
+        gauge4.setText("Nan", "A3")
+
+		# Update engine schematic
         plumbing.updatePipeStatus()
 
+		# Draw to main window
         root.update()
+
+		# Draw to plumbing window
         plumbing.getWindow().update()
 
 ###############################################################
