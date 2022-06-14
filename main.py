@@ -94,21 +94,26 @@ if __name__ == '__main__':
     root.iconphoto(True,SDRlogo)
 
     # Valve button row frames
-    valve_button_row1 = tk.Frame(root,       
-                                 bg='black') 
+    valve_button_row1   = tk.Frame(root,       
+                                   bg='black') 
 
-    valve_button_row2 = tk.Frame(root,       
-                                 bg='black') 
+    valve_button_row2   = tk.Frame(root,       
+                                   bg='black') 
 
-    valve_button_row3 = tk.Frame(root,       
-                                 bg='black') 
+    valve_button_row3   = tk.Frame(root,       
+                                   bg='black') 
 
-    valve_button_row4 = tk.Frame(root,       
-                                 bg='black') 
+    valve_button_row4   = tk.Frame(root,       
+                                   bg='black') 
+
+	# Sequence button frames
+    sequence_frame_row1 = tk.Frame(root,
+								   bg='black')
 
 	# Gauge row frames
     gauge_frame_row1 = tk.Frame(root)
     gauge_frame_row2 = tk.Frame(root)
+
 
 	###########################################################
 	# Widget initializations                                  #
@@ -122,11 +127,11 @@ if __name__ == '__main__':
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
 
 	# Main window label
-    main_window_title = tk.Label(root, 
-                                 text="Engine Dashboard", 
-                                 bg="black", 
-                                 fg="white", 
-                                 font="Arial 30")
+    main_window_title     = tk.Label(root, 
+                                    text="Engine Dashboard", 
+                                    bg="black", 
+                                    fg="white", 
+                                    font="Arial 30")
 
     # USB connection label
     USB_connection_label = tk.Label(root, 
@@ -157,7 +162,7 @@ if __name__ == '__main__':
                                   plumbing.six)
 
 	# Startup button
-    startup_button = tk.Button(root, 
+    startup_button = tk.Button(sequence_frame_row1, 
                                text="STARTUP", 
                                padx=40, 
                                pady=10, 
@@ -167,9 +172,9 @@ if __name__ == '__main__':
                                activebackground="yellow")
 
 	# All valves off button
-    off_button    = tk.Button(root, 
-                              text="All OFF", 
-                              padx=30, 
+    off_button    = tk.Button(sequence_frame_row1, 
+                              text="ALL OFF", 
+                              padx=45, 
                               pady=10, 
                               font="Verdana 14", 
                               bg="RED", 
@@ -211,11 +216,12 @@ if __name__ == '__main__':
     valve_button_row3.pack()
     valve_button_row4.pack()
 
+    sequence_frame_row1.pack()
 	# Startup button
-    startup_button.pack(pady=pad)
+    startup_button.pack(side="left", padx=60)
 
 	# All valves off button 
-    off_button.pack(pady=pad)
+    off_button.pack(side="right",padx=60)
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()
@@ -239,9 +245,9 @@ if __name__ == '__main__':
     while True:
 		# Update USB connection label
         USB_connection_label.configure(text='DISCONNECTED ',
-                                       fg="#ed3b3b")
+                                       fg  ="#ed3b3b")
 
-		# Updated sensor gauge readings
+		# Update sensor gauge readings
         gauge1.setText("Nan", "A0")
         gauge2.setText("Nan", "A1")
         gauge3.setText("Nan", "A2")
