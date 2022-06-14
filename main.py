@@ -45,27 +45,32 @@ import sequence
 if __name__ == '__main__':
 
 	###########################################################
-	# Main application global variables                       #
+	# Global variables                                        #
 	###########################################################
-    global root                     # Main window object
-    global plumbing                 # Engine schematic object
-    global off_button               # All valves off button 
-                                    # button
-    global connectionLabel          # Label widget objects
-    global switch1, switch2         # valve button objects 
-    global switch3, switch4 
-    global switch5, switch6
-    global switch7, switch8 
-    global valve_button_row1        # valve button row frames
+    global root                 # Main window object
+    global plumbing             # Engine schematic object
+    global off_button           # All valves off button
+    global connectionLabel      # USB connection widget objects
+    global switch1              # valve button objects
+    global switch2          
+    global switch3 
+    global switch4 
+    global switch5 
+    global switch6
+    global switch7 
+    global switch8 
+    global valve_button_row1    # valve button row frames
     global valve_button_row2
     global valve_button_row3
     global valve_button_row4
-    global gauge1, gauge2           # sensor gauge objects
-    global gauge3, gauge4           
+    global gauge1               # sensor gauge objects
+    global gauge2    
+    global gauge3 
+    global gauge4           
 
 
 	###########################################################
-	# Main application local variables                        #
+	# Local variables                                         #
 	###########################################################
     pad = 10 # Spacing constants within GUI
     gridLen = 85
@@ -169,14 +174,22 @@ if __name__ == '__main__':
     gauge1.setText("Nan", "A0")
     gauge2 = gauge.gauge(gauge_frame_row1, 'black', 5)
     gauge2.setText("Nan", "A1")
-    gauge3 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge3 = gauge.gauge(gauge_frame_row1, 'black', 5)
     gauge3.setText("Nan", "A2")
     gauge3.getWidget().pack(side="left")
-    gauge4 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge4 = gauge.gauge(gauge_frame_row1, 'black', 5)
     gauge4.setText("Nan", "A3")
+    gauge5 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge5.setText("Nan", "A0")
+    gauge6 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge6.setText("Nan", "A1")
+    gauge7 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge7.setText("Nan", "A2")
+    gauge8 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge8.setText("Nan", "A3")
 
 	###########################################################
-	# Initial window draw                                     #
+	# Draw initial window                                     #
 	###########################################################
 
 	# Main window title
@@ -202,10 +215,14 @@ if __name__ == '__main__':
     gauge_frame_row2.pack()
 
 	# Gauges
-    gauge1.getWidget().pack(side= "left"  )
-    gauge2.getWidget().pack(side= "right" )
-    gauge3.getWidget().pack(side= "left"  )
-    gauge4.getWidget().pack(side= "right" )
+    gauge1.getWidget().pack(side= "left"   )
+    gauge2.getWidget().pack(side= "left"   )
+    gauge3.getWidget().pack(side= "right"  )
+    gauge4.getWidget().pack(side= "right"  )
+    gauge5.getWidget().pack(side= "left"   )
+    gauge6.getWidget().pack(side= "left"   )
+    gauge7.getWidget().pack(side= "right"  )
+    gauge8.getWidget().pack(side= "right"  )
 
 
 	###########################################################
@@ -222,6 +239,10 @@ if __name__ == '__main__':
         gauge2.setText("Nan", "A1")
         gauge3.setText("Nan", "A2")
         gauge4.setText("Nan", "A3")
+        gauge5.setText("Nan", "A4")
+        gauge6.setText("Nan", "A5")
+        gauge7.setText("Nan", "A6")
+        gauge8.setText("Nan", "A7")
 
 		# Update engine schematic
         plumbing.updatePipeStatus()
