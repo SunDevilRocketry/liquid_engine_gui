@@ -23,49 +23,12 @@ import time
 # method called by button. Message forwarded to 
 # threading function
 def startup():
-    global msg
-    msg = 'start'
-    time.sleep(0.1)
-    msg = ''
+	print('startup')
 
 # Hard code all off
 # Relays (no power state), Stepper/Servo (pos = 0)
 def allOff():
-    try:
-        arduinoSwitchbox.write(b'8')
-        switch1.actionOff()
-        time.sleep(0.001)
-        switch2.actionOff()
-        time.sleep(0.001)
-        switch3.actionOff()
-        time.sleep(0.001)
-        switch4.actionOff()
-        time.sleep(0.001)
-        switch5.actionOff()
-        time.sleep(0.001)
-        switch6.actionOff()
-        plumbing.s2.setPercentage(0)
-        plumbing.s1.setPercentage(0)
-        print("All OFF COMPLETE")
-    except:
-        print('Serial Error: Arduino Not'
-            + 'Connected or Detected')
-
-    switch1.setLedState(False)
-    switch2.setLedState(False)
-    switch3.setLedState(False)
-    switch4.setLedState(False)
-    switch5.setLedState(False)
-    switch6.setLedState(False)
-    switch7.scale.set(0)
-    switch8.scale.set(0)
-
-    plumbing.one.setState(False)
-    plumbing.two.setState(False)
-    plumbing.three.setState(False)
-    plumbing.four.setState(False)
-    plumbing.five.setState(False)
-    plumbing.six.setState(False)
+	print('all off')
 
 # THREADING METHOD
 # Runs in parallel with the GUI main loop

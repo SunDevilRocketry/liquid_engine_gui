@@ -25,10 +25,10 @@ import threading
 import time
 import serial
 import serial.tools.list_ports
-from serial import SerialException
 import tkinter as tk
-from mttkinter import mtTkinter
-from PIL import Image, ImageTk
+from   serial    import SerialException
+from   mttkinter import mtTkinter
+from   PIL       import Image, ImageTk
 
 
 ###############################################################
@@ -167,14 +167,14 @@ if __name__ == '__main__':
                                activebackground="yellow")
 
 	# All valves off button
-    off_button = tk.Button(root, 
-                           text="All OFF", 
-                           padx=30, 
-                           pady=10, 
-                           font="Verdana 14", 
-                           bg="RED", 
-                           command=sequence.allOff,
-                           activebackground="RED")
+    off_button    = tk.Button(root, 
+                              text="All OFF", 
+                              padx=30, 
+                              pady=10, 
+                              font="Verdana 14", 
+                              bg="RED", 
+                              command=sequence.allOff,
+                              activebackground="RED")
 
 	# Sensor gauges
     gauge1 = gauge.gauge(gauge_frame_row1, 'black', 5)
