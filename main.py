@@ -28,6 +28,7 @@ import serial.tools.list_ports
 from serial import SerialException
 import tkinter as tk
 from mttkinter import mtTkinter
+from PIL import Image, ImageTk
 
 
 ###############################################################
@@ -84,6 +85,13 @@ if __name__ == '__main__':
     root = tk.Tk(mt_debug = 1)         
     root.title("Engine Dashboard")
     root.configure(background="black")
+
+	# Program icon
+    SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
+    SDRImage = Image.open("images/SDRlogont2.png")
+    SDRImage = SDRImage.resize((280,250),Image.ANTIALIAS)
+    SDR = ImageTk.PhotoImage(SDRImage)
+    root.iconphoto(True,SDRlogo)
 
     # Valve button row frames
     valve_button_row1 = tk.Frame(root,       
@@ -158,6 +166,7 @@ if __name__ == '__main__':
                                bg="yellow", 
                                command=sequence.startup,
                                activebackground="yellow")
+
 
 	# All valves off button
     off_button = tk.Button(root, 
