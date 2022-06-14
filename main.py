@@ -43,11 +43,14 @@ def getPorts():
     portData = serial.tools.list_ports.comports()
     return portData
 
-# Returns COM port of Arduino if detected by computer. User for switchbox
+# Returns COM port of Arduino if detected by computer. 
+# User for switchbox
 def findArduino(portsFound):
     numConnections = len(portsFound)
     for i in range(0, numConnections):
-        if ('Uno' in str(portsFound[i]) or 'Nano' in str(portsFound[i]) or 'CH340' in str(portsFound[i])):
+        if ('Uno'   in str(portsFound[i]) or 
+            'Nano'  in str(portsFound[i]) or 
+            'CH340' in str(portsFound[i])):
             return str(portsFound[i])
     return "None"
 
@@ -55,7 +58,8 @@ def findArduino(portsFound):
 def conv(str):
     return str[2:len(str) - 5]
 
-# method called by button. Message forwarded to threading function
+# method called by button. Message forwarded to 
+# threading function
 def startup():
     global msg
     msg = 'start'
@@ -82,7 +86,9 @@ def allOff():
         plumbing.s1.setPercentage(0)
         print("All OFF COMPLETE")
     except:
-        print('Serial Error: Arduino Not Connected or Detected')
+        print('Serial Error: Arduino Not'
+            + 'Connected or Detected')
+
     switch1.setLedState(False)
     switch2.setLedState(False)
     switch3.setLedState(False)
@@ -104,7 +110,9 @@ def allOff():
 def actionHandler():
     global msg 
     msg = None
-    global root, switch1, switch2, switch3, switch4, switch5, switch6, switch7, switch8, prevCon
+    global root, prevCon
+    global switch1, switch2, switch3, switch4
+    global switch5, switch6, switch7, switch8
     while True:
         time.sleep(0.001)
         if(msg == 'start'):
@@ -112,7 +120,7 @@ def actionHandler():
             ---- STARTUP SEQUENCE HERE ----
             ----------------------------'''
 
-            #TEST SEQUENCE (DELETE ONCE STARTUP SEQ HAS BEEN DETERMINED)
+            #TEST SEQUENCE
             delay = 0.2
             delaySlider = 0.001
             if(prevCon): # if Arduino is connected via serial
@@ -175,7 +183,8 @@ def actionHandler():
                     except:
                         print('ERROR')
             else:
-                print('Serial Error: Arduino Not Connected or Detected')
+                print('Serial Error: Arduino Not Connected'
+                    + ' or Detected')
                 time.sleep(0.1)
             
 
@@ -210,21 +219,32 @@ if __name__ == '__main__':
     thread = threading.Thread(target=actionHandler)
     thread.start()
 
-    # Initialize GUI Windows
-    plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  # P&ID diagram window
-    root = tk.Tk(mt_debug = 1) # root window
+    # P&ID diagram window
+    plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
+
+    # root window
+    root = tk.Tk(mt_debug = 1)
     root.title("Engine Dashboard")
     root.configure(background="black")
-
-    tk.Label(root, text="Engine Dashboard", bg="black", fg="white", font="Arial 30").pack(pady=40)
+    tk.Label(root, 
+             text="Engine Dashboard", 
+             bg="black", 
+             fg="white", 
+             font="Arial 30").pack(pady=40)
 
     # GET ARDUINO STATUS / Update on GUI connection label
     status = findArduino(getPorts())
-    connectionLabel = tk.Label(root, text='DISCONNECTED ' + status, bg="black", fg="#ed3b3b", font="Arial 14")
+    connectionLabel = tk.Label(root, 
+                               text='DISCONNECTED ' + status, 
+                               bg="black", 
+                               fg="#ed3b3b", 
+                               font="Arial 14")
     arduinoSwitchbox = serial.Serial()
     if (not (status == "None")):
-        arduinoSwitchbox = serial.Serial(status.split()[0], 115200)
-        connectionLabel.configure(text='CONNECTED ' + status, fg="#41d94d")
+        arduinoSwitchbox = serial.Serial(status.split()[0], 
+                                         115200)
+        connectionLabel.configure(text='CONNECTED ' + status, 
+                                  fg="#41d94d")
     connectionLabel.pack()
 
     # RELAY Switches created
@@ -238,8 +258,6 @@ if __name__ == '__main__':
     switch4 = RelaySwitch.Buttons(d, 3, arduinoSwitchbox, "Relay 4", plumbing.four)
     switch5 = RelaySwitch.Buttons(a, 4, arduinoSwitchbox, "Relay 5", plumbing.five)
     switch6 = RelaySwitch.Buttons(b, 5, arduinoSwitchbox, "Relay 6", plumbing.six)
-    switch7 = RelaySwitch.StepperSlider(c, 0, arduinoSwitchbox)
-    switch8 = RelaySwitch.StepperSlider(d, 1, arduinoSwitchbox)
     # attaches rows to root tkinter GUI
     a.pack()
     b.pack()
@@ -299,8 +317,6 @@ if __name__ == '__main__':
                 switch4.setArduino(arduinoSwitchbox)
                 switch5.setArduino(arduinoSwitchbox)
                 switch6.setArduino(arduinoSwitchbox)
-                switch7.setArduino(arduinoSwitchbox)
-                switch8.setArduino(arduinoSwitchbox)
                 prevCon = True
             except SerialException:
                 print("ERROR: LOADING...")
@@ -317,9 +333,6 @@ if __name__ == '__main__':
         data = strSerial.split("\\t")
 
         if (data[0] == "Time"):
-            # detect serial data start
-            file = open(fileName, "a")
-            file.write(strSerial[0:len(strSerial) - 2] + "\n")
             print('-------- BEGIN --------')
             file.close()
         elif (len(data) > 4 and data[0] != "Time"):
@@ -334,8 +347,6 @@ if __name__ == '__main__':
             g3.setText(data[3], "A2")
             g4.setAngle(abs(5 * float(data[4])) / 1023.0)
             g4.setText(data[4].replace('\n', ''), "A3")
-        plumbing.s2.setPercentage(switch7.getVal())
-        plumbing.s1.setPercentage(switch8.getVal())
 
         plumbing.updatePipeStatus()
 

@@ -6,38 +6,6 @@ width = 60
 height = 60
 sl_width = 500
 
-class StepperSlider:
-    def __init__(self, root, pinNum, arduino):
-
-        self.pinNum = pinNum
-        self.arduino = arduino
-
-        self.switch = tk.Frame(root, background='black', width=sl_width, height=height)
-
-        var = DoubleVar()
-        self.scale = Scale(self.switch, orient=HORIZONTAL, variable=var, bg='black', fg='white')
-        self.scale.bind("<ButtonRelease-1>", self.actionWriteServo)
-        self.scale.pack(side='left')
-        #self.scale.configure(command=self.actionWriteServo())
-
-
-        self.switch.pack(side='left', padx=11*pad)
-
-
-    def setArduino(self, arduino):
-        self.arduino = arduino
-
-    def actionWriteServo(self, event):
-        val = self.scale.get()
-        self.arduino.write(str.encode("S" + str(self.pinNum) + chr(val)))
-        print("S" + str(self.pinNum) + chr(val))
-
-    def getFrame(self):
-        return self.switch
-
-    def getVal(self):
-        return self.scale.get()
-
 class RelayLED:
 
     def __init__(self, root, background, onB, offB, title, width, height):
