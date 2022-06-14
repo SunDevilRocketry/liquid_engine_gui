@@ -85,6 +85,7 @@ if __name__ == '__main__':
     root = tk.Tk(mt_debug = 1)         
     root.title("Engine Dashboard")
     root.configure(background="black")
+    root.geometry("900x1000")
 
 	# Program icon
     SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
