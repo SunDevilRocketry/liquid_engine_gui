@@ -51,7 +51,7 @@ if __name__ == '__main__':
     global root                 # Main window object
     global plumbing             # Engine schematic object
     global off_button           # All valves off button
-    global connectionLabel      # USB connection widget objects
+    global USB_connection_label # USB connection widget objects
     global switch1              # valve button objects
     global switch2          
     global switch3 
@@ -129,11 +129,11 @@ if __name__ == '__main__':
                                  font="Arial 30")
 
     # USB connection label
-    connectionLabel = tk.Label(root, 
-                               text='DISCONNECTED ', 
-                               bg="black", 
-                               fg="#ed3b3b", 
-                               font="Arial 14")
+    USB_connection_label = tk.Label(root, 
+                                    text='DISCONNECTED ', 
+                                    bg="black", 
+                                    fg="#ed3b3b", 
+                                    font="Arial 14")
 
 
 	# Solenoid buttons
@@ -156,7 +156,6 @@ if __name__ == '__main__':
                                   "Relay 6", 
                                   plumbing.six)
 
-
 	# Startup button
     startup_button = tk.Button(root, 
                                text="STARTUP", 
@@ -166,7 +165,6 @@ if __name__ == '__main__':
                                bg="yellow", 
                                command=sequence.startup,
                                activebackground="yellow")
-
 
 	# All valves off button
     off_button = tk.Button(root, 
@@ -185,7 +183,6 @@ if __name__ == '__main__':
     gauge2.setText("Nan", "A1")
     gauge3 = gauge.gauge(gauge_frame_row1, 'black', 5)
     gauge3.setText("Nan", "A2")
-    gauge3.getWidget().pack(side="left")
     gauge4 = gauge.gauge(gauge_frame_row1, 'black', 5)
     gauge4.setText("Nan", "A3")
     gauge5 = gauge.gauge(gauge_frame_row2, 'black', 5)
@@ -197,6 +194,7 @@ if __name__ == '__main__':
     gauge8 = gauge.gauge(gauge_frame_row2, 'black', 5)
     gauge8.setText("Nan", "A3")
 
+
 	###########################################################
 	# Draw initial window                                     #
 	###########################################################
@@ -205,7 +203,7 @@ if __name__ == '__main__':
     main_window_title.pack(pady=40)
 
 	# USB connection label
-    connectionLabel.pack()
+    USB_connection_label.pack()
 
 	# Valve buttons
     valve_button_row1.pack()
@@ -240,8 +238,8 @@ if __name__ == '__main__':
     prevCon = True
     while True:
 		# Update USB connection label
-        connectionLabel.configure(text='DISCONNECTED ',
-                                  fg="#ed3b3b")
+        USB_connection_label.configure(text='DISCONNECTED ',
+                                       fg="#ed3b3b")
 
 		# Updated sensor gauge readings
         gauge1.setText("Nan", "A0")
