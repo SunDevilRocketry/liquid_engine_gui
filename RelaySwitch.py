@@ -31,10 +31,7 @@ class RelayLED:
         return self.c
 
 class Buttons:
-    def __init__(self, root, pinNum, arduino, text, symbol):
-        self.arduino = arduino
-
-        self.pinNum = pinNum
+    def __init__(self, root, text, symbol):
 
         self.symbol = symbol
 
@@ -48,26 +45,12 @@ class Buttons:
         self.on_button.pack(side="right")
         self.switch.pack(side='left', padx=4*pad)
 
-    def setArduino(self, arduino):
-        self.arduino = arduino
-
     def actionOff(self):
-        try:
-            self.arduino.write(str.encode(str(self.pinNum) + "0"))
-            self.led.setState(False)
-            self.symbol.setState(False)
-            print(str(self.pinNum) + "0 (OFF)")
-        except:
-            print('Serial Error: Arduino Not Connected or Detected ' + str(self.pinNum))
+        self.led.setState(False)
+        self.symbol.setState(False)
 
     def actionOn(self):
-        try:
-            self.arduino.write(str.encode(str(self.pinNum) + "1"))
-            self.led.setState(True)
-            self.symbol.setState(True)
-            print(str(self.pinNum) + "1 (ON)")
-        except:
-            print('Serial Error: Arduino Not Connected or Detected ' + str(self.pinNum))
+        print("1 (ON)")
 
     def setLedState(self, state):
         self.led.setState(state)
@@ -78,11 +61,9 @@ class Buttons:
 
 class Switch:
 
-    def __init__(self, root, name, pinNum, arduino):
-        self.arduino = arduino
+    def __init__(self, root, name):
 
         self.name = name
-        self.pinNum = pinNum
 
 
         self.switch = tk.Frame(root)
@@ -96,10 +77,6 @@ class Switch:
         self.switch.pack(pady=pad)
 
     def action(self):
-        serialNum = (self.pinNum*2) + int(self.state.get())
-        if (serialNum%2 == 1):
-            self.lR.config(bg="green2")
-        elif (serialNum%2 == 0):
-            self.lR.config(bg="red")
-        self.arduino.write(str.encode(str(serialNum)))
+        serialNum = int(self.state.get())
+        self.lR.config(bg="red")
         print(str(serialNum))

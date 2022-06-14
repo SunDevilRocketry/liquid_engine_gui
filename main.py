@@ -233,32 +233,24 @@ if __name__ == '__main__':
              font="Arial 30").pack(pady=40)
 
     # GET ARDUINO STATUS / Update on GUI connection label
-    status = findArduino(getPorts())
     connectionLabel = tk.Label(root, 
-                               text='DISCONNECTED ' + status, 
+                               text='DISCONNECTED ', 
                                bg="black", 
                                fg="#ed3b3b", 
                                font="Arial 14")
-    arduinoSwitchbox = serial.Serial()
-    if (not (status == "None")):
-        arduinoSwitchbox = serial.Serial(status.split()[0], 
-                                         115200)
-        connectionLabel.configure(text='CONNECTED ' + status, 
-                                  fg="#41d94d")
     connectionLabel.pack()
 
-    # RELAY Switches created
+    # Solenoid Switches
     a = tk.Frame(root, bg='black')  # represents tow 1
     b = tk.Frame(root, bg='black')  # represents tow 2
     c = tk.Frame(root, bg='black')  # represents tow 3
     d = tk.Frame(root, bg='black')  # represents tow 4
-    switch1 = RelaySwitch.Buttons(a, 0, arduinoSwitchbox, "Relay 1", plumbing.one)
-    switch2 = RelaySwitch.Buttons(b, 1, arduinoSwitchbox, "Relay 2", plumbing.two)
-    switch3 = RelaySwitch.Buttons(c, 2, arduinoSwitchbox, "Relay 3", plumbing.three)
-    switch4 = RelaySwitch.Buttons(d, 3, arduinoSwitchbox, "Relay 4", plumbing.four)
-    switch5 = RelaySwitch.Buttons(a, 4, arduinoSwitchbox, "Relay 5", plumbing.five)
-    switch6 = RelaySwitch.Buttons(b, 5, arduinoSwitchbox, "Relay 6", plumbing.six)
-    # attaches rows to root tkinter GUI
+    switch1 = RelaySwitch.Buttons(a,"Relay 1", plumbing.one)
+    switch2 = RelaySwitch.Buttons(b,"Relay 2", plumbing.two)
+    switch3 = RelaySwitch.Buttons(c,"Relay 3", plumbing.three)
+    switch4 = RelaySwitch.Buttons(d,"Relay 4", plumbing.four)
+    switch5 = RelaySwitch.Buttons(a,"Relay 5", plumbing.five)
+    switch6 = RelaySwitch.Buttons(b,"Relay 6", plumbing.six)
     a.pack()
     b.pack()
     c.pack()
@@ -267,12 +259,26 @@ if __name__ == '__main__':
     g = tk.Frame(root)
     h = tk.Frame(root)
 
-	# Sequence control buttons
-    s = tk.Button(root, text="STARTUP", padx=40, pady=10, font="Verdana 14", bg="yellow", command=startup,
+	# Startup button
+    s = tk.Button(root, 
+                  text="STARTUP", 
+                  padx=40, 
+                  pady=10, 
+                  font="Verdana 14", 
+                  bg="yellow", 
+                  command=startup,
                   activebackground="yellow")
-    off = tk.Button(root, text="All OFF", padx=30, pady=10, font="Verdana 14", bg="RED", command=allOff,
-                    activebackground="RED")
     s.pack(pady=pad)
+
+	# All off button
+    off = tk.Button(root, 
+                    text="All OFF", 
+                    padx=30, 
+                    pady=10, 
+                    font="Verdana 14", 
+                    bg="RED", 
+                    command=allOff,
+                    activebackground="RED")
     off.pack(pady=pad)
 
 	# Sensor gauges
@@ -297,56 +303,13 @@ if __name__ == '__main__':
 	###########################################################
     prevCon = True
     while True:
-        # ARDUINO CONNECTION CHECK
-        status = findArduino(getPorts())
-        if (status == "None"):
-            connectionLabel.configure(text='DISCONNECTED ' + status, fg="#ed3b3b")
-            g1.setText("Nan", "A0")
-            g2.setText("Nan", "A1")
-            g3.setText("Nan", "A2")
-            g4.setText("Nan", "A3")
-            prevCon = False
-        elif (not prevCon and status != 'None'):
-            try:
-                arduinoSwitchbox = serial.Serial(status.split()[0], 115200)
-                time.sleep(5)
-                connectionLabel.configure(text='CONNECTED ' + status, fg="#41d94d")
-                switch1.setArduino(arduinoSwitchbox)
-                switch2.setArduino(arduinoSwitchbox)
-                switch3.setArduino(arduinoSwitchbox)
-                switch4.setArduino(arduinoSwitchbox)
-                switch5.setArduino(arduinoSwitchbox)
-                switch6.setArduino(arduinoSwitchbox)
-                prevCon = True
-            except SerialException:
-                print("ERROR: LOADING...")
-        else:
-            connectionLabel.configure(text='CONNECTED ' + status, fg="#41d94d")
-
-
-        # Attempt to get data from Arduino
-        try:
-            strSerial = conv(str(arduinoSwitchbox.readline()))
-        except SerialException:
-            strSerial = ''#
-
-        data = strSerial.split("\\t")
-
-        if (data[0] == "Time"):
-            print('-------- BEGIN --------')
-            file.close()
-        elif (len(data) > 4 and data[0] != "Time"):
-            file = open(fileName, "a")
-            file.write((strSerial[0:len(strSerial) - 2] + "\n"))
-            file.close()
-            g1.setAngle(abs(5 * float(data[1])) / 1023.0)
-            g1.setText(data[1], "A0")
-            g2.setAngle(abs(5 * float(data[2])) / 1023.0)
-            g2.setText(data[2], "A1")
-            g3.setAngle(abs(5 * float(data[3])) / 1023.0)
-            g3.setText(data[3], "A2")
-            g4.setAngle(abs(5 * float(data[4])) / 1023.0)
-            g4.setText(data[4].replace('\n', ''), "A3")
+        connectionLabel.configure(text='DISCONNECTED ',
+                                  fg="#ed3b3b")
+        g1.setText("Nan", "A0")
+        g2.setText("Nan", "A1")
+        g3.setText("Nan", "A2")
+        g4.setText("Nan", "A3")
+        prevCon = False
 
         plumbing.updatePipeStatus()
 
