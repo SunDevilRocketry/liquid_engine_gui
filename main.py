@@ -225,8 +225,8 @@ if __name__ == '__main__':
     sequence_frame_row1.pack()
 
 	# Sequence frames
-    startup_button.pack(side="left", padx=60)
-    off_button.pack(side="right",padx=60)
+    startup_button.pack(side="left" , padx=60, pady=30)
+    off_button.pack(    side="right", padx=60, pady=30)
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()
