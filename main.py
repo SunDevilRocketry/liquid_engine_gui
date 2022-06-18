@@ -144,27 +144,27 @@ if __name__ == '__main__':
 
 	# Valve buttons
     switch1 = valve.Buttons(valve_button_row1,
-                                  "Relay 1", 
-                                  plumbing.one)
+                            "LOX Pressurization", 
+                            plumbing.one)
     switch2 = valve.Buttons(valve_button_row2,
-                                  "Relay 2", 
-                                  plumbing.two)
+                            "Kerosene Pressurization", 
+                            plumbing.two)
     switch3 = valve.Buttons(valve_button_row3,
-                                  "Relay 3", 
-                                  plumbing.three)
+                            "LOX Vent", 
+                            plumbing.three)
     switch4 = valve.Buttons(valve_button_row4,
-                                  "Relay 4", 
-                                  plumbing.four)
+                            "Kerosene Vent", 
+                            plumbing.four)
     switch5 = valve.Buttons(valve_button_row1,
-                                  "Relay 5", 
-                                  plumbing.five)
+                            "LOX Purge", 
+                            plumbing.five)
     switch6 = valve.Buttons(valve_button_row2,
-                                  "Relay 6", 
-                                  plumbing.six)
+                            "Kerosene Purge", 
+                            plumbing.six)
     switch7 = valve.BV_button(valve_button_row3,
-                                  "Relay 7")
+                              "LOX Main Valve")
     switch8 = valve.BV_button(valve_button_row4,
-                                  "Relay 8")
+                              "Kerosene Main Valve")
 
 	# Startup button
     startup_button = tk.Button(sequence_frame_row1, 
