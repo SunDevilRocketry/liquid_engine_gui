@@ -48,6 +48,7 @@ class Buttons:
     def actionOff(self):
         self.led.setState(False)
         self.symbol.setState(False)
+        print("1 (OFF)")
 
     def actionOn(self):
         print("1 (ON)")

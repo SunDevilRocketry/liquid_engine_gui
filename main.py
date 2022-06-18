@@ -90,7 +90,7 @@ if __name__ == '__main__':
 	# Program icon
     SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
     SDRImage = Image.open("images/SDRlogont2.png")
-    SDRImage = SDRImage.resize((280,250),Image.ANTIALIAS)
+    SDRImage = SDRImage.resize((280,250),Image.Resampling.LANCZOS)
     SDR = ImageTk.PhotoImage(SDRImage)
     root.iconphoto(True,SDRlogo)
 
@@ -172,9 +172,13 @@ if __name__ == '__main__':
                                padx=40, 
                                pady=10, 
                                font="Verdana 14", 
-                               bg="yellow", 
+                               bg="black", 
+                               fg="white", 
                                command=sequence.startup,
-                               activebackground="yellow")
+                               activebackground="white",
+                               relief="solid",
+							   highlightthickness=2,
+                               borderwidth=5)
 
 	# All valves off button
     off_button    = tk.Button(sequence_frame_row1, 
@@ -182,9 +186,13 @@ if __name__ == '__main__':
                               padx=45, 
                               pady=10, 
                               font="Verdana 14", 
-                              bg="RED", 
+                              bg="black", 
+                              fg="white", 
                               command=sequence.allOff,
-                              activebackground="RED")
+                              relief="solid",
+						      highlightthickness=2,
+                              borderwidth=5,
+                              activebackground="white")
 
 	# Sensor gauges
     gauge1 = gauge.gauge(gauge_frame_row1, 'black', 5)
