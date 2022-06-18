@@ -15,4 +15,3 @@ The following code on this repository has been designed to control the SDR Liqui
 ## GUI Layout
 <img src="images/engine_gui.png">
 
-**Arduino Boards required for com port auto detection. If arduino is not connected, GUI will not allow actuation.
