@@ -57,11 +57,17 @@ class RelayLED:
                             width=self.width, 
                             height=self.height, 
                             bg=background, 
-                            highlightthickness=0)
+                            highlightthickness=0
+                            )
 
 		# indicator circle
-        self.state = self.canvas.create_oval((self.width / 4.0) + 1, (self.height / 4.0) + 1, (3 * self.width / 4.0) - 1, (3 * self.height / 4.0) - 1,
-                                               fill=self.off_color)
+        self.state = self.canvas.create_oval(
+                                            (self.width / 4.0) + 1, 
+                                            (self.height / 4.0) + 1, 
+                                            (3 * self.width / 4.0) - 1, 
+                                            (3 * self.height / 4.0) - 1,
+                                            fill=self.off_color
+                                            )
 
     def setState(self, state):
         if(state):
