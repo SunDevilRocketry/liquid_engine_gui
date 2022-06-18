@@ -44,13 +44,23 @@ class RelayLED:
 		#######################################################
 		# class attributes                                    #
 		#######################################################
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+
+		# Canvas dimensions
         self.width = width
         self.height = height
 
+		# Color hex codes
         self.on = onB
         self.off = offB
 
+		#######################################################
+		# drawing objects                                     #
+		#######################################################
+
+		# tk canvas object	
+        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+
+		# indicator circle
         self.state = self.canvas.create_oval((width / 4.0) + 1, (height / 4.0) + 1, (3 * width / 4.0) - 1, (3 * height / 4.0) - 1,
                                                fill=offB)
 
