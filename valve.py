@@ -113,9 +113,11 @@ class Buttons:
         self.switch = tk.LabelFrame(
                                    root, 
                                    background = 'black',
-                                   text='Solenoid',
-                                   labelanchor='n',
-                                   padx=10
+                                   foreground = 'white',
+                                   text = text,
+                                   font ='Verdana 14',
+                                   relief ='solid',
+                                   labelanchor ='n'
                                    )
 	
 		# indicator light (canvas)
@@ -132,6 +134,7 @@ class Buttons:
                                    activebackground='#d42f2f', 
                                    activeforeground='white'
                                    )
+
         self.on_button = tk.Button(
                                   self.switch, 
                                   text="ON", 
@@ -140,7 +143,8 @@ class Buttons:
                                   bg='#41d94d', 
                                   fg='white', 
                                   activebackground='#28bd33', 
-                                  activeforeground='white')
+                                  activeforeground='white'
+                                  )
 
 		#######################################################
 		# Initial draw                                        #
@@ -173,10 +177,13 @@ class BV_button:
         self.switch = tk.LabelFrame(
                                    root, 
                                    background = 'black',
-                                   text='Solenoid',
-                                   labelanchor='n',
-                                   padx=10
+                                   foreground = 'white',
+                                   text=text,
+                                   font='Verdana 14',
+                                   relief='solid',
+                                   labelanchor='n'
                                    )
+
         self.led = Indicator_Light(self.switch, 'black')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
