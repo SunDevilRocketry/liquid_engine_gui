@@ -121,7 +121,10 @@ class Buttons:
                                    )
 	
 		# indicator light (canvas)
-        self.led = Indicator_Light(self.switch, 'black')
+        self.led =  Indicator_Light(
+                                   self.switch, 
+                                   'black'
+                                   )
 
 		# ON/OFF button widgets
         self.off_button = tk.Button(
@@ -174,6 +177,18 @@ class Buttons:
 class BV_button:
     def __init__(self, root, text):
 
+		#######################################################
+		# class attributes                                    #
+		#######################################################
+
+		# valve ON/OFF state
+        self.state = 0
+
+		#######################################################
+		# objects                                             #
+		#######################################################
+
+		# valve button frame
         self.switch = tk.LabelFrame(
                                    root, 
                                    background = 'black',
@@ -184,10 +199,38 @@ class BV_button:
                                    labelanchor='n'
                                    )
 
-        self.led = Indicator_Light(self.switch, 'black')
-        self.state = 0
-        self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
-        self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
+		# indicator light (canvas)
+        self.led  = Indicator_Light(
+                                   self.switch,
+                                   'black'
+                                   )
+
+		# ON/OFF button widgets
+        self.on_button  = tk.Button(
+                                   self.switch, 
+                                   text="ON", 
+                                   width=12, 
+                                   command=self.actionOn, 
+                                   bg='#41d94d', 
+                                   fg='white', 
+                                   activebackground='#28bd33', 
+                                   activeforeground='white'
+                                   )
+
+        self.off_button = tk.Button(
+                                   self.switch, 
+                                   text="OFF", 
+                                   width=12, 
+                                   command=self.actionOff, 
+                                   bg='#ed3b3b', 
+                                   fg='white', 
+                                   activebackground='#d42f2f', 
+                                   activeforeground='white'
+                                   )
+
+		#######################################################
+		# Initial draw                                        #
+		#######################################################
         self.off_button.pack(side="right")
         self.led.getWidget().pack(side="right")
         self.on_button.pack(side="right")
@@ -200,9 +243,6 @@ class BV_button:
     def actionOn(self):
         self.led.setState(True)
         print("1 (ON)")
-
-    def setLedState(self, state):
-        self.led.setState(state)
 
     def getFrame(self):
         return self.switch
