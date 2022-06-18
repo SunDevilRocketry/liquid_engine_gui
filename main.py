@@ -223,7 +223,7 @@ if __name__ == '__main__':
 	###########################################################
 
 	# Main window title
-    main_window_title.pack(pady=40)
+    main_window_title.pack(pady=10)
 
 	# Valve buttons
     valve_button_row1.pack()
