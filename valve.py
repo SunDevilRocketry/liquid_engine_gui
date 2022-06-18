@@ -110,7 +110,13 @@ class Buttons:
 		#######################################################
 
 		# valve button frame
-        self.switch = tk.Frame(root, background = 'black')
+        self.switch = tk.LabelFrame(
+                                   root, 
+                                   background = 'black',
+                                   text='Solenoid',
+                                   labelanchor='n',
+                                   padx=10
+                                   )
 	
 		# indicator light (canvas)
         self.led = Indicator_Light(self.switch, 'black')
@@ -163,7 +169,14 @@ class Buttons:
 ###############################################################
 class BV_button:
     def __init__(self, root, text):
-        self.switch = tk.Frame(root, background = 'black')
+
+        self.switch = tk.LabelFrame(
+                                   root, 
+                                   background = 'black',
+                                   text='Solenoid',
+                                   labelanchor='n',
+                                   padx=10
+                                   )
         self.led = Indicator_Light(self.switch, 'black')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')

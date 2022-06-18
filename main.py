@@ -12,10 +12,10 @@
 ###############################################################
 # Developers                                                  #
 ###############################################################
-__author__ =   "Nitish Chennoju"
-__credits__ = ["Colton Acosta",
+__author__  =  "Nitish Chennoju"
+__credits__ = ["Colton Acosta"   ,
                "Katie Herrington",
-               "Ian Chandra"]
+               "Ian Chandra"      ]
 
 
 ###############################################################
@@ -96,17 +96,29 @@ if __name__ == '__main__':
     root.iconphoto(True,SDRlogo)
 
     # Valve button row frames
-    valve_button_row1   = tk.Frame(root,       
-                                   bg='black') 
+    valve_button_row1   = tk.Frame(
+                                  root,       
+                                  bg='black',
+                                  pady=10
+                                  ) 
 
-    valve_button_row2   = tk.Frame(root,       
-                                   bg='black') 
+    valve_button_row2   = tk.Frame(
+                                  root,       
+                                  bg='black',
+                                  pady=10
+                                  ) 
 
-    valve_button_row3   = tk.Frame(root,       
-                                   bg='black') 
+    valve_button_row3   = tk.Frame(
+                                  root,       
+                                  bg='black',
+                                  pady=10
+                                  ) 
 
-    valve_button_row4   = tk.Frame(root,       
-                                   bg='black') 
+    valve_button_row4   = tk.Frame(
+                                  root,       
+                                  bg='black',
+                                  pady=10
+                                  ) 
 
 	# Sequence button frames
     sequence_frame_row1 = tk.Frame(root,
@@ -134,14 +146,6 @@ if __name__ == '__main__':
                                     bg="black", 
                                     fg="white", 
                                     font="Arial 30")
-
-    # USB connection label
-    USB_connection_label = tk.Label(root, 
-                                    text='DISCONNECTED ', 
-                                    bg="black", 
-                                    fg="#ed3b3b", 
-                                    font="Arial 14")
-
 
 	# Valve buttons
     switch1 = valve.Buttons(valve_button_row1,
@@ -221,9 +225,6 @@ if __name__ == '__main__':
 	# Main window title
     main_window_title.pack(pady=40)
 
-	# USB connection label
-    USB_connection_label.pack()
-
 	# Valve buttons
     valve_button_row1.pack()
     valve_button_row2.pack()
@@ -257,9 +258,6 @@ if __name__ == '__main__':
 	###########################################################
     prevCon = True
     while True:
-		# Update USB connection label
-        USB_connection_label.configure(text='DISCONNECTED ',
-                                       fg  ="#ed3b3b")
 
 		# Update sensor gauge readings
         gauge1.setText("Nan", "Fuel Tank Pressure"     )
