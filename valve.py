@@ -31,7 +31,19 @@ sl_width = 500
 ###############################################################
 class RelayLED:
 
-    def __init__(self, root, background, onB, offB, title, width, height):
+    def __init__(
+                self, 
+                root, 
+                background, 
+                onB, offB, 
+                title, 
+                width, 
+                height
+                ):
+
+		#######################################################
+		# class attributes                                    #
+		#######################################################
         self.c = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
         self.width = width
         self.height = height
