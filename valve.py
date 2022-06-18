@@ -20,9 +20,9 @@ import tkinter as tk
 ###############################################################
 # Global variables                                            #
 ###############################################################
-pad = 10
-width = 60
-height = 60
+pad      = 10
+width    = 60
+height   = 60
 sl_width = 500
 
 
@@ -44,26 +44,24 @@ class RelayLED:
 		#######################################################
 		# class attributes                                    #
 		#######################################################
-        self.c = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
         self.width = width
         self.height = height
 
         self.on = onB
         self.off = offB
 
-        #self.stateOutline = self.c.create_oval(3 * width / 8.0, 3 * height / 8.0, 5 * width / 8.0, 5 * height / 8.0, outline='white', width=1)
-        self.state = self.c.create_oval((width / 4.0) + 1, (height / 4.0) + 1, (3 * width / 4.0) - 1, (3 * height / 4.0) - 1,
+        self.state = self.canvas.create_oval((width / 4.0) + 1, (height / 4.0) + 1, (3 * width / 4.0) - 1, (3 * height / 4.0) - 1,
                                                fill=offB)
-        #self.text = self.c.create_text(width / 2.0, 7 * height / 8.0, font=("Arial", 10, 'bold'), fill="white", text=title)
 
     def setState(self, state):
         if(state):
-            self.c.itemconfig(self.state, fill=self.on)
+            self.canvas.itemconfig(self.state, fill=self.on)
         else:
-            self.c.itemconfig(self.state, fill=self.off)
+            self.canvas.itemconfig(self.state, fill=self.off)
 
     def getWidget(self):
-        return self.c
+        return self.canvas
 
 
 ###############################################################
