@@ -242,14 +242,14 @@ if __name__ == '__main__':
     gauge_frame_row2.pack()
 
 	# Gauges
-    gauge1.getWidget().pack(side= "left" )
-    gauge2.getWidget().pack(side= "left" )
-    gauge3.getWidget().pack(side= "right")
-    gauge4.getWidget().pack(side= "right")
-    gauge5.getWidget().pack(side= "left" )
-    gauge6.getWidget().pack(side= "left" )
-    gauge7.getWidget().pack(side= "right")
-    gauge8.getWidget().pack(side= "right")
+    gauge1.getWidget().pack(side='left')
+    gauge2.getWidget().pack(side='left')
+    gauge3.getWidget().pack(side='left')
+    gauge4.getWidget().pack(side='left')
+    gauge5.getWidget().pack(side='left')
+    gauge6.getWidget().pack(side='left')
+    gauge7.getWidget().pack(side='left')
+    gauge8.getWidget().pack(side='left')
 
 
 	###########################################################
