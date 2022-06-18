@@ -128,9 +128,10 @@ class BV_button:
 
     def actionOff(self):
         self.led.setState(False)
-        self.symbol.setState(False)
+        print("1 (OFF)")
 
     def actionOn(self):
+        self.led.setState(True)
         print("1 (ON)")
 
     def setLedState(self, state):
