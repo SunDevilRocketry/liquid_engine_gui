@@ -88,15 +88,57 @@ class Indicator_Light:
 # Solenoid state control buttons                              #
 ###############################################################
 class Buttons:
-    def __init__(self, root, text, symbol):
+    def __init__(
+                self, 
+                root,     # frame to attach button to
+                text,     # valve button frame label 
+                symbol    # link to engine schematic symbol
+                ):
 
+		#######################################################
+		# class attributes                                    #
+		#######################################################
+
+		# engine schematic symbol link
         self.symbol = symbol
 
-        self.switch = tk.Frame(root, background = 'black')
-        self.led = Indicator_Light(self.switch, 'black')
+		# valve ON/OFF state
         self.state = 0
-        self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
-        self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
+
+		#######################################################
+		# objects                                             #
+		#######################################################
+
+		# valve button frame
+        self.switch = tk.Frame(root, background = 'black')
+	
+		# indicator light (canvas)
+        self.led = Indicator_Light(self.switch, 'black')
+
+		# ON/OFF button widgets
+        self.off_button = tk.Button(
+                                   self.switch, 
+                                   text="OFF", 
+                                   width=12, 
+                                   command=self.actionOff, 
+                                   bg='#ed3b3b', 
+                                   fg='white', 
+                                   activebackground='#d42f2f', 
+                                   activeforeground='white'
+                                   )
+        self.on_button = tk.Button(
+                                  self.switch, 
+                                  text="ON", 
+                                  width=12, 
+                                  command=self.actionOn, 
+                                  bg='#41d94d', 
+                                  fg='white', 
+                                  activebackground='#28bd33', 
+                                  activeforeground='white')
+
+		#######################################################
+		# Initial draw                                        #
+		#######################################################
         self.off_button.pack(side="right")
         self.led.getWidget().pack(side="right")
         self.on_button.pack(side="right")
