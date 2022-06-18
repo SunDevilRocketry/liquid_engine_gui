@@ -32,7 +32,7 @@ class RelayLED:
     def __init__(
                 self, 
                 root, 
-                background, 
+                bg_color, 
                 ):
 
 		#######################################################
@@ -47,6 +47,7 @@ class RelayLED:
         self.on_color  = '#41d94d'
         self.off_color = '#ed3b3b'
 
+
 		#######################################################
 		# drawing objects                                     #
 		#######################################################
@@ -56,7 +57,7 @@ class RelayLED:
                             root, 
                             width=self.width, 
                             height=self.height, 
-                            bg=background, 
+                            bg=bg_color, 
                             highlightthickness=0
                             )
 
