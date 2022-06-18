@@ -99,25 +99,25 @@ if __name__ == '__main__':
     valve_button_row1   = tk.Frame(
                                   root,       
                                   bg='black',
-                                  pady=10
+                                  pady=5
                                   ) 
 
     valve_button_row2   = tk.Frame(
                                   root,       
                                   bg='black',
-                                  pady=10
+                                  pady=5
                                   ) 
 
     valve_button_row3   = tk.Frame(
                                   root,       
                                   bg='black',
-                                  pady=10
+                                  pady=5
                                   ) 
 
     valve_button_row4   = tk.Frame(
                                   root,       
                                   bg='black',
-                                  pady=10
+                                  pady=5
                                   ) 
 
 	# Sequence button frames
