@@ -85,7 +85,8 @@ if __name__ == '__main__':
 	# root window
     root = tk.Tk(mt_debug = 1)         
     root.title("Engine Dashboard")
-    root.configure(background="black")
+    root.configure(background="black",
+                   borderwidth=10)
     root.geometry("900x1000")
 
 	# Program icon
