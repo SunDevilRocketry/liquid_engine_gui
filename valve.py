@@ -21,8 +21,6 @@ import tkinter as tk
 # Global variables                                            #
 ###############################################################
 pad      = 10
-width    = 60
-height   = 60
 sl_width = 500
 
 
