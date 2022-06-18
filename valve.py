@@ -107,9 +107,6 @@ class Buttons:
         self.symbol.setState(True)
         print("1 (ON)")
 
-    def setLedState(self, state):
-        self.led.setState(state)
-
     def getFrame(self):
         return self.switch
 
