@@ -27,7 +27,7 @@ sl_width = 500
 ###############################################################
 # Valve state indication light                                #
 ###############################################################
-class RelayLED:
+class Indicator_Light:
 
     def __init__(
                 self, 
@@ -93,7 +93,7 @@ class Buttons:
         self.symbol = symbol
 
         self.switch = tk.Frame(root, background = 'black')
-        self.led = RelayLED(self.switch, 'black')
+        self.led = Indicator_Light(self.switch, 'black')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
@@ -122,7 +122,7 @@ class Buttons:
 class BV_button:
     def __init__(self, root, text):
         self.switch = tk.Frame(root, background = 'black')
-        self.led = RelayLED(self.switch, 'black')
+        self.led = Indicator_Light(self.switch, 'black')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
