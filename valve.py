@@ -37,8 +37,6 @@ class RelayLED:
                 background, 
                 onB, offB, 
                 title, 
-                width, 
-                height
                 ):
 
 		#######################################################
@@ -46,8 +44,8 @@ class RelayLED:
 		#######################################################
 
 		# Canvas dimensions
-        self.width = width
-        self.height = height
+        self.width  = 60
+        self.height = 60
 
 		# Color hex codes
         self.on = onB
@@ -58,10 +56,10 @@ class RelayLED:
 		#######################################################
 
 		# tk canvas object	
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.canvas = Canvas(root, width=self.width, height=self.height, bg=background, highlightthickness=0)
 
 		# indicator circle
-        self.state = self.canvas.create_oval((width / 4.0) + 1, (height / 4.0) + 1, (3 * width / 4.0) - 1, (3 * height / 4.0) - 1,
+        self.state = self.canvas.create_oval((self.width / 4.0) + 1, (self.height / 4.0) + 1, (3 * self.width / 4.0) - 1, (3 * self.height / 4.0) - 1,
                                                fill=offB)
 
     def setState(self, state):
@@ -84,7 +82,7 @@ class Buttons:
 
         self.switch = tk.Frame(root, background = 'black')
         #self.switch_label = tk.LabelFrame(self.switch, text = self.title)
-        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text, width, height)
+        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text)
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
@@ -116,7 +114,7 @@ class Buttons:
 class BV_button:
     def __init__(self, root, text):
         self.switch = tk.Frame(root, background = 'black')
-        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text, width, height)
+        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text)
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
