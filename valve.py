@@ -115,7 +115,7 @@ class Buttons:
                                    background = 'black',
                                    foreground = 'white',
                                    text = text,
-                                   font ='Verdana 14',
+                                   font ='Verdana 12',
                                    relief ='solid',
                                    labelanchor ='n'
                                    )
@@ -179,7 +179,7 @@ class BV_button:
                                    background = 'black',
                                    foreground = 'white',
                                    text=text,
-                                   font='Verdana 14',
+                                   font='Verdana 12',
                                    relief='solid',
                                    labelanchor='n'
                                    )
