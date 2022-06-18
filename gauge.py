@@ -45,7 +45,7 @@ class gauge:
 		# Canvas widget for drawing
         self.canvas = Canvas(root,          # parent window 
                              width=190,     # canvas dimensions
-                             height=250, 
+                             height=200, 
                              bg=background, # background color 
                              highlightthickness=0 
                             )
