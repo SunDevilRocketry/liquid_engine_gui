@@ -26,6 +26,7 @@ import time
 import serial
 import serial.tools.list_ports
 import tkinter as tk
+
 from   serial    import SerialException
 from   mttkinter import mtTkinter
 from   PIL       import Image, ImageTk
@@ -112,8 +113,8 @@ if __name__ == '__main__':
 								   bg='black')
 
 	# Gauge row frames
-    gauge_frame_row1 = tk.Frame(root)
-    gauge_frame_row2 = tk.Frame(root)
+    gauge_frame_row1 = tk.Frame(root, bg='black')
+    gauge_frame_row2 = tk.Frame(root, bg='black')
 
 
 	###########################################################
@@ -196,21 +197,21 @@ if __name__ == '__main__':
 
 	# Sensor gauges
     gauge1 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge1.setText("Nan", "A0")
     gauge2 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge2.setText("Nan", "A1")
     gauge3 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge3.setText("Nan", "A2")
     gauge4 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge4.setText("Nan", "A3")
     gauge5 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge5.setText("Nan", "A0")
     gauge6 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge6.setText("Nan", "A1")
     gauge7 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge7.setText("Nan", "A2")
     gauge8 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge8.setText("Nan", "A3")
+    gauge1.setText("Nan", "Fuel Tank Pressure"     )
+    gauge2.setText("Nan", "Fuel Flow Rate"         )
+    gauge3.setText("Nan", "Fuel Injection Pressure")
+    gauge4.setText("Nan", "Thrust"                 )
+    gauge5.setText("Nan", "LOX Pressure"           )
+    gauge6.setText("Nan", "LOX Flow Rate"          )
+    gauge7.setText("Nan", "Engine Pressure"        )
+    gauge8.setText("Nan", "LOX Temperature"        )
 
 
 	###########################################################
@@ -241,14 +242,14 @@ if __name__ == '__main__':
     gauge_frame_row2.pack()
 
 	# Gauges
-    gauge1.getWidget().pack(side= "left"   )
-    gauge2.getWidget().pack(side= "left"   )
-    gauge3.getWidget().pack(side= "right"  )
-    gauge4.getWidget().pack(side= "right"  )
-    gauge5.getWidget().pack(side= "left"   )
-    gauge6.getWidget().pack(side= "left"   )
-    gauge7.getWidget().pack(side= "right"  )
-    gauge8.getWidget().pack(side= "right"  )
+    gauge1.getWidget().pack(side= "left" )
+    gauge2.getWidget().pack(side= "left" )
+    gauge3.getWidget().pack(side= "right")
+    gauge4.getWidget().pack(side= "right")
+    gauge5.getWidget().pack(side= "left" )
+    gauge6.getWidget().pack(side= "left" )
+    gauge7.getWidget().pack(side= "right")
+    gauge8.getWidget().pack(side= "right")
 
 
 	###########################################################
@@ -261,14 +262,14 @@ if __name__ == '__main__':
                                        fg  ="#ed3b3b")
 
 		# Update sensor gauge readings
-        gauge1.setText("Nan", "A0")
-        gauge2.setText("Nan", "A1")
-        gauge3.setText("Nan", "A2")
-        gauge4.setText("Nan", "A3")
-        gauge5.setText("Nan", "A4")
-        gauge6.setText("Nan", "A5")
-        gauge7.setText("Nan", "A6")
-        gauge8.setText("Nan", "A7")
+        gauge1.setText("Nan", "Fuel Tank Pressure"     )
+        gauge2.setText("Nan", "Fuel Flow Rate"         )
+        gauge3.setText("Nan", "Fuel Injection Pressure")
+        gauge4.setText("Nan", "Thrust"                 )
+        gauge5.setText("Nan", "LOX Pressure"           )
+        gauge6.setText("Nan", "LOX Flow Rate"          )
+        gauge7.setText("Nan", "Engine Pressure"        )
+        gauge8.setText("Nan", "LOX Temperature"        )
 
 		# Update engine schematic
         plumbing.updatePipeStatus()

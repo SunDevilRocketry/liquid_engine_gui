@@ -91,9 +91,9 @@ class gauge:
 
         # Gauge text for sensor name
         self.label = self.canvas.create_text(
-						100, 130,             # x-y coordinates
+						100, 150,             # x-y coordinates
 						font=("Arial",        # font properties
-                              int(size / 14), 
+                              int(size / 15), 
 							  'bold'), 
                         fill="white",         # text color
                         text=''               # text contents
