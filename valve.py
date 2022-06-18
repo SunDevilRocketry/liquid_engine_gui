@@ -34,7 +34,6 @@ class RelayLED:
                 root, 
                 background, 
                 onB, offB, 
-                title, 
                 ):
 
 		#######################################################
@@ -79,8 +78,7 @@ class Buttons:
         self.symbol = symbol
 
         self.switch = tk.Frame(root, background = 'black')
-        #self.switch_label = tk.LabelFrame(self.switch, text = self.title)
-        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text)
+        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
@@ -112,7 +110,7 @@ class Buttons:
 class BV_button:
     def __init__(self, root, text):
         self.switch = tk.Frame(root, background = 'black')
-        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b', text)
+        self.led = RelayLED(self.switch, 'black', '#41d94d', '#ed3b3b')
         self.state = 0
         self.off_button = tk.Button(self.switch, text="OFF", width=12, command=self.actionOff, bg='#ed3b3b', fg='white', activebackground='#d42f2f', activeforeground='white')
         self.on_button = tk.Button(self.switch, text="ON", width=12, command=self.actionOn, bg='#41d94d', fg='white', activebackground='#28bd33', activeforeground='white')
