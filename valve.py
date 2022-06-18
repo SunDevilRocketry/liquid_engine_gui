@@ -61,11 +61,15 @@ class RelayLED:
                             )
 
 		# indicator circle
+        indicator_x0 = 16 # upper left corner coordinates
+        indicator_y0 = 16
+        indicator_x1 = 44 # lower right corner coordinates
+        indicator_y1 = 44
         self.state = self.canvas.create_oval(
-                                            (self.width / 4.0) + 1, 
-                                            (self.height / 4.0) + 1, 
-                                            (3 * self.width / 4.0) - 1, 
-                                            (3 * self.height / 4.0) - 1,
+                                            indicator_x0, 
+                                            indicator_y0, 
+                                            indicator_x1, 
+                                            indicator_y1, 
                                             fill=self.off_color
                                             )
 
