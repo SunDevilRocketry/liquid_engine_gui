@@ -28,8 +28,9 @@ import serial
 import serial.tools.list_ports
 import tkinter as tk
 
-from   serial    import SerialException
-from   PIL       import Image, ImageTk
+from tkinter  import ttk
+from serial   import SerialException
+from PIL      import Image, ImageTk
 
 
 ###############################################################
@@ -94,40 +95,58 @@ if __name__ == '__main__':
                  )
 
 	# Program icon
-    SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
+    SDRlogo  = tk.PhotoImage(file='images/SDRLogo5.png')
     SDRImage = Image.open("images/SDRlogont2.png")
-    SDRImage = SDRImage.resize((280,250),Image.Resampling.LANCZOS)
+    SDRImage = SDRImage.resize(
+                              (int(0.8*140),int(0.8*125)),
+                              Image.Resampling.LANCZOS
+                              )
     SDR = ImageTk.PhotoImage(SDRImage)
     root.iconphoto(True,SDRlogo)
+
+    # Logo and dashboard label frame
+    main_title_frame    = tk.Frame(
+                                  root,
+                                  bg = 'black'
+                                  )
 
     # Valve button row frames
     valve_button_row1   = tk.Frame(
                                   root,       
-                                  bg='black',
+                                  bg = 'black'
                                   ) 
 
     valve_button_row2   = tk.Frame(
                                   root,       
-                                  bg='black',
+                                  bg = 'black'
                                   ) 
 
     valve_button_row3   = tk.Frame(
                                   root,       
-                                  bg='black',
+                                  bg = 'black'
                                   ) 
 
     valve_button_row4   = tk.Frame(
                                   root,       
-                                  bg='black',
+                                  bg = 'black'
                                   ) 
 
 	# Sequence button frames
-    sequence_frame_row1 = tk.Frame(root,
-								   bg='black')
+    sequence_frame_row1 = tk.Frame(
+                                  root,
+								  bg='black'
+                                  )
 
 	# Gauge row frames
-    gauge_frame_row1 = tk.Frame(root, bg='black')
-    gauge_frame_row2 = tk.Frame(root, bg='black')
+    gauge_frame_row1    = tk.Frame(
+                                  root, 
+                                  bg='black'
+                                  )
+
+    gauge_frame_row2    = tk.Frame(
+                                  root, 
+                                  bg='black'
+                                  )
 
 
 	###########################################################
@@ -137,36 +156,68 @@ if __name__ == '__main__':
     # P&ID diagram window
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
 
+    # SDR logo
+    SDRlabel =           tk.Label(
+                                 main_title_frame,
+                                 image = SDR, 
+                                 bg = 'black'
+                                 )
+
 	# Main window label
-    main_window_title     = tk.Label(root, 
-                                    text="Engine Dashboard", 
-                                    bg="black", 
-                                    fg="white", 
-                                    font="Arial 30")
+    main_window_title  = tk.Label(
+                                 main_title_frame, 
+                                 text="Engine Dashboard", 
+                                 bg="black", 
+                                 fg="white", 
+                                 font="Arial 30"
+                                 )
 
 	# Valve buttons
-    switch1 = valve.Buttons(valve_button_row1,
-                            "LOX Pressurization", 
-                            plumbing.one)
-    switch2 = valve.Buttons(valve_button_row2,
-                            "Kerosene Pressurization", 
-                            plumbing.two)
-    switch3 = valve.Buttons(valve_button_row3,
-                            "LOX Vent", 
-                            plumbing.three)
-    switch4 = valve.Buttons(valve_button_row4,
-                            "Kerosene Vent", 
-                            plumbing.four)
-    switch5 = valve.Buttons(valve_button_row1,
-                            "LOX Purge", 
-                            plumbing.five)
-    switch6 = valve.Buttons(valve_button_row2,
-                            "Kerosene Purge", 
-                            plumbing.six)
-    switch7 = valve.BV_button(valve_button_row3,
-                              "LOX Main Valve")
-    switch8 = valve.BV_button(valve_button_row4,
-                              "Kerosene Main Valve")
+    switch1 =       valve.Buttons(
+                                 valve_button_row1,
+                                 "LOX Pressurization", 
+                                 plumbing.one
+                                 )
+
+    switch2 =       valve.Buttons(
+                                 valve_button_row2,
+                                 "Kerosene Pressurization", 
+                                 plumbing.two
+                                 )
+
+    switch3 =       valve.Buttons(
+                                 valve_button_row3,
+                                 "LOX Vent", 
+                                 plumbing.three
+                                 )
+
+    switch4 =       valve.Buttons(
+                                 valve_button_row4,
+                                 "Kerosene Vent", 
+                                 plumbing.four
+                                 )
+
+    switch5 =       valve.Buttons(
+                                 valve_button_row1,
+                                 "LOX Purge", 
+                                 plumbing.five
+                                 )
+
+    switch6 =       valve.Buttons(
+                                 valve_button_row2,
+                                 "Kerosene Purge", 
+                                 plumbing.six
+                                 )
+
+    switch7 =     valve.BV_button(
+                                 valve_button_row3,
+                                 "LOX Main Valve"
+                                 )
+
+    switch8 =     valve.BV_button(
+                                 valve_button_row4,
+                                 "Kerosene Main Valve"
+                                 )
 
 	# Startup button
     startup_button = tk.Button(sequence_frame_row1, 
@@ -220,7 +271,9 @@ if __name__ == '__main__':
 	###########################################################
 
 	# Main window title
-    main_window_title.pack(pady=30)
+    main_title_frame.pack()
+    SDRlabel.pack(side='left', padx=30)
+    main_window_title.pack(pady=30, side='right')
 
 	# Valve buttons
     valve_button_row1.pack()
