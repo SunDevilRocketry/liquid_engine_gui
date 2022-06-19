@@ -23,6 +23,7 @@ __credits__ = ["Colton Acosta"   ,
 ###############################################################
 import threading
 import time
+import os
 import serial
 import serial.tools.list_ports
 import tkinter as tk
@@ -42,6 +43,18 @@ import sequence
 
 
 ###############################################################
+# Callbacks                                                   #
+###############################################################
+
+# Close all GUI windows
+def close_window_callback():
+    global exitFlag
+    root.destroy()
+    plumbing.win.destroy()
+    exitFlag = True
+
+
+###############################################################
 # Main application entry point                                #
 ###############################################################
 if __name__ == '__main__':
@@ -49,6 +62,8 @@ if __name__ == '__main__':
 	###########################################################
 	# Global variables                                        #
 	###########################################################
+
+	# Declarations
     global root                 # Main window object
     global plumbing             # Engine schematic object
     global off_button           # All valves off button
@@ -69,6 +84,10 @@ if __name__ == '__main__':
     global gauge2    
     global gauge3 
     global gauge4           
+    global exitFlag             # Flag set when window closes        
+
+    # Initializations
+    exitFlag = False
 
 
 	###########################################################
@@ -88,6 +107,8 @@ if __name__ == '__main__':
     root.configure(background="black",
                    borderwidth=10)
     root.geometry("900x1000")
+    root.protocol("WM_DELETE_WINDOW",
+                   close_window_callback)
 
 	# Program icon
     SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
@@ -129,10 +150,6 @@ if __name__ == '__main__':
 	###########################################################
 	# Widget initializations                                  #
 	###########################################################
-
-    #ACTION HANDLER THREAD (checks for startup button press)
-    thread = threading.Thread(target=sequence.actionHandler)
-    thread.start()
 
     # P&ID diagram window
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
@@ -254,26 +271,31 @@ if __name__ == '__main__':
 	# Main Program Loop                                       #
 	###########################################################
     prevCon = True
-    while True:
+    while (not exitFlag):
+        try:
+			# Update sensor gauge readings
+            gauge1.setText("Nan", "Fuel Tank Pressure"     )
+            gauge2.setText("Nan", "Fuel Flow Rate"         )
+            gauge3.setText("Nan", "Fuel Injection Pressure")
+            gauge4.setText("Nan", "Thrust"                 )
+            gauge5.setText("Nan", "LOX Pressure"           )
+            gauge6.setText("Nan", "LOX Flow Rate"          )
+            gauge7.setText("Nan", "Engine Pressure"        )
+            gauge8.setText("Nan", "LOX Temperature"        )
 
-		# Update sensor gauge readings
-        gauge1.setText("Nan", "Fuel Tank Pressure"     )
-        gauge2.setText("Nan", "Fuel Flow Rate"         )
-        gauge3.setText("Nan", "Fuel Injection Pressure")
-        gauge4.setText("Nan", "Thrust"                 )
-        gauge5.setText("Nan", "LOX Pressure"           )
-        gauge6.setText("Nan", "LOX Flow Rate"          )
-        gauge7.setText("Nan", "Engine Pressure"        )
-        gauge8.setText("Nan", "LOX Temperature"        )
+			# Update engine schematic
+            plumbing.updatePipeStatus()
 
-		# Update engine schematic
-        plumbing.updatePipeStatus()
+			# Draw to main window
+            root.update()
 
-		# Draw to main window
-        root.update()
+			# Draw to plumbing window
+            plumbing.getWindow().update()
+        except:
+            pass
 
-		# Draw to plumbing window
-        plumbing.getWindow().update()
+	# Clear the console to get rid of weird tk/tcl errors
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 ###############################################################
 # END OF FILE                                                 #
