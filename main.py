@@ -64,14 +64,6 @@ if __name__ == '__main__':
 	###########################################################
 
 	# Declarations
-    global root                 # Main window object
-    global plumbing             # Engine schematic object
-    global off_button           # All valves off button
-    global USB_connection_label # USB connection widget objects
-    global valve_button_row1    # valve button row frames
-    global valve_button_row2
-    global valve_button_row3
-    global valve_button_row4
     global exitFlag             # Flag set when window closes        
 
     # Initializations
