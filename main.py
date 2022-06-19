@@ -220,42 +220,86 @@ if __name__ == '__main__':
                                  )
 
 	# Startup button
-    startup_button = tk.Button(sequence_frame_row1, 
-                               text="STARTUP", 
-                               padx=40, 
-                               pady=10, 
-                               font="Verdana 14", 
-                               bg="black", 
-                               fg="white", 
-                               command=sequence.startup,
-                               activebackground="white",
-                               relief="solid",
-							   highlightthickness=2,
-                               borderwidth=5)
+    startup_button =    tk.Button(
+                                 sequence_frame_row1, 
+                                 text="STARTUP", 
+                                 padx=40, 
+                                 pady=10, 
+                                 font="Verdana 14", 
+                                 bg="black", 
+                                 fg="white", 
+                                 command=sequence.startup,
+                                 activebackground="white",
+                                 relief="solid",
+							     highlightthickness=2,
+                                 borderwidth=5
+                                 )
 
 	# All valves off button
-    off_button    = tk.Button(sequence_frame_row1, 
-                              text="ALL OFF", 
-                              padx=45, 
-                              pady=10, 
-                              font="Verdana 14", 
-                              bg="black", 
-                              fg="white", 
-                              command=sequence.allOff,
-                              relief="solid",
-						      highlightthickness=2,
-                              borderwidth=5,
-                              activebackground="white")
+    off_button    =     tk.Button(
+                                 sequence_frame_row1, 
+                                 text="ALL OFF", 
+                                 padx=45, 
+                                 pady=10, 
+                                 font="Verdana 14", 
+                                 bg="black", 
+                                 fg="white", 
+                                 command=sequence.allOff,
+                                 relief="solid",
+						         highlightthickness=2,
+                                 borderwidth=5,
+                                 activebackground="white"
+                                 )
 
 	# Sensor gauges
-    gauge1 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge2 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge3 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge4 = gauge.gauge(gauge_frame_row1, 'black', 5)
-    gauge5 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge6 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge7 = gauge.gauge(gauge_frame_row2, 'black', 5)
-    gauge8 = gauge.gauge(gauge_frame_row2, 'black', 5)
+    gauge1 =          gauge.gauge(
+                                 gauge_frame_row1, 
+                                 background = 'black',
+                                 max_sensor_val = 5
+                                 )
+
+    gauge2 =          gauge.gauge(
+                                 gauge_frame_row1, 
+                                 background = 'black',
+                                 max_sensor_val =  5
+                                 )
+
+    gauge3 =          gauge.gauge(
+                                 gauge_frame_row1, 
+                                 background = 'black',
+                                 max_sensor_val =  5
+                                 )
+
+    gauge4 =          gauge.gauge(
+                                 gauge_frame_row1, 
+                                 background = 'black', 
+                                 max_sensor_val = 5
+                                 )
+
+    gauge5 =          gauge.gauge(
+                                 gauge_frame_row2, 
+                                 background = 'black', 
+                                 max_sensor_val = 5
+                                 )
+
+    gauge6 =          gauge.gauge(
+                                 gauge_frame_row2, 
+                                 background = 'black', 
+                                 max_sensor_val = 5
+                                 )
+
+    gauge7 =          gauge.gauge(
+                                 gauge_frame_row2, 
+                                 background = 'black', 
+                                 max_sensor_val = 5
+                                 )
+
+    gauge8 =          gauge.gauge(
+                                 gauge_frame_row2, 
+                                 background = 'black', 
+                                 max_sensor_val = 5
+                                 )
+
     gauge1.setText("Nan", "Fuel Tank Pressure"     )
     gauge2.setText("Nan", "Fuel Flow Rate"         )
     gauge3.setText("Nan", "Fuel Injection Pressure")
