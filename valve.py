@@ -76,9 +76,15 @@ class Indicator_Light:
 
     def setState(self, state):
         if(state):
-            self.canvas.itemconfig(self.state, fill=self.on_color)
+            self.canvas.itemconfig(
+                                  self.state, 
+                                  fill=self.on_color
+                                  )
         else:
-            self.canvas.itemconfig(self.state, fill=self.off_color)
+            self.canvas.itemconfig(
+                                  self.state, 
+                                  fill=self.off_color
+                                  )
 
     def getWidget(self):
         return self.canvas
@@ -115,7 +121,7 @@ class Buttons:
                                    background = 'black',
                                    foreground = 'white',
                                    text = text,
-                                   font ='Verdana 12',
+                                   font =('Verdana', 12),
                                    relief ='solid',
                                    labelanchor ='n'
                                    )
@@ -194,7 +200,7 @@ class BV_button:
                                    background = 'black',
                                    foreground = 'white',
                                    text=text,
-                                   font='Verdana 12',
+                                   font = ('Verdana', 12),
                                    relief='solid',
                                    labelanchor='n'
                                    )
