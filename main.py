@@ -68,14 +68,6 @@ if __name__ == '__main__':
     global plumbing             # Engine schematic object
     global off_button           # All valves off button
     global USB_connection_label # USB connection widget objects
-    global switch1              # valve button objects
-    global switch2          
-    global switch3 
-    global switch4 
-    global switch5 
-    global switch6
-    global switch7 
-    global switch8 
     global valve_button_row1    # valve button row frames
     global valve_button_row2
     global valve_button_row3
