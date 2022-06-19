@@ -72,10 +72,6 @@ if __name__ == '__main__':
     global valve_button_row2
     global valve_button_row3
     global valve_button_row4
-    global gauge1               # sensor gauge objects
-    global gauge2    
-    global gauge3 
-    global gauge4           
     global exitFlag             # Flag set when window closes        
 
     # Initializations
