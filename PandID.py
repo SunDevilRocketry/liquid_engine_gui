@@ -21,6 +21,7 @@ import tkinter as tk
 ###############################################################
 import Header
 import DiagramComponents
+import main
 
 
 ###############################################################
@@ -37,6 +38,8 @@ class Liquid_Engine_Plumbing:
         self.win.title("P&ID Diagram")
         self.win.geometry(str(width) + "x" + str(height))
         self.win.configure(bg='black')
+        self.win.protocol("WM_DELETE_WINDOW",
+                           self.close_window_callback)
 
         # CONSTANT
         fluidColor = '#41d94d'
@@ -216,6 +219,9 @@ class Liquid_Engine_Plumbing:
         #row 10
         self.n.setNeighbors(None, None, None, None)
         self.tp1.setNeighbors(None, None, None, None)
+
+    def close_window_callback(self):
+        self.win.destroy()
 
     def defaultState(self):
         self.p1.setState(False)

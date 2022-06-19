@@ -93,7 +93,7 @@ if __name__ == '__main__':
 	###########################################################
 	# Local variables                                         #
 	###########################################################
-    pad = 10 # Spacing constants within GUI
+    pad     = 10 # Spacing constants within GUI
     gridLen = 85
 
 
@@ -292,6 +292,7 @@ if __name__ == '__main__':
 			# Draw to plumbing window
             plumbing.getWindow().update()
         except:
+            exitFlag = True
             pass
 
 	# Clear the console to get rid of weird tk/tcl errors
