@@ -29,7 +29,6 @@ import serial.tools.list_ports
 import tkinter as tk
 
 from   serial    import SerialException
-from   mttkinter import mtTkinter
 from   PIL       import Image, ImageTk
 
 
@@ -82,13 +81,17 @@ if __name__ == '__main__':
 	###########################################################
 
 	# root window
-    root = tk.Tk(mt_debug = 1)         
+    root = tk.Tk()         
     root.title("Engine Dashboard")
-    root.configure(background="black",
-                   borderwidth=10)
+    root.configure(
+                   background="black",
+                   borderwidth=10
+                  )
     root.geometry("900x1000")
-    root.protocol("WM_DELETE_WINDOW",
-                   close_window_callback)
+    root.protocol(
+                 "WM_DELETE_WINDOW",
+                 close_window_callback
+                 )
 
 	# Program icon
     SDRlogo = tk.PhotoImage(file='images/SDRLogo5.png')
