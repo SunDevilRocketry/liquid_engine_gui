@@ -91,14 +91,14 @@ class Indicator_Light:
 
 
 ###############################################################
-# Solenoid state control buttons                              #
+# Valve state control buttons                                 #
 ###############################################################
 class Buttons:
     def __init__(
                 self, 
                 root,     # frame to attach button to
                 text,     # valve button frame label 
-                symbol    # link to engine schematic symbol
+                symbol=None    # link to engine schematic symbol
                 ):
 
 		#######################################################
@@ -165,97 +165,19 @@ class Buttons:
 
     def actionOff(self):
         self.led.setState(False)
-        self.symbol.setState(False)
+        if (self.symbol != None):
+            self.symbol.setState(False)
         print("1 (OFF)")
 
     def actionOn(self):
         self.led.setState(True)
-        self.symbol.setState(True)
+        if (self.symbol != None):
+            self.symbol.setState(False)
         print("1 (ON)")
 
     def getFrame(self):
         return self.switch
 
-
-###############################################################
-# Ball valve state control buttons                            #
-###############################################################
-class BV_button:
-    def __init__(self, root, text):
-
-		#######################################################
-		# class attributes                                    #
-		#######################################################
-
-		# valve ON/OFF state
-        self.state = 0
-
-		#######################################################
-		# objects                                             #
-		#######################################################
-
-		# valve button frame
-        self.switch = tk.LabelFrame(
-                                   root, 
-                                   background = 'black',
-                                   foreground = 'white',
-                                   text=text,
-                                   font = ('Verdana', 12),
-                                   relief='solid',
-                                   labelanchor='n'
-                                   )
-
-		# indicator light (canvas)
-        self.led  = Indicator_Light(
-                                   self.switch,
-                                   'black'
-                                   )
-
-		# ON/OFF button widgets
-        self.on_button  = tk.Button(
-                                   self.switch, 
-                                   text="ON", 
-                                   width=12, 
-                                   command=self.actionOn, 
-                                   bg='#41d94d', 
-                                   fg='white', 
-                                   activebackground='#28bd33', 
-                                   activeforeground='white'
-                                   )
-
-        self.off_button = tk.Button(
-                                   self.switch, 
-                                   text="OFF", 
-                                   width=12, 
-                                   command=self.actionOff, 
-                                   bg='#ed3b3b', 
-                                   fg='white', 
-                                   activebackground='#d42f2f', 
-                                   activeforeground='white'
-                                   )
-
-		#######################################################
-		# Initial draw                                        #
-		#######################################################
-        self.off_button.pack(side="right")
-        self.led.getWidget().pack(side="right")
-        self.on_button.pack(side="right")
-        self.switch.pack(side='left', padx=4*pad)
-
-    def actionOff(self):
-        self.led.setState(False)
-        print("1 (OFF)")
-
-    def actionOn(self):
-        self.led.setState(True)
-        print("1 (ON)")
-
-    def getFrame(self):
-        return self.switch
-
-        serialNum = int(self.state.get())
-        self.lR.config(bg="red")
-        print(str(serialNum))
 
 ###############################################################
 # END OF FILE                                                 #

@@ -73,7 +73,9 @@ if __name__ == '__main__':
 	###########################################################
 	# Local variables                                         #
 	###########################################################
-    pad     = 10 # Spacing constants within GUI
+
+    # Spacing constants within GUI
+    pad     = 10 
     gridLen = 85
 
 
@@ -85,8 +87,8 @@ if __name__ == '__main__':
     root = tk.Tk()         
     root.title("Engine Dashboard")
     root.configure(
-                   background="black",
-                   borderwidth=10
+                  background="black",
+                  borderwidth=10
                   )
     root.geometry("900x1000")
     root.protocol(
@@ -102,7 +104,7 @@ if __name__ == '__main__':
                               Image.Resampling.LANCZOS
                               )
     SDR = ImageTk.PhotoImage(SDRImage)
-    root.iconphoto(True,SDRlogo)
+    root.iconphoto(True, SDRlogo)
 
     # Logo and dashboard label frame
     main_title_frame    = tk.Frame(
@@ -157,67 +159,67 @@ if __name__ == '__main__':
     plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
 
     # SDR logo
-    SDRlabel =           tk.Label(
-                                 main_title_frame,
-                                 image = SDR, 
-                                 bg = 'black'
-                                 )
+    SDRlabel =                tk.Label(
+                                      main_title_frame,
+                                      image = SDR, 
+                                      bg = 'black'
+                                      )
 
 	# Main window label
-    main_window_title  = tk.Label(
-                                 main_title_frame, 
-                                 text="Engine Dashboard", 
-                                 bg="black", 
-                                 fg="white", 
-                                 font="Arial 30"
-                                 )
+    main_window_title =       tk.Label(
+                                      main_title_frame, 
+                                      text="Engine Dashboard", 
+                                      bg="black", 
+                                      fg="white", 
+                                      font="Arial 30"
+                                      )
 
 	# Valve buttons
-    switch1 =       valve.Buttons(
-                                 valve_button_row1,
-                                 "LOX Pressurization", 
-                                 plumbing.one
-                                 )
+    solenoid1_buttons = valve.Buttons(
+                                     valve_button_row1,
+                                     "LOX Pressurization", 
+                                     plumbing.one
+                                     )
 
-    switch2 =       valve.Buttons(
-                                 valve_button_row2,
-                                 "Kerosene Pressurization", 
-                                 plumbing.two
-                                 )
+    solenoid2_buttons = valve.Buttons(
+                                     valve_button_row2,
+                                     "Kerosene Pressurization", 
+                                     plumbing.two
+                                     )
 
-    switch3 =       valve.Buttons(
-                                 valve_button_row3,
-                                 "LOX Vent", 
-                                 plumbing.three
-                                 )
+    solenoid3_buttons = valve.Buttons(
+                                     valve_button_row3,
+                                     "LOX Vent", 
+                                     plumbing.three
+                                     )
 
-    switch4 =       valve.Buttons(
-                                 valve_button_row4,
-                                 "Kerosene Vent", 
-                                 plumbing.four
-                                 )
+    solenoid4_buttons = valve.Buttons(
+                                     valve_button_row4,
+                                     "Kerosene Vent", 
+                                     plumbing.four
+                                     )
 
-    switch5 =       valve.Buttons(
-                                 valve_button_row1,
-                                 "LOX Purge", 
-                                 plumbing.five
-                                 )
+    solenoid5_buttons = valve.Buttons(
+                                     valve_button_row1,
+                                     "LOX Purge", 
+                                     plumbing.five
+                                     )
 
-    switch6 =       valve.Buttons(
-                                 valve_button_row2,
-                                 "Kerosene Purge", 
-                                 plumbing.six
-                                 )
+    solenoid6_buttons = valve.Buttons(
+                                     valve_button_row2,
+                                     "Kerosene Purge", 
+                                     plumbing.six
+                                     )
 
-    switch7 =     valve.BV_button(
-                                 valve_button_row3,
-                                 "LOX Main Valve"
-                                 )
+    ball_valve1_buttons = valve.Buttons(
+                                    valve_button_row3,
+                                    "LOX Main Valve"
+                                    )
 
-    switch8 =     valve.BV_button(
-                                 valve_button_row4,
-                                 "Kerosene Main Valve"
-                                 )
+    ball_valve2_buttons = valve.Buttons(
+                                    valve_button_row4,
+                                    "Kerosene Main Valve"
+                                    )
 
 	# Startup button
     startup_button =    tk.Button(
