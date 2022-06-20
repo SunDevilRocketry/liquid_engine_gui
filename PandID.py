@@ -24,7 +24,7 @@ import main
 
 
 ###############################################################
-# Engine Title Object                                         #
+# Engine Window Title                                         #
 ###############################################################
 class Header:
 
@@ -33,9 +33,9 @@ class Header:
                 root,       # window to draw on 
                 background, # background color 
                 text,       # header text 
-                width,      
-                height, 
-                size
+                width,      # width of drawing canvas 
+                height,     # height of drawing canvas 
+                fontsize
                 ):
 
         # Canvas dimensions
@@ -70,7 +70,7 @@ class Header:
         self.canvas.create_text(
                                width/2.0, 
                                height/2.0, 
-                               font=("Arial", size, ''), 
+                               font=("Arial", fontsize, ''), 
                                fill="white", 
                                text=text
                                )
@@ -79,10 +79,22 @@ class Header:
     def getWidget(self):
         return self.canvas
 
+
+###############################################################
+# Engine Schematic Labels                                     #
+###############################################################
 class Text:
 
-    def __init__(self, root, background, text, width, height, size):
-        self.canvas = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+    def __init__(
+                self, 
+                root, 
+                bg_color, 
+                text, 
+                width, 
+                height, 
+                size):
+
+        self.canvas = tk.Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
         self.width = width
         self.height = height
 
