@@ -172,7 +172,7 @@ class Buttons:
     def actionOn(self):
         self.led.setState(True)
         if (self.symbol != None):
-            self.symbol.setState(False)
+            self.symbol.setState(True)
         print("1 (ON)")
 
     def getFrame(self):
