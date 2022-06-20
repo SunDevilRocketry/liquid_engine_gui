@@ -177,37 +177,37 @@ if __name__ == '__main__':
 	# Valve buttons
     solenoid1_buttons = valve.Buttons(
                                      valve_button_row1,
-                                     "LOX Pressurization", 
+                                     "LOX Pressurization (1)", 
                                      plumbing.one
                                      )
 
     solenoid2_buttons = valve.Buttons(
                                      valve_button_row2,
-                                     "Kerosene Pressurization", 
+                                     "Kerosene Pressurization (2)", 
                                      plumbing.two
                                      )
 
     solenoid3_buttons = valve.Buttons(
                                      valve_button_row3,
-                                     "LOX Vent", 
+                                     "LOX Vent (2)", 
                                      plumbing.three
                                      )
 
     solenoid4_buttons = valve.Buttons(
                                      valve_button_row4,
-                                     "Kerosene Vent", 
+                                     "Kerosene Vent (4)", 
                                      plumbing.four
                                      )
 
     solenoid5_buttons = valve.Buttons(
                                      valve_button_row1,
-                                     "LOX Purge", 
+                                     "LOX Purge (5)", 
                                      plumbing.five
                                      )
 
     solenoid6_buttons = valve.Buttons(
                                      valve_button_row2,
-                                     "Kerosene Purge", 
+                                     "Kerosene Purge (6)", 
                                      plumbing.six
                                      )
 
