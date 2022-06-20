@@ -38,13 +38,44 @@ class Header:
                 size
                 ):
 
-        self.canvas = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        # Canvas dimensions
         self.width = width
         self.height = height
 
-        self.canvas.create_line((width / 8.0, 7 * height / 8.0), (7 * width / 8.0, 7 * height / 8.0), width=1, fill='white')
-        self.canvas.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
+        # Underline coordinates
+        underline_x0 = width/8.0
+        underline_y0 = 7*height/8.0
+        underline_x1 = 7*underline_x0
+        underline_y1 = underline_y0
+        underline_start_coords = (underline_x0, underline_y0)
+        underline_end_coords   = (underline_x1, underline_y1)
 
+        # Canvas object
+        self.canvas = tk.Canvas(
+                               root, 
+                               width=width, 
+                               height=height, 
+                               bg=background, 
+                               highlightthickness=0
+                               )
+
+        # Draw text and underline
+        self.canvas.create_line(
+                               underline_start_coords, 
+                               underline_end_coords,
+                               width=1, 
+                               fill='white'
+                               )
+
+        self.canvas.create_text(
+                               width/2.0, 
+                               height/2.0, 
+                               font=("Arial", size, ''), 
+                               fill="white", 
+                               text=text
+                               )
+
+    # Canvas widget public access
     def getWidget(self):
         return self.canvas
 
