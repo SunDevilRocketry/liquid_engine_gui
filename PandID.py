@@ -19,9 +19,33 @@ import tkinter as tk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import Header
 import DiagramComponents
 import main
+
+class Header:
+
+    def __init__(self, root, background, text, width, height, size):
+        self.c = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.width = width
+        self.height = height
+
+        self.c.create_line((width / 8.0, 7 * height / 8.0), (7 * width / 8.0, 7 * height / 8.0), width=1, fill='white')
+        self.c.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
+
+    def getWidget(self):
+        return self.c
+
+class Text:
+
+    def __init__(self, root, background, text, width, height, size):
+        self.c = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.width = width
+        self.height = height
+
+        self.c.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
+
+    def getWidget(self):
+        return self.c
 
 
 ###############################################################
@@ -45,7 +69,7 @@ class Liquid_Engine_Plumbing:
         fluidColor = '#41d94d'
 
         # HEADER
-        self.header = Header.Header(self.win, 'black', 'P&ID', width, gridLen, 24)
+        self.header = Header(self.win, 'black', 'P&ID', width, gridLen, 24)
         self.header.getWidget().place(x=gridLen * 0, y=gridLen * 0)
 
         # All TANKS
@@ -104,10 +128,10 @@ class Liquid_Engine_Plumbing:
         self.tp1.getWidget().place(x=gridLen * 5, y=gridLen * 10)
 
         # All Text boxes
-        self.t1 = Header.Text(self.win, 'black', 'K Fill', gridLen, gridLen, 12)
-        self.t2 = Header.Text(self.win, 'black', 'K Drain', gridLen, gridLen, 12)
-        self.t3 = Header.Text(self.win, 'black', 'LOx\nFill/Drain', gridLen, gridLen, 12)
-        self.t4 = Header.Text(self.win, 'black', 'Regen\nCircuit', gridLen, gridLen, 12)
+        self.t1 = Text(self.win, 'black', 'K Fill', gridLen, gridLen, 12)
+        self.t2 = Text(self.win, 'black', 'K Drain', gridLen, gridLen, 12)
+        self.t3 = Text(self.win, 'black', 'LOx\nFill/Drain', gridLen, gridLen, 12)
+        self.t4 = Text(self.win, 'black', 'Regen\nCircuit', gridLen, gridLen, 12)
         self.t1.getWidget().place(x=gridLen * 7, y=gridLen * 4)
         self.t2.getWidget().place(x=gridLen * 7, y=gridLen * 6)
         self.t3.getWidget().place(x=gridLen * 1, y=gridLen * 9)
