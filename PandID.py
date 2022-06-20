@@ -87,19 +87,37 @@ class Text:
 
     def __init__(
                 self, 
-                root, 
-                bg_color, 
-                text, 
-                width, 
-                height, 
-                size):
+                root,      # Window to draw text on 
+                bg_color,  # Background color 
+                text,      # Text to display 
+                width,     # Width of drawing canvas 
+                height,    # Height of frawing canvas 
+                fontsize   # Text fontsize
+                ):
 
-        self.canvas = tk.Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
+        # Drawing canvas dimensions 
         self.width = width
         self.height = height
 
-        self.canvas.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
+        # Canvas object
+        self.canvas = tk.Canvas(
+                               root, 
+                               width=width, 
+                               height=height, 
+                               bg=bg_color, 
+                               highlightthickness=0
+                               )
 
+        # Draw text
+        self.canvas.create_text(
+                               width/2.0, 
+                               height/2.0, 
+                               font=("Arial", fontsize, ''),
+                               fill="white", 
+                               text=text
+                               )
+
+    # Canvas widget public access
     def getWidget(self):
         return self.canvas
 
