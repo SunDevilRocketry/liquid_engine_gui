@@ -51,14 +51,14 @@ class Header:
 class Text:
 
     def __init__(self, root, background, text, width, height, size):
-        self.c = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.canvas = tk.Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
         self.width = width
         self.height = height
 
-        self.c.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
+        self.canvas.create_text(width / 2.0, height / 2.0, font=("Arial", size, ''), fill="white", text=text)
 
     def getWidget(self):
-        return self.c
+        return self.canvas
 
 
 ###############################################################
