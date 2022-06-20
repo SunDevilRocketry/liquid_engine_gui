@@ -36,10 +36,10 @@ from PIL      import Image, ImageTk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import gauge
-import valve
-import PandID
-import sequence
+import gauge    as SDR_gauge
+import valve    as SDR_valve
+import PandID   as SDR_PandID
+import sequence as SDR_sequence
 
 
 ###############################################################
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 	###########################################################
 
     # P&ID diagram window
-    plumbing = PandID.Liquid_Engine_Plumbing(gridLen)  
+    plumbing = SDR_PandID.Liquid_Engine_Plumbing(gridLen)  
 
     # SDR logo
     SDRlabel =                tk.Label(
@@ -175,48 +175,48 @@ if __name__ == '__main__':
                                       )
 
 	# Valve buttons
-    solenoid1_buttons = valve.Buttons(
+    solenoid1_buttons = SDR_valve.Buttons(
                                      valve_button_row1,
                                      "LOX Pressurization (1)", 
                                      plumbing.one
                                      )
 
-    solenoid2_buttons = valve.Buttons(
+    solenoid2_buttons = SDR_valve.Buttons(
                                      valve_button_row2,
                                      "Kerosene Pressurization (2)", 
                                      plumbing.two
                                      )
 
-    solenoid3_buttons = valve.Buttons(
+    solenoid3_buttons = SDR_valve.Buttons(
                                      valve_button_row3,
                                      "LOX Vent (2)", 
                                      plumbing.three
                                      )
 
-    solenoid4_buttons = valve.Buttons(
+    solenoid4_buttons = SDR_valve.Buttons(
                                      valve_button_row4,
                                      "Kerosene Vent (4)", 
                                      plumbing.four
                                      )
 
-    solenoid5_buttons = valve.Buttons(
+    solenoid5_buttons = SDR_valve.Buttons(
                                      valve_button_row1,
                                      "LOX Purge (5)", 
                                      plumbing.five
                                      )
 
-    solenoid6_buttons = valve.Buttons(
+    solenoid6_buttons = SDR_valve.Buttons(
                                      valve_button_row2,
                                      "Kerosene Purge (6)", 
                                      plumbing.six
                                      )
 
-    ball_valve1_buttons = valve.Buttons(
+    ball_valve1_buttons = SDR_valve.Buttons(
                                     valve_button_row3,
                                     "LOX Main Valve"
                                     )
 
-    ball_valve2_buttons = valve.Buttons(
+    ball_valve2_buttons = SDR_valve.Buttons(
                                     valve_button_row4,
                                     "Kerosene Main Valve"
                                     )
@@ -230,7 +230,7 @@ if __name__ == '__main__':
                                  font="Verdana 14", 
                                  bg="black", 
                                  fg="white", 
-                                 command=sequence.startup,
+                                 command=SDR_sequence.startup,
                                  activebackground="white",
                                  relief="solid",
 							     highlightthickness=2,
@@ -246,7 +246,7 @@ if __name__ == '__main__':
                                  font="Verdana 14", 
                                  bg="black", 
                                  fg="white", 
-                                 command=sequence.allOff,
+                                 command=SDR_sequence.allOff,
                                  relief="solid",
 						         highlightthickness=2,
                                  borderwidth=5,
@@ -254,49 +254,49 @@ if __name__ == '__main__':
                                  )
 
 	# Sensor gauges
-    gauge1 =          gauge.gauge(
+    gauge1 =      SDR_gauge.gauge(
                                  gauge_frame_row1, 
                                  background = 'black',
                                  max_sensor_val = 5
                                  )
 
-    gauge2 =          gauge.gauge(
-                                 gauge_frame_row1, 
-                                 background = 'black',
-                                 max_sensor_val =  5
-                                 )
-
-    gauge3 =          gauge.gauge(
+    gauge2 =      SDR_gauge.gauge(
                                  gauge_frame_row1, 
                                  background = 'black',
                                  max_sensor_val =  5
                                  )
 
-    gauge4 =          gauge.gauge(
+    gauge3 =      SDR_gauge.gauge(
+                                 gauge_frame_row1, 
+                                 background = 'black',
+                                 max_sensor_val =  5
+                                 )
+
+    gauge4 =      SDR_gauge.gauge(
                                  gauge_frame_row1, 
                                  background = 'black', 
                                  max_sensor_val = 5
                                  )
 
-    gauge5 =          gauge.gauge(
+    gauge5 =      SDR_gauge.gauge(
                                  gauge_frame_row2, 
                                  background = 'black', 
                                  max_sensor_val = 5
                                  )
 
-    gauge6 =          gauge.gauge(
+    gauge6 =      SDR_gauge.gauge(
                                  gauge_frame_row2, 
                                  background = 'black', 
                                  max_sensor_val = 5
                                  )
 
-    gauge7 =          gauge.gauge(
+    gauge7 =      SDR_gauge.gauge(
                                  gauge_frame_row2, 
                                  background = 'black', 
                                  max_sensor_val = 5
                                  )
 
-    gauge8 =          gauge.gauge(
+    gauge8 =      SDR_gauge.gauge(
                                  gauge_frame_row2, 
                                  background = 'black', 
                                  max_sensor_val = 5
