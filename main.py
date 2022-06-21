@@ -355,7 +355,7 @@ if __name__ == '__main__':
     prevCon = True
     while (not exitFlag):
         try:
-			# Update sensor gauge readings
+		    # Update sensor gauge readings
             gauge1.setText("Nan", "Fuel Tank Pressure"     )
             gauge2.setText("Nan", "Fuel Flow Rate"         )
             gauge3.setText("Nan", "Fuel Injection Pressure")
@@ -365,13 +365,13 @@ if __name__ == '__main__':
             gauge7.setText("Nan", "Engine Pressure"        )
             gauge8.setText("Nan", "LOX Temperature"        )
 
-			# Update engine schematic
+		    # Update engine schematic
             plumbing.updatePipeStatus()
 
-			# Draw to main window
+            # Draw to main window
             root.update()
 
-			# Draw to plumbing window
+            # Draw to plumbing window
             plumbing.getWindow().update()
         except:
             exitFlag = True

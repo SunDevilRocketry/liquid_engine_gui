@@ -56,23 +56,23 @@ class Component:
                             )
 
         # Pipe input/output port configuration, boolean values
-        self.pipe_top = pipe_top
-        self.pipe_right = pipe_right
+        self.pipe_top    = pipe_top
+        self.pipe_right  = pipe_right
         self.pipe_buttom = pipe_buttom
-        self.pipe_left = pipe_left
+        self.pipe_left   = pipe_left
 
         # TODO: Not sure what this is yet
-        self.top = None
-        self.right = None
+        self.top    = None
+        self.right  = None
         self.bottom = None
-        self.left = None
+        self.left   = None
 
         # Fill state boolean variables to tell the GUI how to 
         # draw fluid in the engine pipes
-        self.pipe_top_fluid_state = False
-        self.pipe_right_fluid_state = False
+        self.pipe_top_fluid_state    = False
+        self.pipe_right_fluid_state  = False
         self.pipe_bottom_fluid_state = False
-        self.pipe_left_fluid_state = False
+        self.pipe_left_fluid_state   = False
 
         # Fluid fill color
         self.fluidColor = kwargs.get('fluid_color', '#41d94d')
@@ -231,7 +231,7 @@ class Component:
         self.pipe_left_fluid_state   = pipe_left_fluid_status
 
 
-        # Draw to engine display
+        ############# Draw to engine display ##################
 
         # top pipe
         if (pipe_top_fluid_state):
@@ -278,23 +278,45 @@ class Component:
                                   fill='black'
                                   )
 
-    def setFill(self, pipe_top_fluid_state, pipe_right_fluid_state, pipe_buttom_fluid_state, pipe_left_fluid_status):
+    # adds fluid to pipes for edge cases
+    def setFill(
+               self, 
+               pipe_top_fluid_state, 
+               pipe_right_fluid_state, 
+               pipe_buttom_fluid_state, 
+               pipe_left_fluid_status
+               ):
+
         # change color only if true
         if (pipe_top_fluid_state):
-            self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_top, 
+                                  fill=self.fluidColor
+                                  )
         if (pipe_right_fluid_state):
-            self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_right, 
+                                  fill=self.fluidColor
+                                  )
         if (pipe_buttom_fluid_state):
-            self.canvas.itemconfig(self.fluid_buttom, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_buttom, 
+                                  fill=self.fluidColor
+                                  )
         if (pipe_left_fluid_status):
-            self.canvas.itemconfig(self.fluid_left, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_left, 
+                                  fill=self.fluidColor
+                                  )
 
+    # TODO: Not sure what this method does
     def setNeighbors(self, top, right, bottom, left):
         self.top = top
         self.right = right
         self.bottom = bottom
         self.left = left
 
+    # Public access to canvas widget
     def getWidget(self):
         return self.canvas
 
