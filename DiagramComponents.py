@@ -77,6 +77,11 @@ class Component:
         # Fluid fill color
         self.fluidColor = kwargs.get('fluid_color', '#41d94d')
 
+
+		#######################################################
+		# Initial component draw                              #
+		#######################################################
+
         # Draw input/output pipes with white lines
         if (pipe_top):
             pipewall_left        = [
@@ -171,65 +176,107 @@ class Component:
 
         # Draw inital input/output piping fluid (initially empy)
         self.fluid_top = self.canvas.create_rectangle(
-                                                     (7*width/16.0)+1, 
-                                                     0, 
-                                                     (9*width/16.0)-1,
-                                                     ( height/4.0) -1,
-                                                     fill='black', 
-                                                     outline=""
+                                                (7*width/16.0)+1, 
+                                                 0, 
+                                                (9*width/16.0)-1,
+                                                ( height/4.0) -1,
+                                                fill='black', 
+                                                outline=""
                                                      )
 
         self.fluid_right = self.canvas.create_rectangle(
-                                                     (3*width /4.0) +1,
-                                                     (7*height/16.0)+1, 
-                                                     width,
-                                                     (9*height/16.0)-1,
-                                                     fill='black', 
-                                                     outline=""
+                                                (3*width /4.0) +1,
+                                                (7*height/16.0)+1, 
+                                                width,
+                                                (9*height/16.0)-1,
+                                                fill='black', 
+                                                outline=""
                                                        )
 
         self.fluid_buttom = self.canvas.create_rectangle(
-                                                     (7*width/16.0)+1, 
-                                                     (3*height/4.0)+1, 
-                                                     (9*width/16.0)-1,
-                                                     height,
-                                                     fill='black', 
-                                                     outline=""
+                                               (7*width/16.0)+1, 
+                                               (3*height/4.0)+1, 
+                                               (9*width/16.0)-1,
+                                               height,
+                                               fill='black', 
+                                               outline=""
                                                         )
 
         self.fluid_left = self.canvas.create_rectangle(
-                                                     0, 
-                                                     (7*height/16.0)+1, 
-                                                     ( width  / 4.0)-1, 
-                                                     (9*height/16.0)-1,
-                                                     fill='black', 
-                                                     outline=""
+                                                0, 
+                                               (7*height/16.0)+1, 
+                                               ( width  / 4.0)-1, 
+                                               (9*height/16.0)-1,
+                                               fill='black', 
+                                               outline=""
                                                       )
+
+	###########################################################
+	# Display update drawing functions                        #
+	###########################################################
 
     # Set the fill state of the component input/output pipes and 
     # update the engine display
-    def setPipes(self, pipe_top_fluid_state, pipe_right_fluid_state, pipe_buttom_fluid_state, pipe_left_fluid_status):
-        # absolute condition, True = Fluid color, False = black
-        self.pipe_top_fluid_state = pipe_top_fluid_state
-        self.pipe_right_fluid_state = pipe_right_fluid_state
+    def setPipes(self, 
+                pipe_top_fluid_state,    # boolean values 
+                pipe_right_fluid_state,  # indicating whether  
+                pipe_buttom_fluid_state, # there is fluid in the 
+                pipe_left_fluid_status   # adjacent pipes
+                ):
+
+        # Update class attributes
+        self.pipe_top_fluid_state    = pipe_top_fluid_state
+        self.pipe_right_fluid_state  = pipe_right_fluid_state
         self.pipe_bottom_fluid_state = pipe_buttom_fluid_state
-        self.pipe_left_fluid_state = pipe_left_fluid_status
+        self.pipe_left_fluid_state   = pipe_left_fluid_status
+
+
+        # Draw to engine display
+
+        # top pipe
         if (pipe_top_fluid_state):
-            self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_top, 
+                                  fill=self.fluidColor
+                                  )
         else:
-            self.canvas.itemconfig(self.fluid_top, fill='black')
+            self.canvas.itemconfig(
+                                  self.fluid_top, 
+                                  fill='black'
+                                  )
+        # right pipe
         if (pipe_right_fluid_state):
-            self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_right, 
+                                  fill=self.fluidColor
+                                  )
         else:
-            self.canvas.itemconfig(self.fluid_right, fill='black')
+            self.canvas.itemconfig(
+                                  self.fluid_right, 
+                                  fill='black'
+                                  )
+        # buttom pipe
         if (pipe_buttom_fluid_state):
-            self.canvas.itemconfig(self.fluid_buttom, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_buttom, 
+                                  fill=self.fluidColor
+                                  )
         else:
-            self.canvas.itemconfig(self.fluid_buttom, fill='black')
+            self.canvas.itemconfig(
+                                  self.fluid_buttom, 
+                                  fill='black'
+                                  )
+        # left pipe
         if (pipe_left_fluid_status):
-            self.canvas.itemconfig(self.fluid_left, fill=self.fluidColor)
+            self.canvas.itemconfig(
+                                  self.fluid_left, 
+                                  fill=self.fluidColor
+                                  )
         else:
-            self.canvas.itemconfig(self.fluid_left, fill='black')
+            self.canvas.itemconfig(
+                                  self.fluid_left, 
+                                  fill='black'
+                                  )
 
     def setFill(self, pipe_top_fluid_state, pipe_right_fluid_state, pipe_buttom_fluid_state, pipe_left_fluid_status):
         # change color only if true
