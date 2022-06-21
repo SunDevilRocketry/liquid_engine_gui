@@ -24,6 +24,7 @@ __credits__ = ["Colton Acosta"   ,
 import threading
 import time
 import os
+import sys
 import serial
 import serial.tools.list_ports
 import tkinter as tk
@@ -36,6 +37,10 @@ from PIL      import Image, ImageTk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
+
+# Setup path 
+sys.path.insert(0, './plumbing')
+import solenoid
 import gauge    as SDR_gauge
 import valve    as SDR_valve
 import PandID   as SDR_PandID

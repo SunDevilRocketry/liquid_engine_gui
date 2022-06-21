@@ -20,6 +20,7 @@ import tkinter as tk
 # Project Modules                                             #
 ###############################################################
 import DiagramComponents
+import solenoid as SDR_solenoid
 import main
 
 
@@ -155,12 +156,12 @@ class Liquid_Engine_Plumbing:
         self.k.getWidget().place(x=gridLen * 6, y=gridLen * 5)
 
         # All SOLENOID VALVES
-        self.one = DiagramComponents.Solenoid(self.win, 'black', 1, gridLen, gridLen, False, True, True, False)
-        self.two = DiagramComponents.Solenoid(self.win, 'black', 2, gridLen, gridLen, False, True, False, False)
-        self.three = DiagramComponents.Solenoid(self.win, 'black', 3, gridLen, gridLen, False, False, True, True)
-        self.four = DiagramComponents.Solenoid(self.win, 'black', 4, gridLen, gridLen, False, True, False, False)
-        self.five = DiagramComponents.Solenoid(self.win, 'black', 5, gridLen, gridLen, True, False, False, True)
-        self.six = DiagramComponents.Solenoid(self.win, 'black', 6, gridLen, gridLen, False, True, False, True)
+        self.one = SDR_solenoid.Solenoid(self.win, 'black', 1, gridLen, gridLen, False, True, True, False)
+        self.two = SDR_solenoid.Solenoid(self.win, 'black', 2, gridLen, gridLen, False, True, False, False)
+        self.three =SDR_solenoid.Solenoid(self.win, 'black', 3, gridLen, gridLen, False, False, True, True)
+        self.four = SDR_solenoid.Solenoid(self.win, 'black', 4, gridLen, gridLen, False, True, False, False)
+        self.five = SDR_solenoid.Solenoid(self.win, 'black', 5, gridLen, gridLen, True, False, False, True)
+        self.six = SDR_solenoid.Solenoid(self.win, 'black', 6, gridLen, gridLen, False, True, False, True)
         self.one.getWidget().place(x=gridLen * 1, y=gridLen * 2)
         self.one.setIn(2)
         self.one.setOut(3)
@@ -384,40 +385,40 @@ class Liquid_Engine_Plumbing:
                 head.setState(True)
 
             if (head.top is not None and head.top not in visited):
-                if(type(head.top) is DiagramComponents.Solenoid and head.top.getState()):
+                if(type(head.top) is SDR_solenoid.Solenoid and head.top.getState()):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
-                elif(type(head.top) is not DiagramComponents.Solenoid and type(head.top) is not DiagramComponents.Stepper):
+                elif(type(head.top) is not SDR_solenoid.Solenoid and type(head.top) is not DiagramComponents.Stepper):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
                 elif (type(head.top) is DiagramComponents.Stepper and head.top.getPercentage() > 0):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
             if (head.right is not None and head.right not in visited):
-                if (type(head.right) is DiagramComponents.Solenoid and head.right.getState()):
+                if (type(head.right) is SDR_solenoid.Solenoid and head.right.getState()):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
-                elif (type(head.right) is not DiagramComponents.Solenoid and type(head.right) is not DiagramComponents.Stepper):
+                elif (type(head.right) is not SDR_solenoid.Solenoid and type(head.right) is not DiagramComponents.Stepper):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
                 elif (type(head.right) is DiagramComponents.Stepper and head.right.getPercentage() > 0):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
             if (head.bottom is not None and head.bottom not in visited):
-                if (type(head.bottom) is DiagramComponents.Solenoid and head.bottom.getState()):
+                if (type(head.bottom) is SDR_solenoid.Solenoid and head.bottom.getState()):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
-                elif (type(head.bottom) is not DiagramComponents.Solenoid and type(head.bottom) is not DiagramComponents.Stepper):
+                elif (type(head.bottom) is not SDR_solenoid.Solenoid and type(head.bottom) is not DiagramComponents.Stepper):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
                 elif (type(head.bottom) is DiagramComponents.Stepper and head.bottom.getPercentage() > 0):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
             if (head.left is not None and head.left not in visited):
-                if (type(head.left) is DiagramComponents.Solenoid and head.left.getState()):
+                if (type(head.left) is SDR_solenoid.Solenoid and head.left.getState()):
                     listMultiplePaths.append(head.left)
                     visited.append(head.left)
-                elif (type(head.left) is not DiagramComponents.Solenoid and type(head.left) is not DiagramComponents.Stepper):
+                elif (type(head.left) is not SDR_solenoid.Solenoid and type(head.left) is not DiagramComponents.Stepper):
                     listMultiplePaths.append(head.left)
                     visited.append(head.left)
                 elif (type(head.left) is DiagramComponents.Stepper and head.left.getPercentage() > 0):
