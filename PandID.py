@@ -25,6 +25,7 @@ import ball_valve      as SDR_ball_valve
 import orifice         as SDR_orifice
 import pressure_sensor as SDR_pressure_sensor
 import temp_sensor     as SDR_temp_sensor
+import tank            as SDR_tank
 import main
 
 
@@ -152,9 +153,9 @@ class Liquid_Engine_Plumbing:
         self.header.getWidget().place(x=gridLen * 0, y=gridLen * 0)
 
         # All TANKS
-        self.gn2 = DiagramComponents.Tank(self.win, 'black', 'GN2', '#1d2396', gridLen, gridLen)
-        self.lox = DiagramComponents.Tank(self.win, 'black', 'LOx', '#1d2396', gridLen, gridLen)
-        self.k = DiagramComponents.Tank(self.win, 'black', 'K', '#1d2396', gridLen, gridLen)
+        self.gn2 = SDR_tank.Tank(self.win, 'black', 'GN2', '#1d2396', gridLen, gridLen)
+        self.lox = SDR_tank.Tank(self.win, 'black', 'LOx', '#1d2396', gridLen, gridLen)
+        self.k = SDR_tank.Tank(self.win, 'black', 'K', '#1d2396', gridLen, gridLen)
         self.gn2.getWidget().place(x=gridLen * 3, y=gridLen * 1)
         self.lox.getWidget().place(x=gridLen * 1, y=gridLen * 5)
         self.k.getWidget().place(x=gridLen * 6, y=gridLen * 5)
