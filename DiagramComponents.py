@@ -51,28 +51,33 @@ class Component:
                             highlightthickness=0
                             )
 
+        # Pipe input/output port configuration, boolean values
         self.pipe_top = pipe_top
         self.pipe_right = pipe_right
         self.pipe_buttom = pipe_buttom
         self.pipe_left = pipe_left
 
+        # TODO: Not sure what this is yet
         self.top = None
         self.right = None
         self.bottom = None
         self.left = None
+
+        # TODO: Note sure what this is yet
         self.fill1 = False
         self.fill2 = False
         self.fill3 = False
         self.fill4 = False
 
+        # Fluid fill color
         self.fluidColor = kwargs.get('fluid_color', '#41d94d')
 
-        # DRAW PIPES
+        # Draw input/output pipes with white lines
         if (pipe_top):
-            xy = [(7 * width / 16.0, height / 4.0), (7 * width / 16.0, 0)]
-            self.canvas.create_line(xy, width=1, fill='white')
-            xy2 = [(9 * width / 16.0, height / 4.0), (9 * width / 16.0, 0)]
-            self.canvas.create_line(xy2, width=1, fill='white')
+            pipewall_left = [(7 * width / 16.0, height / 4.0), (7 * width / 16.0, 0)]
+            self.canvas.create_line(pipewall_left, width=1, fill='white')
+            pipewall_right = [(9 * width / 16.0, height / 4.0), (9 * width / 16.0, 0)]
+            self.canvas.create_line(pipewall_right, width=1, fill='white')
         if (pipe_right):
             xy = [(width * (3 / 4.0), 7 * height / 16.0), (width, 7 * height / 16.0)]
             self.canvas.create_line(xy, width=1, fill='white')
