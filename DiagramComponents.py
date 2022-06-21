@@ -38,6 +38,10 @@ class Component:
                 **kwargs
                 ):
 
+		#######################################################
+		# Class attributes                                    #
+		#######################################################
+
 		# Canvas dimensions
         self.width = width
         self.height = height
@@ -63,8 +67,9 @@ class Component:
         self.bottom = None
         self.left = None
 
-        # TODO: Note sure what this is yet
-        self.fill1 = False
+        # Fill state boolean variables to tell the GUI how to 
+        # draw fluid in the engine pipes
+        self.pipe_top_fluid_state = False
         self.fill2 = False
         self.fill3 = False
         self.fill4 = False
@@ -201,13 +206,15 @@ class Component:
                                                      outline=""
                                                       )
 
-    def setPipes(self, fill_1, fill_2, fill_3, fill_4):
+    # Set the fill state of the component input/output pipes and 
+    # update the engine display
+    def setPipes(self, pipe_top_fluid_state, fill_2, fill_3, fill_4):
         # absolute condition, True = Fluid color, False = black
-        self.fill1 = fill_1
+        self.pipe_top_fluid_state = pipe_top_fluid_state
         self.fill2 = fill_2
         self.fill3 = fill_3
         self.fill4 = fill_4
-        if (fill_1):
+        if (pipe_top_fluid_state):
             self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
         else:
             self.canvas.itemconfig(self.fluid_top, fill='black')
@@ -224,9 +231,9 @@ class Component:
         else:
             self.canvas.itemconfig(self.fluid_left, fill='black')
 
-    def setFill(self, fill_1, fill_2, fill_3, fill_4):
+    def setFill(self, pipe_top_fluid_state, fill_2, fill_3, fill_4):
         # change color only if true
-        if (fill_1):
+        if (pipe_top_fluid_state):
             self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
         if (fill_2):
             self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
