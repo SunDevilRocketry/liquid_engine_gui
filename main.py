@@ -163,7 +163,7 @@ if __name__ == '__main__':
 	###########################################################
 
     # P&ID diagram window
-    plumbing = SDR_engine_display.Liquid_Engine_Plumbing(gridLen)  
+    plumbing = SDR_engine_display.Engine_Display(gridLen)  
 
     # SDR logo
     SDRlabel =                tk.Label(

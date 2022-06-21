@@ -133,7 +133,7 @@ class Text:
 ###############################################################
 # Engine Object                                               #
 ###############################################################
-class Liquid_Engine_Plumbing:
+class Engine_Display:
 
     def __init__(self, gridLen):
 
