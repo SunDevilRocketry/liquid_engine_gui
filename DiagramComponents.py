@@ -164,8 +164,8 @@ class Component:
                                    fill='white'
                                    )
 
-        # DRAW FLOW
-        self.f1 = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1, (height / 4.0) - 1,
+        # Draw inital input/output piping fluid (initially empy)
+        self.fluid_top = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1, (height / 4.0) - 1,
                                           fill='black', outline="")
         self.f2 = self.canvas.create_rectangle((3 * width / 4.0) + 1, (7 * height / 16.0) + 1, width,
                                           (9 * height / 16.0) - 1,
@@ -183,9 +183,9 @@ class Component:
         self.fill3 = fill_3
         self.fill4 = fill_4
         if (fill_1):
-            self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+            self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
         else:
-            self.canvas.itemconfig(self.f1, fill='black')
+            self.canvas.itemconfig(self.fluid_top, fill='black')
         if (fill_2):
             self.canvas.itemconfig(self.f2, fill=self.fluidColor)
         else:
@@ -202,7 +202,7 @@ class Component:
     def setFill(self, fill_1, fill_2, fill_3, fill_4):
         # change color only if true
         if (fill_1):
-            self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+            self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
         if (fill_2):
             self.canvas.itemconfig(self.f2, fill=self.fluidColor)
         if (fill_3):
@@ -249,10 +249,10 @@ class Solenoid(Component):
         inlet = False
         if (self.inlet == 1):
             if(self.top is not None and self.top.getState()):
-                self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
                 inlet = True
             else:
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
         if (self.inlet == 2):
             if(self.right is not None and self.right.getState()):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
@@ -277,9 +277,9 @@ class Solenoid(Component):
             self.canvas.itemconfig(self.fill, fill='#41d94d')
             if (self.outlet == 1):
                 if(inlet):
-                    self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                    self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
                 else:
-                    self.canvas.itemconfig(self.f1, fill='black')
+                    self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.outlet == 2):
                 if (inlet):
                     self.canvas.itemconfig(self.f2, fill=self.fluidColor)
@@ -299,7 +299,7 @@ class Solenoid(Component):
             self.state = False
             self.canvas.itemconfig(self.fill, fill = '#ab1f1f')
             if (self.outlet == 1):
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.outlet == 2):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.outlet == 3):
@@ -354,7 +354,7 @@ class Orifice(Component):
         self.state = state
         if(state):
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.pipe_buttom):
@@ -363,7 +363,7 @@ class Orifice(Component):
                 self.canvas.itemconfig(self.f4, fill=self.fluidColor)
         else:
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.pipe_buttom):
@@ -403,7 +403,7 @@ class PressureSensor(Component):
         self.state = state
         if(state):
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.pipe_buttom):
@@ -412,7 +412,7 @@ class PressureSensor(Component):
                 self.canvas.itemconfig(self.f4, fill=self.fluidColor)
         else:
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.pipe_buttom):
@@ -448,7 +448,7 @@ class TempSensor(Component):
         self.state = state
         if(state):
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.pipe_buttom):
@@ -457,7 +457,7 @@ class TempSensor(Component):
                 self.canvas.itemconfig(self.f4, fill=self.fluidColor)
         else:
             if (self.pipe_top):
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.pipe_buttom):
@@ -577,11 +577,11 @@ class Pipe:
             xy2 = [(9 * width / 16.0, 0), (9 * width / 16.0, 7 * height / 16.0)]
             self.canvas.create_line(xy2, width=1, fill='white')
             if (fill):
-                self.f1 = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1,
+                self.fluid_top = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1,
                                                   (7 * height / 16.0) + 1,
                                                   fill=fluidColor, outline="")
             else:
-                self.f1 = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1,
+                self.fluid_top = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1,
                                                   (7 * height / 16.0) + 1,
                                                   fill='black', outline="")
         else:
@@ -648,7 +648,7 @@ class Pipe:
         if (fluid):
             self.canvas.itemconfig(self.f0, fill=self.fluidColor)
             if (self.line1):
-                self.canvas.itemconfig(self.f1, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.line2):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.line3):
@@ -658,7 +658,7 @@ class Pipe:
         else:
             self.canvas.itemconfig(self.f0, fill='black')
             if (self.line1):
-                self.canvas.itemconfig(self.f1, fill='black')
+                self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.line2):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.line3):
