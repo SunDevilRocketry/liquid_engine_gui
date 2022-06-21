@@ -165,16 +165,41 @@ class Component:
                                    )
 
         # Draw inital input/output piping fluid (initially empy)
-        self.fluid_top = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1, (height / 4.0) - 1,
-                                          fill='black', outline="")
-        self.fluid_right = self.canvas.create_rectangle((3 * width / 4.0) + 1, (7 * height / 16.0) + 1, width,
-                                          (9 * height / 16.0) - 1,
-                                          fill='black', outline="")
-        self.fluid_buttom = self.canvas.create_rectangle((7 * width / 16.0) + 1, (3 * height / 4.0) + 1, (9 * width / 16.0) - 1,
-                                          height,
-                                          fill='black', outline="")
-        self.fluid_left = self.canvas.create_rectangle(0, (7 * height / 16.0) + 1, (width / 4.0) - 1, (9 * height / 16.0) - 1,
-                                          fill='black', outline="")
+        self.fluid_top = self.canvas.create_rectangle(
+                                                     (7*width/16.0)+1, 
+                                                     0, 
+                                                     (9*width/16.0)-1,
+                                                     ( height/4.0) -1,
+                                                     fill='black', 
+                                                     outline=""
+                                                     )
+
+        self.fluid_right = self.canvas.create_rectangle(
+                                                     (3*width /4.0) +1,
+                                                     (7*height/16.0)+1, 
+                                                     width,
+                                                     (9*height/16.0)-1,
+                                                     fill='black', 
+                                                     outline=""
+                                                       )
+
+        self.fluid_buttom = self.canvas.create_rectangle(
+                                                     (7*width/16.0)+1, 
+                                                     (3*height/4.0)+1, 
+                                                     (9*width/16.0)-1,
+                                                     height,
+                                                     fill='black', 
+                                                     outline=""
+                                                        )
+
+        self.fluid_left = self.canvas.create_rectangle(
+                                                     0, 
+                                                     (7*height/16.0)+1, 
+                                                     ( width  / 4.0)-1, 
+                                                     (9*height/16.0)-1,
+                                                     fill='black', 
+                                                     outline=""
+                                                      )
 
     def setPipes(self, fill_1, fill_2, fill_3, fill_4):
         # absolute condition, True = Fluid color, False = black
