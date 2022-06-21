@@ -180,8 +180,8 @@ class Liquid_Engine_Plumbing:
         self.six.setOut(2)
 
         # All STEPPER
-        self.s1 = DiagramComponents.Stepper(self.win, 'black', gridLen, gridLen, True, False, False, True)
-        self.s2 = DiagramComponents.Stepper(self.win, 'black', gridLen, gridLen, False, True, True, True)
+        self.s1 = DiagramComponents.Ball_Valve(self.win, 'black', gridLen, gridLen, True, False, False, True)
+        self.s2 = DiagramComponents.Ball_Valve(self.win, 'black', gridLen, gridLen, False, True, True, True)
         self.s1.getWidget().place(x=gridLen * 6, y=gridLen * 7)
         self.s2.getWidget().place(x=gridLen * 2, y=gridLen * 8)
 
@@ -388,40 +388,40 @@ class Liquid_Engine_Plumbing:
                 if(type(head.top) is SDR_solenoid.Solenoid and head.top.getState()):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
-                elif(type(head.top) is not SDR_solenoid.Solenoid and type(head.top) is not DiagramComponents.Stepper):
+                elif(type(head.top) is not SDR_solenoid.Solenoid and type(head.top) is not DiagramComponents.Ball_Valve):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
-                elif (type(head.top) is DiagramComponents.Stepper and head.top.getPercentage() > 0):
+                elif (type(head.top) is DiagramComponents.Ball_Valve and head.top.getPercentage() > 0):
                     listMultiplePaths.append(head.top)
                     visited.append(head.top)
             if (head.right is not None and head.right not in visited):
                 if (type(head.right) is SDR_solenoid.Solenoid and head.right.getState()):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
-                elif (type(head.right) is not SDR_solenoid.Solenoid and type(head.right) is not DiagramComponents.Stepper):
+                elif (type(head.right) is not SDR_solenoid.Solenoid and type(head.right) is not DiagramComponents.Ball_Valve):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
-                elif (type(head.right) is DiagramComponents.Stepper and head.right.getPercentage() > 0):
+                elif (type(head.right) is DiagramComponents.Ball_Valve and head.right.getPercentage() > 0):
                     listMultiplePaths.append(head.right)
                     visited.append(head.right)
             if (head.bottom is not None and head.bottom not in visited):
                 if (type(head.bottom) is SDR_solenoid.Solenoid and head.bottom.getState()):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
-                elif (type(head.bottom) is not SDR_solenoid.Solenoid and type(head.bottom) is not DiagramComponents.Stepper):
+                elif (type(head.bottom) is not SDR_solenoid.Solenoid and type(head.bottom) is not DiagramComponents.Ball_Valve):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
-                elif (type(head.bottom) is DiagramComponents.Stepper and head.bottom.getPercentage() > 0):
+                elif (type(head.bottom) is DiagramComponents.Ball_Valve and head.bottom.getPercentage() > 0):
                     listMultiplePaths.append(head.bottom)
                     visited.append(head.bottom)
             if (head.left is not None and head.left not in visited):
                 if (type(head.left) is SDR_solenoid.Solenoid and head.left.getState()):
                     listMultiplePaths.append(head.left)
                     visited.append(head.left)
-                elif (type(head.left) is not SDR_solenoid.Solenoid and type(head.left) is not DiagramComponents.Stepper):
+                elif (type(head.left) is not SDR_solenoid.Solenoid and type(head.left) is not DiagramComponents.Ball_Valve):
                     listMultiplePaths.append(head.left)
                     visited.append(head.left)
-                elif (type(head.left) is DiagramComponents.Stepper and head.left.getPercentage() > 0):
+                elif (type(head.left) is DiagramComponents.Ball_Valve and head.left.getPercentage() > 0):
                     listMultiplePaths.append(head.left)
                     visited.append(head.left)
 

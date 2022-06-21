@@ -327,7 +327,7 @@ class Component:
 
 
 
-class Stepper(Component):
+class Ball_Valve(Component):
 
     def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, **kwargs):
         Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
