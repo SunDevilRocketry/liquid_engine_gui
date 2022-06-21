@@ -74,25 +74,95 @@ class Component:
 
         # Draw input/output pipes with white lines
         if (pipe_top):
-            pipewall_left = [(7 * width / 16.0, height / 4.0), (7 * width / 16.0, 0)]
-            self.canvas.create_line(pipewall_left, width=1, fill='white')
-            pipewall_right = [(9 * width / 16.0, height / 4.0), (9 * width / 16.0, 0)]
-            self.canvas.create_line(pipewall_right, width=1, fill='white')
+            pipewall_left        = [
+                                   (7*width/16.0, height/4.0),
+                                   (7*width/16.0, 0)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_left, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
+            pipewall_right =       [
+                                   (9*width/16.0, height/4.0),
+                                   (9*width/16.0, 0)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_right, 
+                                   width=1, 
+                                   fill='white'
+                                   )
         if (pipe_right):
-            pipewall_top = [(width * (3 / 4.0), 7 * height / 16.0), (width, 7 * height / 16.0)]
-            self.canvas.create_line(pipewall_top, width=1, fill='white')
-            pipewall_bottom = [(width * (3 / 4.0), 9 * height / 16.0), (width, 9 * height / 16.0)]
-            self.canvas.create_line(pipewall_bottom, width=1, fill='white')
+            pipewall_top =          [
+                                    (width*(3/4.0), 7*height/16.0), 
+                                    (width        , 7*height/16.0)
+                                    ]
+
+            self.canvas.create_line(
+                                   pipewall_top, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
+            pipewall_bottom =      [
+                                   (width*(3/4.0), 9*height/16.0), 
+                                   (width        , 9*height/16.0)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_bottom, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
         if (pipe_buttom):
-            pipewall_left = [(7 * width / 16.0, height * (3 / 4.0)), (7 * width / 16.0, height)]
-            self.canvas.create_line(pipewall_left, width=1, fill='white')
-            pipewall_right = [(9 * width / 16.0, height * (3 / 4.0)), (9 * width / 16.0, height)]
-            self.canvas.create_line(pipewall_right, width=1, fill='white')
+            pipewall_left =        [
+                                   (7*width/16.0, height*(3/4.0)), 
+                                   (7*width/16.0, height)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_left, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
+            pipewall_right =       [
+                                   (9*width/16.0, height*(3/4.0)), 
+                                   (9*width/16.0, height)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_right, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
         if (pipe_left):
-            pipewall_top = [(width / 4.0, 7 * height / 16.0), (0, 7 * height / 16.0)]
-            self.canvas.create_line(pipewall_top, width=1, fill='white')
-            pipewall_bottom = [(width / 4.0, 9 * height / 16.0), (0, 9 * height / 16.0)]
-            self.canvas.create_line(pipewall_bottom, width=1, fill='white')
+            pipewall_top =         [
+                                   (width/4.0, 7*height/16.0), 
+                                   (0        , 7*height/16.0)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_top, 
+                                   width=1, 
+                                   fill='white'
+                                   )
+
+            pipewall_bottom =      [
+                                   (width/4.0, 9*height/16.0), 
+                                   (0        , 9*height/16.0)
+                                   ]
+
+            self.canvas.create_line(
+                                   pipewall_bottom, 
+                                   width=1, 
+                                   fill='white'
+                                   )
 
         # DRAW FLOW
         self.f1 = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1, (height / 4.0) - 1,
