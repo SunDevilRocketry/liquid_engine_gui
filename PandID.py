@@ -24,6 +24,7 @@ import solenoid        as SDR_solenoid
 import ball_valve      as SDR_ball_valve
 import orifice         as SDR_orifice
 import pressure_sensor as SDR_pressure_sensor
+import temp_sensor     as SDR_temp_sensor
 import main
 
 
@@ -202,7 +203,7 @@ class Liquid_Engine_Plumbing:
         self.ps2.getWidget().place(x=gridLen * 7, y=gridLen * 3)
         self.ps3.getWidget().place(x=gridLen * 5, y=gridLen * 9)
 
-        self.tp1 = DiagramComponents.TempSensor(self.win, 'black', gridLen, gridLen, True, False, False, False)
+        self.tp1 = SDR_temp_sensor.TempSensor(self.win, 'black', gridLen, gridLen, True, False, False, False)
         self.tp1.getWidget().place(x=gridLen * 5, y=gridLen * 10)
 
         # All Text boxes
