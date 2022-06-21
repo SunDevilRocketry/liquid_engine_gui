@@ -167,7 +167,7 @@ class Component:
         # Draw inital input/output piping fluid (initially empy)
         self.fluid_top = self.canvas.create_rectangle((7 * width / 16.0) + 1, 0, (9 * width / 16.0) - 1, (height / 4.0) - 1,
                                           fill='black', outline="")
-        self.f2 = self.canvas.create_rectangle((3 * width / 4.0) + 1, (7 * height / 16.0) + 1, width,
+        self.fluid_right = self.canvas.create_rectangle((3 * width / 4.0) + 1, (7 * height / 16.0) + 1, width,
                                           (9 * height / 16.0) - 1,
                                           fill='black', outline="")
         self.f3 = self.canvas.create_rectangle((7 * width / 16.0) + 1, (3 * height / 4.0) + 1, (9 * width / 16.0) - 1,
@@ -187,9 +187,9 @@ class Component:
         else:
             self.canvas.itemconfig(self.fluid_top, fill='black')
         if (fill_2):
-            self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+            self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
         else:
-            self.canvas.itemconfig(self.f2, fill='black')
+            self.canvas.itemconfig(self.fluid_right, fill='black')
         if (fill_3):
             self.canvas.itemconfig(self.f3, fill=self.fluidColor)
         else:
@@ -204,7 +204,7 @@ class Component:
         if (fill_1):
             self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
         if (fill_2):
-            self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+            self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
         if (fill_3):
             self.canvas.itemconfig(self.f3, fill=self.fluidColor)
         if (fill_4):
@@ -255,10 +255,10 @@ class Solenoid(Component):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
         if (self.inlet == 2):
             if(self.right is not None and self.right.getState()):
-                self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
                 inlet = True
             else:
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
         if (self.inlet == 3):
             if (self.bottom is not None and self.bottom.getState()):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
@@ -282,9 +282,9 @@ class Solenoid(Component):
                     self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.outlet == 2):
                 if (inlet):
-                    self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                    self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
                 else:
-                    self.canvas.itemconfig(self.f2, fill='black')
+                    self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.outlet == 3):
                 if (inlet):
                     self.canvas.itemconfig(self.f3, fill=self.fluidColor)
@@ -301,7 +301,7 @@ class Solenoid(Component):
             if (self.outlet == 1):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.outlet == 2):
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.outlet == 3):
                 self.canvas.itemconfig(self.f3, fill='black')
             if (self.outlet == 4):
@@ -356,7 +356,7 @@ class Orifice(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
             if (self.pipe_left):
@@ -365,7 +365,7 @@ class Orifice(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill='black')
             if (self.pipe_left):
@@ -405,7 +405,7 @@ class PressureSensor(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
             if (self.pipe_left):
@@ -414,7 +414,7 @@ class PressureSensor(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill='black')
             if (self.pipe_left):
@@ -450,7 +450,7 @@ class TempSensor(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
             if (self.pipe_left):
@@ -459,7 +459,7 @@ class TempSensor(Component):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.pipe_right):
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.pipe_buttom):
                 self.canvas.itemconfig(self.f3, fill='black')
             if (self.pipe_left):
@@ -593,11 +593,11 @@ class Pipe:
             xy2 = [(9 * width / 16.0, 9 * height / 16.0), (width, 9 * height / 16.0)]
             self.canvas.create_line(xy2, width=1, fill='white')
             if (fill):
-                self.f2 = self.canvas.create_rectangle(9 * width / 16.0, (7 * height / 16.0) + 1, width,
+                self.fluid_right = self.canvas.create_rectangle(9 * width / 16.0, (7 * height / 16.0) + 1, width,
                                                   (9 * height / 16.0) - 1,
                                                   fill=fluidColor, outline="")
             else:
-                self.f2 = self.canvas.create_rectangle(9 * width / 16.0, (7 * height / 16.0) + 1, width,
+                self.fluid_right = self.canvas.create_rectangle(9 * width / 16.0, (7 * height / 16.0) + 1, width,
                                                   (9 * height / 16.0) - 1,
                                                   fill='black', outline="")
         else:
@@ -650,7 +650,7 @@ class Pipe:
             if (self.line1):
                 self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
             if (self.line2):
-                self.canvas.itemconfig(self.f2, fill=self.fluidColor)
+                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
             if (self.line3):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
             if (self.line4):
@@ -660,7 +660,7 @@ class Pipe:
             if (self.line1):
                 self.canvas.itemconfig(self.fluid_top, fill='black')
             if (self.line2):
-                self.canvas.itemconfig(self.f2, fill='black')
+                self.canvas.itemconfig(self.fluid_right, fill='black')
             if (self.line3):
                 self.canvas.itemconfig(self.f3, fill='black')
             if (self.line4):
