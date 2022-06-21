@@ -26,6 +26,7 @@ import orifice         as SDR_orifice
 import pressure_sensor as SDR_pressure_sensor
 import temp_sensor     as SDR_temp_sensor
 import tank            as SDR_tank
+import pipe            as SDR_pipe
 import main
 
 
@@ -218,28 +219,28 @@ class Liquid_Engine_Plumbing:
         self.t4.getWidget().place(x=gridLen * 7, y=gridLen * 9)
 
         # All PIPES
-        self.p1 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
-        self.p2 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, True, '#41d94d', False)
-        self.p3 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
-        self.p4 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
-        self.p5 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, True, '#41d94d', False)
-        self.p6 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
-        self.p7 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
-        self.p8 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, True, '#41d94d', False)
-        self.p9 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
-        self.p10 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, True, '#41d94d', False)
-        self.p11 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
-        self.p12 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
-        self.p13 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
-        self.p14 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
-        self.p15 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
-        self.p16 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
-        self.p17 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, False, False, '#41d94d', False)
-        self.p18 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, False, True, True, '#41d94d', False)
-        self.p19 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, True, False, False, '#41d94d', False)
-        self.p20 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, True, True, True, '#41d94d', False)
-        self.p21 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
-        self.p22 = DiagramComponents.Pipe(self.win, 'black', gridLen, gridLen, True, False, False, True, '#41d94d', False)
+        self.p1 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
+        self.p2 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, True, '#41d94d', False)
+        self.p3 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
+        self.p4 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
+        self.p5 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, True, '#41d94d', False)
+        self.p6 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
+        self.p7 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
+        self.p8 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, True, '#41d94d', False)
+        self.p9 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
+        self.p10 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, True, '#41d94d', False)
+        self.p11 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
+        self.p12 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
+        self.p13 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
+        self.p14 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, True, False, '#41d94d', False)
+        self.p15 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
+        self.p16 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, False, '#41d94d', False)
+        self.p17 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, False, False, '#41d94d', False)
+        self.p18 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, False, True, True, '#41d94d', False)
+        self.p19 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, False, False, '#41d94d', False)
+        self.p20 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, True, True, '#41d94d', False)
+        self.p21 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
+        self.p22 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, False, True, '#41d94d', False)
         self.p1.getWidget().place(x=gridLen * 2, y=gridLen * 2)
         self.p2.getWidget().place(x=gridLen * 3, y=gridLen * 2)
         self.p3.getWidget().place(x=gridLen * 4, y=gridLen * 2)
@@ -386,7 +387,7 @@ class Liquid_Engine_Plumbing:
 
         # Basic traversal method
         while(len(listMultiplePaths) > 0):
-            if(type(head) is DiagramComponents.Pipe):
+            if(type(head) is SDR_pipe.Pipe):
                 head.setState(True)
 
             if (head.top is not None and head.top not in visited):
