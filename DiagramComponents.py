@@ -79,15 +79,15 @@ class Component:
             pipewall_right = [(9 * width / 16.0, height / 4.0), (9 * width / 16.0, 0)]
             self.canvas.create_line(pipewall_right, width=1, fill='white')
         if (pipe_right):
-            xy = [(width * (3 / 4.0), 7 * height / 16.0), (width, 7 * height / 16.0)]
-            self.canvas.create_line(xy, width=1, fill='white')
-            xy2 = [(width * (3 / 4.0), 9 * height / 16.0), (width, 9 * height / 16.0)]
-            self.canvas.create_line(xy2, width=1, fill='white')
+            pipewall_top = [(width * (3 / 4.0), 7 * height / 16.0), (width, 7 * height / 16.0)]
+            self.canvas.create_line(pipewall_top, width=1, fill='white')
+            pipewall_bottom = [(width * (3 / 4.0), 9 * height / 16.0), (width, 9 * height / 16.0)]
+            self.canvas.create_line(pipewall_bottom, width=1, fill='white')
         if (pipe_buttom):
-            xy = [(7 * width / 16.0, height * (3 / 4.0)), (7 * width / 16.0, height)]
-            self.canvas.create_line(xy, width=1, fill='white')
-            xy2 = [(9 * width / 16.0, height * (3 / 4.0)), (9 * width / 16.0, height)]
-            self.canvas.create_line(xy2, width=1, fill='white')
+            pipewall_left = [(7 * width / 16.0, height * (3 / 4.0)), (7 * width / 16.0, height)]
+            self.canvas.create_line(pipewall_left, width=1, fill='white')
+            pipewall_right = [(9 * width / 16.0, height * (3 / 4.0)), (9 * width / 16.0, height)]
+            self.canvas.create_line(pipewall_right, width=1, fill='white')
         if (pipe_left):
             xy = [(width / 4.0, 7 * height / 16.0), (0, 7 * height / 16.0)]
             self.canvas.create_line(xy, width=1, fill='white')
