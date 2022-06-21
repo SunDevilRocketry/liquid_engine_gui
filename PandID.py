@@ -27,6 +27,7 @@ import pressure_sensor as SDR_pressure_sensor
 import temp_sensor     as SDR_temp_sensor
 import tank            as SDR_tank
 import pipe            as SDR_pipe
+import nozzle          as SDR_nozzle
 import main
 
 
@@ -265,7 +266,7 @@ class Liquid_Engine_Plumbing:
         self.p22.getWidget().place(x=gridLen * 6, y=gridLen * 9)
 
         # NOZZLE
-        self.n = DiagramComponents.Nozzle(self.win, 'black', gridLen, gridLen * 1.5)
+        self.n = SDR_nozzle.Nozzle(self.win, 'black', gridLen, gridLen * 1.5)
         self.n.getWidget().place(x=gridLen * 3, y=gridLen * 10)
 
         #self.s2.setNeighbors(None, self.five, self.p19, self.p16)

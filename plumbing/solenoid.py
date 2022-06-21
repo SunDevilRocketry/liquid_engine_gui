@@ -10,7 +10,7 @@
 
 
 ###############################################################
-# Standard Imports                                            #
+# Project Imports                                             #
 ###############################################################
 import DiagramComponents as SDR_DiagramComponents
 
