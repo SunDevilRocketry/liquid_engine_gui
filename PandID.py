@@ -20,8 +20,9 @@ import tkinter as tk
 # Project Modules                                             #
 ###############################################################
 import DiagramComponents
-import solenoid as SDR_solenoid
+import solenoid   as SDR_solenoid
 import ball_valve as SDR_ball_valve
+import orifice    as SDR_orifice
 import main
 
 
@@ -187,8 +188,8 @@ class Liquid_Engine_Plumbing:
         self.s2.getWidget().place(x=gridLen * 2, y=gridLen * 8)
 
         # All ORIFICES
-        self.o1 = DiagramComponents.Orifice(self.win, 'black', gridLen, gridLen, True, False, True, False)
-        self.o2 = DiagramComponents.Orifice(self.win, 'black', gridLen, gridLen, False, True, True, True)
+        self.o1 = SDR_orifice.Orifice(self.win, 'black', gridLen, gridLen, True, False, True, False)
+        self.o2 = SDR_orifice.Orifice(self.win, 'black', gridLen, gridLen, False, True, True, True)
         self.o1.getWidget().place(x=gridLen * 1, y=gridLen * 6)
         self.o2.getWidget().place(x=gridLen * 5, y=gridLen * 7)
 
