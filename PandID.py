@@ -19,7 +19,7 @@ import tkinter as tk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import DiagramComponents
+import component_template
 import solenoid        as SDR_solenoid
 import ball_valve      as SDR_ball_valve
 import orifice         as SDR_orifice

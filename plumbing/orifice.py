@@ -12,14 +12,14 @@
 ###############################################################
 # Standard Imports                                            #
 ###############################################################
-import DiagramComponents as SDR_DiagramComponents
+import component_template as SDR_component_template
 
 
-class Orifice(SDR_DiagramComponents.Component):
+class Orifice(SDR_component_template.Component):
 
     def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, **kwargs):
 
-        SDR_DiagramComponents.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        SDR_component_template.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -59,3 +59,8 @@ class Orifice(SDR_DiagramComponents.Component):
     def setValues(self, before, after):
         self.canvas.itemconfig(self.beforeP, text='B: ' + before + ' Pa')
         self.canvas.itemconfig(self.afterP, text='A: ' + after + ' Pa')
+
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################

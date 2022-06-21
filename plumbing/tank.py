@@ -18,7 +18,7 @@ from tkinter import *
 ###############################################################
 # Project Imports                                             #
 ###############################################################
-import DiagramComponents as SDR_DiagramComponents
+import component_template as SDR_component_template
 
 
 class Tank:
@@ -60,3 +60,8 @@ class Tank:
 
     def getWidget(self):
         return self.canvas
+
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################

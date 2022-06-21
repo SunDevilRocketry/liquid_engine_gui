@@ -12,13 +12,13 @@
 ###############################################################
 # Standard Imports                                            #
 ###############################################################
-import DiagramComponents as SDR_DiagramComponents
+import component_template as SDR_component_template
 
 
-class Ball_Valve(SDR_DiagramComponents.Component):
+class Ball_Valve(SDR_component_template.Component):
 
     def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, **kwargs):
-        SDR_DiagramComponents.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        SDR_component_template.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.fill = self.canvas.create_rectangle((width/4.0), (height/4.0), (width*(3/4.0)), (height*(3/4.0)), fill='#ab1f1f')
         self.fillGreen = self.canvas.create_rectangle((width / 4.0), (height / 4.0), (width / 4.0), (height * (3 / 4.0)), fill='#41d94d')
@@ -34,3 +34,8 @@ class Ball_Valve(SDR_DiagramComponents.Component):
 
     def getPercentage(self):
         return self.per
+
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################

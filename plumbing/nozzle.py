@@ -18,7 +18,7 @@ from tkinter import *
 ###############################################################
 # Project Imports                                             #
 ###############################################################
-import DiagramComponents as SDR_DiagramComponents
+import component_template as SDR_component_template
 
 
 class Nozzle:
@@ -67,3 +67,8 @@ class Nozzle:
     def setNozzleReadout(self, thrust, pressure):
         self.canvas.itemconfig(self.thrust, text='LC: ' + str(thrust) + ' N')
         self.canvas.itemconfig(self.pressure, text='PT: ' + str(pressure) + ' psi')
+
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################

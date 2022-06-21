@@ -12,10 +12,10 @@
 ###############################################################
 # Project Imports                                             #
 ###############################################################
-import DiagramComponents as SDR_DiagramComponents
+import component_template as SDR_component_template
 
 
-class Solenoid(SDR_DiagramComponents.Component):
+class Solenoid(SDR_component_template.Component):
     def __init__(
                 self, 
                 root, 
@@ -30,7 +30,7 @@ class Solenoid(SDR_DiagramComponents.Component):
                 **kwargs
                 ):
 
-        SDR_DiagramComponents.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        SDR_component_template.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
         self.inlet = -1
         self.outlet = -1
 
@@ -112,3 +112,8 @@ class Solenoid(SDR_DiagramComponents.Component):
                 self.canvas.itemconfig(self.fluid_buttom, fill='black')
             if (self.outlet == 4):
                 self.canvas.itemconfig(self.fluid_left, fill='black')
+
+
+###############################################################
+# END OF FILE                                                 #
+###############################################################
