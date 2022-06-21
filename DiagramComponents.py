@@ -24,18 +24,28 @@ class Component:
     def __init__(
                 self, 
                 root, 
-                background, 
+                bg_color, 
                 width, 
                 height, 
                 line_1, 
                 line_2, 
                 line_3, 
                 line_4, 
-                **kwargs):
+                **kwargs
+                ):
 
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+		# Canvas dimensions
         self.width = width
         self.height = height
+
+		# Canvas object
+        self.canvas = Canvas(
+                            root, 
+                            width=width, 
+                            height=height, 
+                            bg=bg_color, 
+                            highlightthickness=0
+                            )
 
         self.line_1 = line_1
         self.line_2 = line_2
@@ -134,8 +144,8 @@ class Component:
 
 
 class Solenoid(Component):
-    def __init__(self, root, background, num, width, height, line_1, line_2, line_3, line_4, **kwargs):
-        Component.__init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+    def __init__(self, root, bg_color, num, width, height, line_1, line_2, line_3, line_4, **kwargs):
+        Component.__init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
         self.inlet = -1
         self.outlet = -1
 
@@ -223,8 +233,8 @@ class Solenoid(Component):
 
 class Stepper(Component):
 
-    def __init__(self, root, background, width, height, line_1, line_2, line_3, line_4, **kwargs):
-        Component.__init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+    def __init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, **kwargs):
+        Component.__init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.fill = self.canvas.create_rectangle((width/4.0), (height/4.0), (width*(3/4.0)), (height*(3/4.0)), fill='#ab1f1f')
         self.fillGreen = self.canvas.create_rectangle((width / 4.0), (height / 4.0), (width / 4.0), (height * (3 / 4.0)), fill='#41d94d')
@@ -246,9 +256,9 @@ class Stepper(Component):
 
 class Orifice(Component):
 
-    def __init__(self, root, background, width, height, line_1, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -294,9 +304,9 @@ class Orifice(Component):
 
 class PressureSensor(Component):
 
-    def __init__(self, root, background, width, height, line_1, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -342,9 +352,9 @@ class PressureSensor(Component):
 
 class TempSensor(Component):
 
-    def __init__(self, root, background, width, height, line_1, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -387,10 +397,10 @@ class TempSensor(Component):
 
 class Tank:
 
-    def __init__(self, root, background, title, fluidColor, width, height):
+    def __init__(self, root, bg_color, title, fluidColor, width, height):
         padding = 15
 
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.canvas = Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
         self.width = width
         self.height = height
 
@@ -455,8 +465,8 @@ allows for a traversal of the list to enable mass flow indicators on the GUI P&I
 
 class Pipe:
 
-    def __init__(self, root, background, width, height, line_1, line_2, line_3, line_4, fluidColor, fill):
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+    def __init__(self, root, bg_color, width, height, line_1, line_2, line_3, line_4, fluidColor, fill):
+        self.canvas = Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
         self.width = width
         self.height = height
 
@@ -588,7 +598,7 @@ class Pipe:
 
 class Nozzle:
 
-    def __init__(self, root, background, width, height):
+    def __init__(self, root, bg_color, width, height):
         padding = 25
 
         self.top = None
@@ -596,7 +606,7 @@ class Nozzle:
         self.bottom = None
         self.left = None
 
-        self.canvas = Canvas(root, width=width, height=height, bg=background, highlightthickness=0)
+        self.canvas = Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
         self.width = width
         self.height = height
 
