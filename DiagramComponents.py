@@ -23,13 +23,14 @@ class Component:
 
     def __init__(
                 self, 
-                root,     # Window/frame to draw on 
-                bg_color, # Background color
-                width,    # Width of drawing canvas 
-                height,   # Hieght of drawing canvas 
-                pipe_top, # Boolean, sets a pipe on top
-                          # of component    
-                line_2,   # Boolean, set
+                root,       # Window/frame to draw on 
+                bg_color,   # Background color
+                width,      # Width of drawing canvas 
+                height,     # Hieght of drawing canvas 
+                pipe_top,   # Boolean, sets a pipe on top
+                            # of component    
+                pipe_right, # Boolean, sets a pipe to the 
+                            # right of component
                 line_3, 
                 line_4, 
                 **kwargs
@@ -49,7 +50,7 @@ class Component:
                             )
 
         self.pipe_top = pipe_top
-        self.line_2 = line_2
+        self.pipe_right = pipe_right
         self.line_3 = line_3
         self.line_4 = line_4
 
@@ -70,7 +71,7 @@ class Component:
             self.canvas.create_line(xy, width=1, fill='white')
             xy2 = [(9 * width / 16.0, height / 4.0), (9 * width / 16.0, 0)]
             self.canvas.create_line(xy2, width=1, fill='white')
-        if (line_2):
+        if (pipe_right):
             xy = [(width * (3 / 4.0), 7 * height / 16.0), (width, 7 * height / 16.0)]
             self.canvas.create_line(xy, width=1, fill='white')
             xy2 = [(width * (3 / 4.0), 9 * height / 16.0), (width, 9 * height / 16.0)]
@@ -145,8 +146,8 @@ class Component:
 
 
 class Solenoid(Component):
-    def __init__(self, root, bg_color, num, width, height, pipe_top, line_2, line_3, line_4, **kwargs):
-        Component.__init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+    def __init__(self, root, bg_color, num, width, height, pipe_top, pipe_right, line_3, line_4, **kwargs):
+        Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
         self.inlet = -1
         self.outlet = -1
 
@@ -234,8 +235,8 @@ class Solenoid(Component):
 
 class Stepper(Component):
 
-    def __init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, **kwargs):
-        Component.__init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+    def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, **kwargs):
+        Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.fill = self.canvas.create_rectangle((width/4.0), (height/4.0), (width*(3/4.0)), (height*(3/4.0)), fill='#ab1f1f')
         self.fillGreen = self.canvas.create_rectangle((width / 4.0), (height / 4.0), (width / 4.0), (height * (3 / 4.0)), fill='#41d94d')
@@ -257,9 +258,9 @@ class Stepper(Component):
 
 class Orifice(Component):
 
-    def __init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -277,7 +278,7 @@ class Orifice(Component):
         if(state):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill=self.fluidColor)
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
@@ -286,7 +287,7 @@ class Orifice(Component):
         else:
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill='black')
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill='black')
@@ -305,9 +306,9 @@ class Orifice(Component):
 
 class PressureSensor(Component):
 
-    def __init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -326,7 +327,7 @@ class PressureSensor(Component):
         if(state):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill=self.fluidColor)
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
@@ -335,7 +336,7 @@ class PressureSensor(Component):
         else:
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill='black')
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill='black')
@@ -353,9 +354,9 @@ class PressureSensor(Component):
 
 class TempSensor(Component):
 
-    def __init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, **kwargs):
+    def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, **kwargs):
 
-        Component.__init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
+        Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluid_color=kwargs.get('fluid_color', '#41d94d'))
 
         self.state = False
 
@@ -371,7 +372,7 @@ class TempSensor(Component):
         if(state):
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill=self.fluidColor)
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill=self.fluidColor)
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill=self.fluidColor)
@@ -380,7 +381,7 @@ class TempSensor(Component):
         else:
             if (self.pipe_top):
                 self.canvas.itemconfig(self.f1, fill='black')
-            if (self.line_2):
+            if (self.pipe_right):
                 self.canvas.itemconfig(self.f2, fill='black')
             if (self.line_3):
                 self.canvas.itemconfig(self.f3, fill='black')
@@ -466,13 +467,13 @@ allows for a traversal of the list to enable mass flow indicators on the GUI P&I
 
 class Pipe:
 
-    def __init__(self, root, bg_color, width, height, pipe_top, line_2, line_3, line_4, fluidColor, fill):
+    def __init__(self, root, bg_color, width, height, pipe_top, pipe_right, line_3, line_4, fluidColor, fill):
         self.canvas = Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
         self.width = width
         self.height = height
 
         self.line1 = pipe_top
-        self.line2 = line_2
+        self.line2 = pipe_right
         self.line3 = line_3
         self.line4 = line_4
 
@@ -509,7 +510,7 @@ class Pipe:
         else:
             xy = [(7 * width / 16.0, 7 * height / 16.0), (9 * width / 16.0, 7 * height / 16.0)]
             self.canvas.create_line(xy, width=1, fill='white')
-        if (line_2):
+        if (pipe_right):
             xy = [(9 * width / 16.0, 7 * height / 16.0), (width, 7 * height / 16.0)]
             self.canvas.create_line(xy, width=1, fill='white')
             xy2 = [(9 * width / 16.0, 9 * height / 16.0), (width, 9 * height / 16.0)]
