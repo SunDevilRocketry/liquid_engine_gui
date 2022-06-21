@@ -1,6 +1,6 @@
 ###############################################################
 #                                                             #
-# Solenoid.py -- Solenoid engine display component            #
+# solenoid.py -- Solenoid engine display component            #
 #                                                             #
 # Author: Nitish Chennoju, Colton Acosta                      #
 # Date: 6/12/2022                                             #

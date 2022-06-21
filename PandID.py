@@ -20,9 +20,10 @@ import tkinter as tk
 # Project Modules                                             #
 ###############################################################
 import DiagramComponents
-import solenoid   as SDR_solenoid
-import ball_valve as SDR_ball_valve
-import orifice    as SDR_orifice
+import solenoid        as SDR_solenoid
+import ball_valve      as SDR_ball_valve
+import orifice         as SDR_orifice
+import pressure_sensor as SDR_pressure_sensor
 import main
 
 
@@ -194,9 +195,9 @@ class Liquid_Engine_Plumbing:
         self.o2.getWidget().place(x=gridLen * 5, y=gridLen * 7)
 
         # All Pressure Sensors
-        self.ps1 = DiagramComponents.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, False, False)
-        self.ps2 = DiagramComponents.PressureSensor(self.win, 'black', gridLen, gridLen, False, False, False, True)
-        self.ps3 = DiagramComponents.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, True, True)
+        self.ps1 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, False, False)
+        self.ps2 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, False, False, True)
+        self.ps3 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, True, True)
         self.ps1.getWidget().place(x=gridLen * 0, y=gridLen * 3)
         self.ps2.getWidget().place(x=gridLen * 7, y=gridLen * 3)
         self.ps3.getWidget().place(x=gridLen * 5, y=gridLen * 9)
