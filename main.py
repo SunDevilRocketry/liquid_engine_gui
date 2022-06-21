@@ -40,11 +40,13 @@ from PIL      import Image, ImageTk
 
 # Setup path 
 sys.path.insert(0, './plumbing')
+
+# Imports
 import solenoid
-import gauge    as SDR_gauge
-import valve    as SDR_valve
-import PandID   as SDR_PandID
-import sequence as SDR_sequence
+import gauge          as SDR_gauge
+import valve          as SDR_valve
+import engine_display as SDR_engine_display
+import sequence       as SDR_sequence
 
 
 ###############################################################
@@ -161,7 +163,7 @@ if __name__ == '__main__':
 	###########################################################
 
     # P&ID diagram window
-    plumbing = SDR_PandID.Liquid_Engine_Plumbing(gridLen)  
+    plumbing = SDR_engine_display.Liquid_Engine_Plumbing(gridLen)  
 
     # SDR logo
     SDRlabel =                tk.Label(
