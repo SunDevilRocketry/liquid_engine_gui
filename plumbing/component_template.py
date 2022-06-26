@@ -26,7 +26,7 @@ class Component:
                 root,        # Window/frame to draw on 
                 bg_color,    # Background color
                 width,       # Width of drawing canvas 
-                height,      # Hieght of drawing canvas 
+                height,      # Height of drawing canvas 
                 pipe_top,    # Boolean, sets a pipe on top
                              # of component    
                 pipe_right,  # Boolean, sets a pipe to the 

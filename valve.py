@@ -80,6 +80,7 @@ class Indicator_Light:
                                   self.state, 
                                   fill=self.on_color
                                   )
+
         else:
             self.canvas.itemconfig(
                                   self.state, 
