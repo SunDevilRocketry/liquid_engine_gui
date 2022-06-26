@@ -82,34 +82,62 @@ class PressureSensor(SDR_component_template.Component):
                 text="__ Pa"
                                         )
 
-
+	# Public access to canvas widget
     def getWidget(self):
         return self.canvas
 
+	# Draw fluid in sensor pipes
     def setPipes(self, state):
         self.state = state
-        if(state):
+        if(state):    # fluid is in connecting pipes
             if (self.pipe_top):
-                self.canvas.itemconfig(self.fluid_top, fill=self.fluidColor)
+                self.canvas.itemconfig(
+                                      self.fluid_top, 
+                                      fill=self.fluidColor
+                                      )
             if (self.pipe_right):
-                self.canvas.itemconfig(self.fluid_right, fill=self.fluidColor)
+                self.canvas.itemconfig(
+                                      self.fluid_right, 
+                                      fill=self.fluidColor
+                                      )
             if (self.pipe_buttom):
-                self.canvas.itemconfig(self.fluid_buttom, fill=self.fluidColor)
+                self.canvas.itemconfig(
+                                      self.fluid_buttom, 
+                                      fill=self.fluidColor
+                                      )
             if (self.pipe_left):
-                self.canvas.itemconfig(self.fluid_left, fill=self.fluidColor)
-        else:
+                self.canvas.itemconfig(
+                                      self.fluid_left, 
+                                      fill=self.fluidColor
+                                      )
+        else:	  # no fluid in connecting pipes
             if (self.pipe_top):
-                self.canvas.itemconfig(self.fluid_top, fill='black')
+                self.canvas.itemconfig(
+                                      self.fluid_top, 
+                                      fill='black'
+                                      )
             if (self.pipe_right):
-                self.canvas.itemconfig(self.fluid_right, fill='black')
+                self.canvas.itemconfig(
+                                      self.fluid_right, 
+                                      fill='black'
+                                      )
             if (self.pipe_buttom):
-                self.canvas.itemconfig(self.fluid_buttom, fill='black')
+                self.canvas.itemconfig(
+                                      self.fluid_buttom, 
+                                      fill='black'
+                                      )
             if (self.pipe_left):
-                self.canvas.itemconfig(self.fluid_left, fill='black')
+                self.canvas.itemconfig(
+                                      self.fluid_left, 
+                                      fill='black'
+                                      )
 
+	# Set the state indicating if fluid is in the connecting 
+    # pipes
     def getState(self):
         return self.state
 
+    # Set the pressure readout
     def setValues(self, pressure):
         self.canvas.itemconfig(self.p, text=pressure)
 
