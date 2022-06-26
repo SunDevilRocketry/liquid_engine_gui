@@ -43,6 +43,7 @@ class PressureSensor(SDR_component_template.Component):
                pipe_left, 
                fluid_color=kwargs.get('fluid_color', '#41d94d')
                                                  )
+
 		#######################################################
 		# Attribute Initializations                           #
 		#######################################################
@@ -51,13 +52,18 @@ class PressureSensor(SDR_component_template.Component):
         self.state = False
 
 		# Sensor circle coordinates
-        pressure_sensor_x0 = width/4.0
-        pressure_sensor_y0 = height/4.0
-        pressure_sensor_x1 = width*(3/4.0)
-        pressure_sensor_y1 = height*(3/4.0)
+        pressure_sensor_x0 = width    /4.0  # Upper left corner
+        pressure_sensor_y0 = height   /4.0  # coordinates
+        pressure_sensor_x1 = width* (3/4.0) # Lower right corner
+        pressure_sensor_y1 = height*(3/4.0) # coordinates
+
+
+		#######################################################
+		# Widget Initializations                              #
+		#######################################################
 		
 
-		# Draw the pressure sensor circle
+		# Pressure sensor circle
         self.rect = self.canvas.create_oval(
         		pressure_sensor_x0, 
                 pressure_sensor_y0, 
@@ -67,10 +73,15 @@ class PressureSensor(SDR_component_template.Component):
                 width=1
                                            )
 
-        self.p = self.canvas.create_text(width / 2.0, height / 2.0, font=("Arial", 8, 'bold'), fill="white",
-                                             text="__ Pa")
-        self.name = self.canvas.create_text(width/4.0, height/8.0, font=("Arial", 6, 'bold'), fill="white",
-                                         text="Pressure\nSensor")
+		# Sensor readout
+        self.p = self.canvas.create_text(
+        		width / 2.0, 
+                height / 2.0, 
+                font=("Arial", 8, 'bold'), 
+                fill="white",
+                text="__ Pa"
+                                        )
+
 
     def getWidget(self):
         return self.canvas
