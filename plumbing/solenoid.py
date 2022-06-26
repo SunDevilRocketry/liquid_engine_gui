@@ -18,29 +18,63 @@ import component_template as SDR_component_template
 class Solenoid(SDR_component_template.Component):
     def __init__(
                 self, 
+                root,        # Window to draw on 
+                bg_color,    # Background color 
+                num,         
+                width,       # Width of draw canvas 
+                height,      # Height of draw canvas 
+                pipe_top,    # Connecting pipes fill status 
+                pipe_right, 
+                pipe_buttom, 
+                pipe_left, 
+                **kwargs    # fluid color
+                ):
+
+		# Initial component initializations
+        SDR_component_template.Component.__init__(
+                self, 
                 root, 
                 bg_color, 
-                num, 
                 width, 
                 height, 
                 pipe_top, 
                 pipe_right, 
                 pipe_buttom, 
                 pipe_left, 
-                **kwargs
-                ):
+                fluid_color=kwargs.get('fluid_color', '#41d94d')
+                                                  )
 
-        SDR_component_template.Component.__init__(self, root, bg_color, width, height, pipe_top, pipe_right, pipe_buttom, pipe_left, fluid_color=kwargs.get('fluid_color', '#41d94d'))
         self.inlet = -1
         self.outlet = -1
 
         self.state = False
 
-        self.fill = self.canvas.create_rectangle((width / 4.0), (height / 4.0), (width * (3 / 4.0)), (height * (3 / 4.0)),
-                                            fill='#ab1f1f')
-        self.rect = self.canvas.create_rectangle(width / 4.0, height / 4.0, width * (3 / 4.0), height * (3 / 4.0),
-                                            outline='white')
-        self.canvas.create_text(width / 2.0, height / 2.0, font=("Arial", 10, 'bold'), fill="white", text=str(num))
+		# Draw initial fluid in connecting pipes
+        self.fill = self.canvas.create_rectangle(
+               (width /4.0)    , 
+               (height/4.0)    , 
+               (width *(3/4.0)), 
+               (height*(3/4.0)),
+               fill='#ab1f1f'
+                                                )
+
+		# Draw the solenoid outline
+        self.rect = self.canvas.create_rectangle(
+               width/4.0, 
+               height/4.0, 
+               width*(3/4.0), 
+               height*(3/4.0),
+               outline='white'
+                                                )
+
+		# Write the solenoid number
+        self.canvas.create_text(
+               width/2.0, 
+               height/2.0, 
+               font=("Arial", 10, 'bold'), 
+               fill="white", 
+               text=str(num)
+                               )
 
     def setIn(self, num):
         self.inlet = num
@@ -51,7 +85,12 @@ class Solenoid(SDR_component_template.Component):
     def getState(self):
         return self.state
 
-    def setState(self, open):
+    # Set the solenoid to open or close
+    def setState(
+                self, 
+                open_solenoid  # Boolean indicating if the solenoid is open
+                ):
+
         inlet = False
         if (self.inlet == 1):
             if(self.top is not None and self.top.getState()):
@@ -78,7 +117,7 @@ class Solenoid(SDR_component_template.Component):
             else:
                 self.canvas.itemconfig(self.fluid_left, fill='black')
 
-        if(open):
+        if(open_solenoid):
             self.state = True
             self.canvas.itemconfig(self.fill, fill='#41d94d')
             if (self.outlet == 1):
