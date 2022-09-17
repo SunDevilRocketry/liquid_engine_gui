@@ -110,7 +110,7 @@ class gauge:
 
         # Set gauge diplay angle
         gauge_angular_width = abs(self.endAngle - self.startAngle)
-        gauge_percent_fill = value/self.max_sensor_val  
+        gauge_percent_fill = sensor_value/self.max_sensor_val  
         gauge_angle = (
                       self.endAngle - 
                       (gauge_percent_fill*gauge_angular_width)
