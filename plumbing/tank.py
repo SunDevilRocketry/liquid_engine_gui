@@ -23,25 +23,80 @@ import component_template as SDR_component_template
 
 class Tank:
 
-    def __init__(self, root, bg_color, title, fluidColor, width, height):
-        padding = 15
+    def __init__(
+                self      , 
+                root      ,  # Window to draw on 
+                bg_color  ,  # Background color 
+                title     ,   
+                fluidColor,  # Color of tank fluid 
+                width     ,  # Width of drawing canvas 
+                height       # Height of drawing canvas
+                ):
 
-        self.canvas = Canvas(root, width=width, height=height, bg=bg_color, highlightthickness=0)
-        self.width = width
+		# Widget variables
+        padding     = 15
+        self.width  = width
         self.height = height
 
-        self.top = None
-        self.right = None
+        # Booleans indicating which connecting pipes contain fluid
+        self.top    = None
+        self.right  = None
         self.bottom = None
-        self.left = None
+        self.left   = None
 
-        self.rect = self.canvas.create_rectangle(width/4.0, 0, width*(3/4.0), height-1, outline='white')
-        self.fill = self.canvas.create_rectangle((width/4.0) + 1, 50,width*(3/4.0)-1, height-2, fill=fluidColor)
+	    # Canvas object to draw on	
+        self.canvas = Canvas(
+                            root, 
+                            width=width, 
+                            height=height, 
+                            bg=bg_color, 
+                            highlightthickness=0
+                            )
 
-        self.pressure = self.canvas.create_text(width / 2.0, (height / 2.0) - 1.25*padding, font=("Arial", 11, 'bold'), fill="white", text=title)
-        self.pressure = self.canvas.create_text(width/2.0, (height/2.0), font=("Arial", 8), fill="white", text='psi')
-        self.percentage = self.canvas.create_text(width/2.0, (height/2.0) + padding, font=("Arial", 8), fill="white", text='%')
-        self.temperature = self.canvas.create_text(width/2.0, (height/2.0) + 2*padding, font=("Arial", 8), fill="white", text='tmp')
+		# Draw tank and fluid
+        self.rect = self.canvas.create_rectangle(
+                            width/4.0    , 
+                            0            , 
+                            width*(3/4.0), 
+                            height-1     , 
+                            outline='white'
+                                                )
+        self.fill = self.canvas.create_rectangle(
+                            (width/4.0)+1, 
+                             50,
+                             width*(3/4.0)-1, 
+                             height-2, 
+                             fill=fluidColor
+                                                )
+		# Draw tank labels and readouts
+        self.pressure = self.canvas.create_text(
+                             width/2.0, 
+                            (height/2.0)-1.25*padding, 
+                             font=("Arial", 11, 'bold'), 
+                             fill="white", 
+                             text=title
+                                               )
+        self.pressure = self.canvas.create_text(
+                             width/2.0, 
+                            (height/2.0), 
+                             font=("Arial", 8), 
+                             fill="white", 
+                             text='psi'
+                                               )
+        self.percentage = self.canvas.create_text(
+                            width /2.0, 
+                           (height/2.0)+padding, 
+                            font=("Arial", 8), 
+                            fill="white", 
+                            text='%'
+                                                 )
+        self.temperature = self.canvas.create_text(
+                            width/2.0, 
+                           (height/2.0)+2*padding, 
+                            font=("Arial", 8), 
+                            fill="white", 
+                            text='tmp'
+                                                  )
 
 
     def setTankLevel(self, percent):
