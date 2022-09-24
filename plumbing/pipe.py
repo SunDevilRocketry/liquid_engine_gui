@@ -54,33 +54,51 @@ import component_template as SDR_component_template
 # traversal of the list to enable mass flow indicators on the GUI 
 # P&ID sketch.
 
+
+###############################################################
+#                                                             #
+# OBJECT:                                                     #
+# 		Pipe                                                  #
+#                                                             #
+# DESCRIPTION:                                                #
+# 		Container of fluid on engine display, used to connect #
+#       components such as valves, tanks, and the chamber     #
+#                                                             #
+###############################################################
 class Pipe:
 
     def __init__(
-                self, 
-                root, 
-                bg_color, 
-                width, 
-                height, 
-                pipe_top, 
-                pipe_right, 
+                self       , 
+                root       , # GUI window to draw on
+                bg_color   , # Background color 
+                width      , # Canvas dimensions  
+                height     , 
+                pipe_top   , # booleans indicating which sides 
+                pipe_right , # have pipes connected 
                 pipe_buttom, 
-                pipe_left, 
-                fluidColor, 
-                fill
-                ):
+                pipe_left  , 
+                fluidColor , # Fluid color code 
+                fill         # boolean indicating whether pipe is
+                ):           # filled or not
 
+		#######################################################
+		# Initialization                                      #
+		#######################################################
+
+		# Instantiate canvas to draw on
         self.canvas = Canvas(
-                            root, 
-                            width=width, 
+                            root         , 
+                            width=width  , 
                             height=height, 
-                            bg=bg_color, 
+                            bg=bg_color  , 
                             highlightthickness=0
                             )
 
+		# Canvas dimensions
         self.width = width
         self.height = height
 
+		# Pipe attachments
         self.line1 = pipe_top
         self.line2 = pipe_right
         self.line3 = pipe_buttom
@@ -91,135 +109,131 @@ class Pipe:
         self.bottom = None
         self.left =   None
 
+		# Fluid variables
         self.state = False
         self.fluidColor = fluidColor
 
+		#######################################################
+		# Central pipe                                        #
+		#######################################################
 
-        # DRAW PIPES
         if (fill):
-            self.f0 = self.canvas.create_rectangle(
+            self.pipe_fluid_canvas = self.canvas.create_rectangle(
                                                   7*width /16.0, 
                                                   7*height/16.0, 
                                                   9*width /16.0, 
                                                   9*height/16.0,
-                                                  fill=fluidColor
-                                                  )
+                                                  fill=fluidColor )
         else:
-            self.f0 = self.canvas.create_rectangle(
+            self.pipe_fluid_canvas = self.canvas.create_rectangle(
                                                   7*width/16.0, 
                                                   7*height/16.0, 
                                                   9*width /16.0, 
                                                   9*height/16.0,
-                                                  fill='black'
-                                                  )
+                                                  fill='black')
 
-        if (pipe_top):
-            xy = [
-                 (7*width/16.0, 0            ), 
-                 (7*width/16.0, 7*height/16.0)
-                 ]
+		#######################################################
+		# Top connecting pipe                                 #
+		#######################################################
 
+        if ( pipe_top ):
+            left_wall = [
+						(7*width/16.0, 0            ), 
+						(7*width/16.0, 7*height/16.0)
+                        ]
             self.canvas.create_line(
-                                   xy, 
-                                   width=1, 
+                                   left_wall, 
+                                   width = 1, 
                                    fill='white'
                                    )
-
-            xy2 = [
-                  (9*width/16.0, 0            ), 
-                  (9*width/16.0, 7*height/16.0)
-                  ]
-
+            right_wall= [
+                        (9*width/16.0, 0            ), 
+                        (9*width/16.0, 7*height/16.0)
+                        ]
             self.canvas.create_line(
-                                   xy2, 
-                                   width=1, 
+                                   right_wall, 
+                                   width = 1 , 
                                    fill='white'
                                    )
-
-            if (fill):
+			# Draw fluid in top connecting pipe
+            if ( fill ):
                 self.fluid_top = self.canvas.create_rectangle(
                                            (7*width /16.0)+1, 
-                                            0              , 
+                                            0               , 
                                            (9*width /16.0)-1,
                                            (7*height/16.0)+1,
-                                           fill=fluidColor, 
-                                           outline=""
-                                                             )
-
+                                           fill=fluidColor  , 
+                                           outline = ""      )
             else:
                 self.fluid_top = self.canvas.create_rectangle(
                                            (7*width /16.0)+1, 
-                                            0, 
+                                            0               , 
                                            (9*width /16.0)-1,
                                            (7*height/16.0)+1,
-                                           fill='black', 
-                                           outline=""
-                                                             )
-
+                                           fill='black'     , 
+                                           outline = ""      )
+		# No top connecting pipe, close the top off
         else:
-            xy = [
-                 (7*width/16.0, 7*height/16.0), 
-                 (9*width/16.0, 7*height/16.0)
-                 ]
+            top_wall = [
+                       (7*width/16.0, 7*height/16.0), 
+                       (9*width/16.0, 7*height/16.0)
+                       ]
 
             self.canvas.create_line(
-                                   xy, 
-                                   width=1, 
+                                   top_wall , 
+                                   width = 1, 
                                    fill='white'
                                    )
 
-        if (pipe_right):
-            xy = [
-                 (9*width/16.0, 7*height/16.0), 
-                 (  width     , 7*height/16.0)
-                 ]
+		#######################################################
+		# Right connecting pipe                               #
+		#######################################################
 
+        if ( pipe_right ):
+            bottom_wall = [
+                          (9*width/16.0, 7*height/16.0), 
+                          (  width     , 7*height/16.0)
+                          ]
+            top_wall =    [
+                          (9*width/16.0, 9*height/16.0), 
+                          (  width     , 9*height/16.0)
+                          ]
             self.canvas.create_line(
-                                   xy, 
-                                   width=1, 
+                                   bottom_wall, 
+                                   width = 1  , 
                                    fill='white'
                                    )
-
-            xy2 = [
-                  (9*width/16.0, 9*height/16.0), 
-                  (  width     , 9*height/16.0)
-                  ]
-
             self.canvas.create_line(
-                                   xy2, 
-                                   width=1, 
+                                   top_wall , 
+                                   width = 1, 
                                    fill='white'
                                    )
-
-            if (fill):
+			# Draw fluid in right connecting pipe
+            if ( fill ):
                 self.fluid_right = self.canvas.create_rectangle(
                                   (9*width /16.0)  , 
                                   (7*height/16.0)+1, 
                                   (   width     )  ,
                                   (9*height/16.0)-1,
                                   fill=fluidColor  , 
-                                  outline=""
-                                                               )
-
+                                  outline=""                   )
             else:
                 self.fluid_right = self.canvas.create_rectangle(
-                                    9*width/16.0, 
+                                   (9*width /16.0)  , 
                                    (7*height/16.0)+1, 
-                                     width,
+                                   (  width      )  ,
                                    (9*height/16.0)-1,
-                                   fill='black', 
-                                   outline=""
-                                                               )
-
+                                   fill='black'     , 
+                                   outline = ""                )
+		# No top connecting pipe, close the right off
         else:
-            xy = [
-                 (9*width/16.0, 7*height/16.0), 
-                 (9*width/16.0, 9*height/16.0)
-                 ]
-
+            right_wall= [
+                        (9*width/16.0, 7*height/16.0), 
+                        (9*width/16.0, 9*height/16.0)
+                        ]
             self.canvas.create_line(
-                                   xy, 
-                                   width=1, 
+                                   right_wall, 
+                                   width = 1 , 
                                    fill='white'
                                    )
 
@@ -351,7 +365,7 @@ class Pipe:
         self.state = fluid
         if (fluid):
             self.canvas.itemconfig(
-                                  self.f0, 
+                                  self.pipe_fluid_canvas, 
                                   fill=self.fluidColor
                                   )
 
@@ -381,7 +395,7 @@ class Pipe:
 
         else:
             self.canvas.itemconfig(
-                                  self.f0, 
+                                  self.pipe_fluid_canvas, 
                                   fill='black'
                                   )
 
