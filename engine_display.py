@@ -137,9 +137,15 @@ class Engine_Display:
 
     def __init__(self, gridLen):
 
-        width = gridLen * 8
+		#######################################################
+		# Display Settings                                    #
+		#######################################################
+
+		# Window dimensions
+        width  = gridLen * 8
         height = gridLen * 12
 
+		# Window Configuration
         self.win = tk.Tk()
         self.win.title("P&ID Diagram")
         self.win.geometry(str(width) + "x" + str(height))
@@ -147,79 +153,52 @@ class Engine_Display:
         self.win.protocol("WM_DELETE_WINDOW",
                            self.close_window_callback)
 
-        # CONSTANT
+        # Fluid Color Hex Code 
         fluidColor = '#41d94d'
 
-        # HEADER
-        self.header = Header(self.win, 'black', 'P&ID', width, gridLen, 24)
-        self.header.getWidget().place(x=gridLen * 0, y=gridLen * 0)
 
-        # All TANKS
+		#######################################################
+		# Component Initializations                           #
+		#######################################################
+
+        # Header 
+        self.header = Header(self.win, 'black', 'P&ID', width, gridLen, 24)
+
+        # Tanks 
         self.gn2 = SDR_tank.Tank(self.win, 'black', 'GN2', '#1d2396', gridLen, gridLen)
         self.lox = SDR_tank.Tank(self.win, 'black', 'LOx', '#1d2396', gridLen, gridLen)
-        self.k = SDR_tank.Tank(self.win, 'black', 'K', '#1d2396', gridLen, gridLen)
-        self.gn2.getWidget().place(x=gridLen * 3, y=gridLen * 1)
-        self.lox.getWidget().place(x=gridLen * 1, y=gridLen * 5)
-        self.k.getWidget().place(x=gridLen * 6, y=gridLen * 5)
+        self.k   = SDR_tank.Tank(self.win, 'black', 'K'  , '#1d2396', gridLen, gridLen)
 
-        # All SOLENOID VALVES
-        self.one = SDR_solenoid.Solenoid(self.win, 'black', 1, gridLen, gridLen, False, True, True, False)
-        self.two = SDR_solenoid.Solenoid(self.win, 'black', 2, gridLen, gridLen, False, True, False, False)
-        self.three =SDR_solenoid.Solenoid(self.win, 'black', 3, gridLen, gridLen, False, False, True, True)
-        self.four = SDR_solenoid.Solenoid(self.win, 'black', 4, gridLen, gridLen, False, True, False, False)
-        self.five = SDR_solenoid.Solenoid(self.win, 'black', 5, gridLen, gridLen, True, False, False, True)
-        self.six = SDR_solenoid.Solenoid(self.win, 'black', 6, gridLen, gridLen, False, True, False, True)
-        self.one.getWidget().place(x=gridLen * 1, y=gridLen * 2)
-        self.one.setIn(2)
-        self.one.setOut(3)
-        self.two.getWidget().place(x=gridLen * 0, y=gridLen * 4)
-        self.two.setIn(2)
-        self.three.getWidget().place(x=gridLen * 6, y=gridLen * 2)
-        self.three.setIn(4)
-        self.three.setOut(3)
-        self.four.getWidget().place(x=gridLen * 5, y=gridLen * 4)
-        self.four.setIn(2)
-        self.five.getWidget().place(x=gridLen * 3, y=gridLen * 8)
-        self.five.setIn(1)
-        self.five.setOut(4)
-        self.six.getWidget().place(x=gridLen * 4, y=gridLen * 7)
-        self.six.setIn(4)
-        self.six.setOut(2)
+        # Solenoids 
+        self.one   = SDR_solenoid.Solenoid(self.win, 'black', 1, gridLen, gridLen, False, True, True, False)
+        self.two   = SDR_solenoid.Solenoid(self.win, 'black', 2, gridLen, gridLen, False, True, False, False)
+        self.three = SDR_solenoid.Solenoid(self.win, 'black', 3, gridLen, gridLen, False, False, True, True)
+        self.four  = SDR_solenoid.Solenoid(self.win, 'black', 4, gridLen, gridLen, False, True, False, False)
+        self.five  = SDR_solenoid.Solenoid(self.win, 'black', 5, gridLen, gridLen, True, False, False, True)
+        self.six   = SDR_solenoid.Solenoid(self.win, 'black', 6, gridLen, gridLen, False, True, False, True)
 
-        # All STEPPER
+        # Ball Valves 
         self.s1 = SDR_ball_valve.Ball_Valve(self.win, 'black', gridLen, gridLen, True, False, False, True)
         self.s2 = SDR_ball_valve.Ball_Valve(self.win, 'black', gridLen, gridLen, False, True, True, True)
-        self.s1.getWidget().place(x=gridLen * 6, y=gridLen * 7)
-        self.s2.getWidget().place(x=gridLen * 2, y=gridLen * 8)
 
-        # All ORIFICES
+        # Orifices 
         self.o1 = SDR_orifice.Orifice(self.win, 'black', gridLen, gridLen, True, False, True, False)
         self.o2 = SDR_orifice.Orifice(self.win, 'black', gridLen, gridLen, False, True, True, True)
-        self.o1.getWidget().place(x=gridLen * 1, y=gridLen * 6)
-        self.o2.getWidget().place(x=gridLen * 5, y=gridLen * 7)
 
-        # All Pressure Sensors
+        # Pressure Sensors
         self.ps1 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, False, False)
         self.ps2 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, False, False, True)
         self.ps3 = SDR_pressure_sensor.PressureSensor(self.win, 'black', gridLen, gridLen, False, True, True, True)
-        self.ps1.getWidget().place(x=gridLen * 0, y=gridLen * 3)
-        self.ps2.getWidget().place(x=gridLen * 7, y=gridLen * 3)
-        self.ps3.getWidget().place(x=gridLen * 5, y=gridLen * 9)
 
+		# Temperature Sensors
         self.tp1 = SDR_temp_sensor.TempSensor(self.win, 'black', gridLen, gridLen, True, False, False, False)
-        self.tp1.getWidget().place(x=gridLen * 5, y=gridLen * 10)
 
-        # All Text boxes
+        # Text boxes
         self.t1 = Text(self.win, 'black', 'K Fill', gridLen, gridLen, 12)
         self.t2 = Text(self.win, 'black', 'K Drain', gridLen, gridLen, 12)
         self.t3 = Text(self.win, 'black', 'LOx\nFill/Drain', gridLen, gridLen, 12)
-        self.t4 = Text(self.win, 'black', 'Regen\nCircuit', gridLen, gridLen, 12)
-        self.t1.getWidget().place(x=gridLen * 7, y=gridLen * 4)
-        self.t2.getWidget().place(x=gridLen * 7, y=gridLen * 6)
-        self.t3.getWidget().place(x=gridLen * 1, y=gridLen * 9)
-        self.t4.getWidget().place(x=gridLen * 7, y=gridLen * 9)
 
-        # All PIPES
+        # Pipes 
         self.p1 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
         self.p2 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, True, True, True, '#41d94d', False)
         self.p3 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
@@ -242,6 +221,66 @@ class Engine_Display:
         self.p20 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, True, True, '#41d94d', False)
         self.p21 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, False, True, False, True, '#41d94d', False)
         self.p22 = SDR_pipe.Pipe(self.win, 'black', gridLen, gridLen, True, False, False, True, '#41d94d', False)
+
+        # Nozzle  
+        self.n = SDR_nozzle.Nozzle(self.win, 'black', gridLen, gridLen * 1.5)
+
+        #self.s2.setNeighbors(None, self.five, self.p19, self.p16)
+        #self.s1.setNeighbors(self.p13, None, None, self.o2)
+
+
+		#######################################################
+		# Component Placement                                 #
+		#######################################################
+
+        # Header 
+        self.header.getWidget().place(x=gridLen * 0, y=gridLen * 0)
+
+		# Tanks
+        self.gn2.getWidget().place(x=gridLen * 3, y=gridLen * 1)
+        self.lox.getWidget().place(x=gridLen * 1, y=gridLen * 5)
+        self.k.getWidget().place(x=gridLen * 6, y=gridLen * 5)
+
+		# Solenoids
+        self.one.getWidget().place(x=gridLen * 1, y=gridLen * 2)
+        self.one.setIn(2)
+        self.one.setOut(3)
+        self.two.getWidget().place(x=gridLen * 0, y=gridLen * 4)
+        self.two.setIn(2)
+        self.three.getWidget().place(x=gridLen * 6, y=gridLen * 2)
+        self.three.setIn(4)
+        self.three.setOut(3)
+        self.four.getWidget().place(x=gridLen * 5, y=gridLen * 4)
+        self.four.setIn(2)
+        self.five.getWidget().place(x=gridLen * 3, y=gridLen * 8)
+        self.five.setIn(1)
+        self.five.setOut(4)
+        self.six.getWidget().place(x=gridLen * 4, y=gridLen * 7)
+        self.six.setIn(4)
+        self.six.setOut(2)
+
+		# Ball Valves
+        self.s1.getWidget().place(x=gridLen * 6, y=gridLen * 7)
+        self.s2.getWidget().place(x=gridLen * 2, y=gridLen * 8)
+
+		# Orifices
+        self.o1.getWidget().place(x=gridLen * 1, y=gridLen * 6)
+        self.o2.getWidget().place(x=gridLen * 5, y=gridLen * 7)
+
+		# Pressure Sensors
+        self.ps1.getWidget().place(x=gridLen * 0, y=gridLen * 3)
+        self.ps2.getWidget().place(x=gridLen * 7, y=gridLen * 3)
+        self.ps3.getWidget().place(x=gridLen * 5, y=gridLen * 9)
+
+		# Temperature Sensors
+        self.tp1.getWidget().place(x=gridLen * 5, y=gridLen * 10)
+
+		# Text Boxes
+        self.t1.getWidget().place(x=gridLen * 7, y=gridLen * 4)
+        self.t2.getWidget().place(x=gridLen * 7, y=gridLen * 6)
+        self.t3.getWidget().place(x=gridLen * 1, y=gridLen * 9)
+
+		# Pipes
         self.p1.getWidget().place(x=gridLen * 2, y=gridLen * 2)
         self.p2.getWidget().place(x=gridLen * 3, y=gridLen * 2)
         self.p3.getWidget().place(x=gridLen * 4, y=gridLen * 2)
@@ -265,18 +304,20 @@ class Engine_Display:
         self.p21.getWidget().place(x=gridLen * 4, y=gridLen * 9)
         self.p22.getWidget().place(x=gridLen * 6, y=gridLen * 9)
 
-        # NOZZLE
-        self.n = SDR_nozzle.Nozzle(self.win, 'black', gridLen, gridLen * 1.5)
+		# Nozzle
         self.n.getWidget().place(x=gridLen * 3, y=gridLen * 10)
 
-        #self.s2.setNeighbors(None, self.five, self.p19, self.p16)
-        #self.s1.setNeighbors(self.p13, None, None, self.o2)
 
+		#######################################################
+		# Configure Connections                               #
+		#######################################################
 
         #SET ALL VIRTUAL COMPONENTS (linked list)
         self.head = self.gn2
+
         #row 1
         self.gn2.setNeighbors(None, None, self.p2, None)
+
         #row 2
         self.one.setNeighbors(None, None, self.p5, None)
         self.p1.setNeighbors(None, None, None, self.one)
@@ -284,26 +325,31 @@ class Engine_Display:
         self.p3.setNeighbors(None, self.p4, None, None)
         self.p4.setNeighbors(None, self.three, None, None)
         self.three.setNeighbors(None, None, self.p7, None)
+
         #row 3
         self.ps1.setNeighbors(None, None, None, None)
         self.p5.setNeighbors(None, None, self.p8, self.ps1)
         self.p6.setNeighbors(None, None, self.p9, None)
         self.p7.setNeighbors(None, self.ps2, self.p10, None)
         self.ps2.setNeighbors(None, None, None, None)
+
         #row 4
         self.two.setNeighbors(None, None, None, None)
         self.p8.setNeighbors(None, None, self.lox, self.two)
         self.p9.setNeighbors(None, None, self.p11, None)
         self.four.setNeighbors(None, None, None, None)
         self.p10.setNeighbors(None, None, self.k, self.four)
+
         #row5
         self.lox.setNeighbors(None, None, self.o1, None)
         self.p11.setNeighbors(None, None, self.p12, None)
         self.k.setNeighbors(None, None, self.p13, None)
+
         #row 6
         self.o1.setNeighbors(None, None, self.p14, None)
         self.p12.setNeighbors(None, None, self.p15, None)
         self.p13.setNeighbors(None, None, self.s1, None)
+
         #row 7
         self.p14.setNeighbors(None, None, self.p16, None)
         self.p15.setNeighbors(None, self.six, self.five, None)
