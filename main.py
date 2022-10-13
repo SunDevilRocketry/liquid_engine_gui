@@ -21,7 +21,6 @@ __credits__ = ["Colton Acosta"   ,
 ###############################################################
 # Standard Imports                                            #
 ###############################################################
-import threading
 import time
 import os
 import sys
@@ -190,42 +189,46 @@ if __name__ == '__main__':
 
     solenoid2_buttons = SDR_valve.Buttons(
                                      valve_button_row2,
-                                     "Kerosene Pressurization (2)", 
+                                     "LOX Vent (2)", 
                                      plumbing.two
                                      )
 
     solenoid3_buttons = SDR_valve.Buttons(
                                      valve_button_row3,
-                                     "LOX Vent (2)", 
-                                     plumbing.three
-                                     )
-
-    solenoid4_buttons = SDR_valve.Buttons(
-                                     valve_button_row4,
-                                     "Kerosene Vent (4)", 
-                                     plumbing.four
-                                     )
-
-    solenoid5_buttons = SDR_valve.Buttons(
-                                     valve_button_row1,
                                      "LOX Purge (5)", 
                                      plumbing.five
                                      )
 
+    ball_valve1_buttons = SDR_valve.Buttons(
+                                    valve_button_row4,
+                                    "LOX Main"       ,
+                                    plumbing.s2
+                                    )
+
+
+    solenoid5_buttons = SDR_valve.Buttons(
+                                     valve_button_row1,
+                                     "Kerosene Pressure (3)", 
+                                     plumbing.three
+                                     )
+
     solenoid6_buttons = SDR_valve.Buttons(
                                      valve_button_row2,
+                                     "Kerosene Vent (4)", 
+                                     plumbing.four
+                                     )
+
+    solenoid4_buttons = SDR_valve.Buttons(
+                                     valve_button_row3,
                                      "Kerosene Purge (6)", 
                                      plumbing.six
                                      )
 
-    ball_valve1_buttons = SDR_valve.Buttons(
-                                    valve_button_row3,
-                                    "LOX Main Valve"
-                                    )
 
     ball_valve2_buttons = SDR_valve.Buttons(
                                     valve_button_row4,
-                                    "Kerosene Main Valve"
+                                    "Kerosene Main Valve",
+                                    plumbing.s1
                                     )
 
 	# Startup button

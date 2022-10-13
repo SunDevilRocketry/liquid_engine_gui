@@ -178,8 +178,8 @@ class Engine_Display:
         self.six   = SDR_solenoid.Solenoid(self.win, 'black', 6, gridLen, gridLen, False, False, True, True)
 
         # Ball Valves 
-        self.s1 = SDR_ball_valve.Ball_Valve(self.win, 'black', gridLen, gridLen, True, False, True, False)
-        self.s2 = SDR_ball_valve.Ball_Valve(self.win, 'black', gridLen, gridLen, True, False, True, False)
+        self.s1 = SDR_solenoid.Solenoid(self.win, 'black', 7, gridLen, gridLen, True, False, True, False)
+        self.s2 = SDR_solenoid.Solenoid(self.win, 'black', 8, gridLen, gridLen, True, False, True, False)
 
         # Orifices 
         self.o1 = SDR_orifice.Orifice(self.win, 'black', gridLen, gridLen, True, False, True, False)
@@ -365,10 +365,10 @@ class Engine_Display:
 
         #row 9
         self.p14.setNeighbors(None, self.p19, None, None)
-        self.p19.setNeighbors(None, self.p20, None, None)
+        self.p19.setNeighbors(None, self.p20, None, self.p14)
         self.p20.setNeighbors(None, None, self.n, None)
-        self.p21.setNeighbors(None, None, None, self.p20)
-        self.ps3.setNeighbors(None, None, self.tp1, self.p21)
+        self.p21.setNeighbors(self.six, self.ps3, None, self.p20)
+        self.ps3.setNeighbors(self.p22, None, self.tp1, self.p21)
         self.p22.setNeighbors(None, None, None, self.ps3)
 
         #row 10
@@ -509,25 +509,41 @@ class Engine_Display:
             self.five.setFill(False, True, False, False)
             self.six.setFill(False, False, False, True)
             if(self.six.getState()):
-                self.six.setFill(False, True, False, False)
+                self.six.setFill(False, False, True, False)
 #                self.o2.setFill(False, False, True, True)
             if(self.five.getState()):
-                self.five.setFill(False, False, False, True)
+                self.five.setFill(False, False, True, False)
 #                self.s2.setFill(False, True, False, False)
 #                if(self.s2.getPercentage() > 0):
 #                    self.s2.setFill(False, False, True, False)
         if(self.p13.getState()):
             self.s1.setFill(True, False, False, False)
-            if(self.s1.getPercentage() > 0):
-                self.s1.setFill(False, False, False, True)
-                self.o2.setFill(False, True, True, False)
+            self.o2.setFill(True, False, True, False)
+            if( self.s1.getState() ):
+                self.s1.setFill(True, False, True, False)
+            #    self.o2.setFill(False, True, True, False)
+        if ( self.p14.getState() ):
+            if ( self.s2.getState() ):
+                self.s2.setFill(True, False, True, False)
+            else:
+                self.s2.setFill(False, False, True, False)
         if(self.p16.getState()):
             self.s2.setFill(True, False, False, False)
-            if(self.s2.getPercentage() > 0):
+            if( self.s2.getState() ):
                 self.s2.setFill(False, False, True, False)
+        if ( self.p19.getState() ):
+            self.five.setFill(False, True, True, False)
+        if ( self.p21.getState() ):
+            self.ps3.setFill(False, True, True, True)
+            self.tp1.setFill(True, False, False, False)
+            if ( self.six.getState() ):
+                self.six.setFill(False, False, True, True)
+            else:
+                self.six.setFill(False, False, True, False)
         if(self.p22.getState()):
             self.ps3.setFill(False, True, True, True)
             self.tp1.setFill(True, False, False, False)
+            self.s1.setFill(False, False, True, False)
 
     def getWindow(self):
         return self.win
