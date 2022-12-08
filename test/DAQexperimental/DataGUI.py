@@ -13,11 +13,11 @@ __credits__=["Ian Chandra"]
 
 ## USER INPUTS
 # Gain
-G1 = 51.7   # For P1, A0
+G1 = 33.93   # For P1, A0
 G2 = 51.1   # For P2, A5
 
 # Maximum Pressure Expected
-pmax = 5
+pmax = 1000
 
 # Maximum Pressure Drop Expect
 dpmax = 80
@@ -28,7 +28,7 @@ dpmax = 80
 import tkinter as tk 
 from tkinter import *
 # Only for running on mac
-from tkmacosx import Button
+#from tkmacosx import Button
 # Only for running on mac
 import Gauge
 from PIL import Image,ImageTk
