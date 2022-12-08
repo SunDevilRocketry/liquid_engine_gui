@@ -6,7 +6,7 @@
 ## voltage05:
 ## Input: analogRead value (1-1023)
 ## Output: voltage (0-5 V)
-from os import fstatvfs
+#from os import fstatvfs
 
 
 def voltage05(x):
