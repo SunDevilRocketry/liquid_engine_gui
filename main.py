@@ -232,42 +232,34 @@ if __name__ == '__main__':
                                     )
 
 	# Startup button
-    startup_button =    tk.Button(
-                                 sequence_frame_row1, 
-                                 text="STARTUP", 
-                                 padx=40, 
-                                 pady=10, 
-                                 font="Verdana 14", 
-                                 bg="black", 
-                                 fg="white", 
-                                 command=SDR_sequence.startup,
-                                 activebackground="white",
-                                 relief="solid",
-							     highlightthickness=2,
-                                 borderwidth=5
-                                 )
-
-	# All valves off button
-#    off_button    =     tk.Button(
+#    startup_button =    tk.Button(
 #                                 sequence_frame_row1, 
-#                                 text="ALL OFF", 
-#                                 padx=45, 
+#                                 text="STARTUP", 
+#                                 padx=40, 
 #                                 pady=10, 
 #                                 font="Verdana 14", 
 #                                 bg="black", 
 #                                 fg="white", 
-#                                 command=SDR_sequence.allOff,
+#                                 command=SDR_sequence.startup,
+#                                 activebackground="white",
 #                                 relief="solid",
-#						         highlightthickness=2,
-#                                 borderwidth=5,
-#                                 activebackground="white"
+#							     highlightthickness=2,
+#                                 borderwidth=5
 #                                 )
+    startup_button = SDR_buttons.Button(
+                                        sequence_frame_row1,
+                                        text = "STARTUP"   ,
+                                        bg_color = 'black' ,
+                                        f_callback = SDR_sequence.startup
+                                       )
 
-    # Test button
-    test_button   =   SDR_buttons.Button( 
-                                         sequence_frame_row1, 
-                                         bg_color = 'black'
-                                        )
+	# All valves off button
+    off_button   =   SDR_buttons.Button( 
+                                        sequence_frame_row1              , 
+                                        text = "ALL OFF"                 ,
+                                        bg_color = 'black'               ,
+                                        f_callback = SDR_sequence.allOff
+                                       )
 
 	# Sensor gauges
     gauge1 =      SDR_gauge.gauge(
@@ -347,9 +339,8 @@ if __name__ == '__main__':
     sequence_frame_row1.pack()
 
 	# Sequence frames
-    startup_button.pack( side="left" , padx=60, pady=30)
-    #off_button.pack(    side="right", padx=60, pady=30)
-    test_button.pack( side = "right" )
+    startup_button.pack( side = "left"  )
+    off_button.pack    ( side = "right" )
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()
