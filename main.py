@@ -46,6 +46,7 @@ import gauge          as SDR_gauge
 import valve          as SDR_valve
 import engine_display as SDR_engine_display
 import sequence       as SDR_sequence
+import buttons        as SDR_buttons
 
 
 ###############################################################
@@ -205,7 +206,6 @@ if __name__ == '__main__':
                                     plumbing.s2
                                     )
 
-
     solenoid5_buttons = SDR_valve.Buttons(
                                      valve_button_row1,
                                      "Kerosene Pressure (3)", 
@@ -248,20 +248,26 @@ if __name__ == '__main__':
                                  )
 
 	# All valves off button
-    off_button    =     tk.Button(
-                                 sequence_frame_row1, 
-                                 text="ALL OFF", 
-                                 padx=45, 
-                                 pady=10, 
-                                 font="Verdana 14", 
-                                 bg="black", 
-                                 fg="white", 
-                                 command=SDR_sequence.allOff,
-                                 relief="solid",
-						         highlightthickness=2,
-                                 borderwidth=5,
-                                 activebackground="white"
-                                 )
+#    off_button    =     tk.Button(
+#                                 sequence_frame_row1, 
+#                                 text="ALL OFF", 
+#                                 padx=45, 
+#                                 pady=10, 
+#                                 font="Verdana 14", 
+#                                 bg="black", 
+#                                 fg="white", 
+#                                 command=SDR_sequence.allOff,
+#                                 relief="solid",
+#						         highlightthickness=2,
+#                                 borderwidth=5,
+#                                 activebackground="white"
+#                                 )
+
+    # Test button
+    test_button   =   SDR_buttons.Button( 
+                                         sequence_frame_row1, 
+                                         bg_color = 'black'
+                                        )
 
 	# Sensor gauges
     gauge1 =      SDR_gauge.gauge(
@@ -341,8 +347,9 @@ if __name__ == '__main__':
     sequence_frame_row1.pack()
 
 	# Sequence frames
-    startup_button.pack(side="left" , padx=60, pady=30)
-    off_button.pack(    side="right", padx=60, pady=30)
+    startup_button.pack( side="left" , padx=60, pady=30)
+    #off_button.pack(    side="right", padx=60, pady=30)
+    test_button.pack( side = "right" )
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()
