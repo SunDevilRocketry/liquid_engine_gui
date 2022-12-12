@@ -22,13 +22,16 @@ class Button:
 
     # Initialization
     def __init__( 
-                 self                  , 
-                 root                  , # Widget frame
-                 text                  , # Text to display on button
-                 size       = (180, 60), # size of button (width, height)
-                 corner_r   = 0.2      , # Extent of corner rounding (0.0-1.0)
-                 bg_color   = 'black'  , # Color of background
-                 f_callback = None     # Button Callback function
+                 self                     , 
+                 root                     , # Widget frame
+                 text                     , # Text to display on button
+                 size          = (180, 60), # size of button (width, height)
+                 corner_r      = 0.2      , # Extent of corner rounding (0.0-1.0)
+                 bg_color      = 'black'  , # Color of background
+                 fg_color      = 'black'  , # Color of foreground 
+                 outline_color = None     , # Color of button outline
+                 text_color    = 'black'  , # Color of button text
+                 f_callback    = None       # Button Callback function
                 ):
 
         ##############################################################################
@@ -83,6 +86,15 @@ class Button:
         self.canvas_width  = width  + canvas_pad 
         self.canvas_height = height + canvas_pad 
 
+        # Button colors
+        if ( outline_color == None ):
+            self.outline_color = bg_color
+        else:
+            self.outline_color = outline_color
+        self.text_color        = text_color
+        self.bg_color          = bg_color
+        self.fg_color          = fg_color
+
         # Button corner radius
         self.corner_radius = corner_radius
 
@@ -120,7 +132,7 @@ class Button:
                                     line_coords[0][0], line_coords[0][1], 
                                     line_coords[1][0], line_coords[1][1], 
                                     width = 1, 
-                                    fill  = 'white'
+                                    fill  = self.outline_color 
                                    )
         
         # Rounded corners
@@ -129,10 +141,10 @@ class Button:
                 self.canvas.create_arc(
                                        corner_coord[0][0], corner_coord[0][1],
                                        corner_coord[1][0], corner_coord[1][1],
-                                       width   = 1        , 
-                                       outline = 'white'  ,
-                                       start   = 90 - 90*i,
-                                       extent  = 90       ,
+                                       width   = 1                 , 
+                                       outline = self.outline_color,
+                                       start   = 90 - 90*i         ,
+                                       extent  = 90                ,
                                        style   = 'arc'
                                       )
 
@@ -140,7 +152,7 @@ class Button:
         self.canvas.create_text( width/2, height/2, 
                                  text = text        , 
                                  font = 'Verdana 14', 
-                                 fill = 'white' 
+                                 fill = self.text_color 
                                )
 
     # Pack the widget into a frame
@@ -155,8 +167,8 @@ class Button:
             self.canvas.create_rectangle( 
                                          rect_coords[0][0], rect_coords[0][1],
                                          rect_coords[1][0], rect_coords[1][1],
-                                         fill = 'white',
-                                         outline = 'white'
+                                         fill    = self.fg_color,
+                                         outline = self.fg_color 
                                         )
 
         # Draw Corner ovals
@@ -164,8 +176,8 @@ class Button:
             self.canvas.create_oval(
                                     corner_coord[0][0], corner_coord[0][1],
                                     corner_coord[1][0], corner_coord[1][1],
-                                    fill = 'white',
-                                    outline = 'white'
+                                    fill    = self.fg_color,
+                                    outline = self.fg_color 
                                    )
         
         # Draw text 
@@ -173,7 +185,7 @@ class Button:
                                 self.width/2, self.height/2  , 
                                 text = self.text   , 
                                 font = 'Verdana 14', 
-                                fill = 'black' 
+                                fill =  self.bg_color 
                                )
 
     # Dehighlight the button when the mouse is moved away from the button
@@ -184,13 +196,13 @@ class Button:
             self.canvas.create_rectangle( 
                                          rect_coords[0][0], rect_coords[0][1],
                                          rect_coords[1][0], rect_coords[1][1],
-                                         fill = 'black'
+                                         fill = self.bg_color 
                                         )
         for corner_coord in self.corner_coords:
             self.canvas.create_oval(
                                     corner_coord[0][0], corner_coord[0][1],
                                     corner_coord[1][0], corner_coord[1][1],
-                                    fill = 'black'
+                                    fill = self.bg_color 
                                    )
         # Straight lines
         for line_coords in self.button_coords:
@@ -198,7 +210,7 @@ class Button:
                                     line_coords[0][0], line_coords[0][1], 
                                     line_coords[1][0], line_coords[1][1], 
                                     width = 1, 
-                                    fill  = 'white'
+                                    fill  = self.outline_color 
                                    )
         
         # Rounded corners
@@ -207,10 +219,10 @@ class Button:
                 self.canvas.create_arc(
                                        corner_coord[0][0], corner_coord[0][1],
                                        corner_coord[1][0], corner_coord[1][1],
-                                       width   = 1        , 
-                                       outline = 'white'  ,
-                                       start   = 90 - 90*i,
-                                       extent  = 90       ,
+                                       width   = 1                 , 
+                                       outline = self.outline_color,
+                                       start   = 90 - 90*i         ,
+                                       extent  = 90                ,
                                        style   = 'arc'
                                       )
 
@@ -218,7 +230,7 @@ class Button:
         self.canvas.create_text( self.width/2, self.height/2, 
                                  text = self.text           , 
                                  font = 'Verdana 14'        , 
-                                 fill = 'white' 
+                                 fill = self.fg_color 
                                )
 
     # Links callback to button press event 
