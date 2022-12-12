@@ -22,16 +22,18 @@ class Button:
 
     # Initialization
     def __init__( 
-                 self                     , 
-                 root                     , # Widget frame
-                 text                     , # Text to display on button
-                 size          = (180, 60), # size of button (width, height)
-                 corner_r      = 0.2      , # Extent of corner rounding (0.0-1.0)
-                 bg_color      = 'black'  , # Color of background
-                 fg_color      = 'black'  , # Color of foreground 
-                 outline_color = None     , # Color of button outline
-                 text_color    = 'black'  , # Color of button text
-                 f_callback    = None       # Button Callback function
+                 self                       , 
+                 root                       , # Widget frame
+                 text                       , # Text to display on button
+                 size            = (180, 60), # size of button (width, height)
+                 corner_r        = 0.2      , # Extent of corner rounding (0.0-1.0)
+                 canvas_bg_color = 'black'  , # Background color of canvas
+                 bg_color        = 'black'  , # Color of background
+                 fg_color        = 'black'  , # Color of foreground 
+                 outline_color   = None     , # Color of button outline
+                 text_color      = 'black'  , # Color of button text
+                 text_color_fg   = 'black'  , # Color of button text in foreground
+                 f_callback      = None       # Button Callback function
                 ):
 
         ##############################################################################
@@ -91,9 +93,11 @@ class Button:
             self.outline_color = bg_color
         else:
             self.outline_color = outline_color
+        self.canvas_bg_color   = canvas_bg_color
         self.text_color        = text_color
         self.bg_color          = bg_color
         self.fg_color          = fg_color
+        self.text_color_fg     = text_color_fg
 
         # Button corner radius
         self.corner_radius = corner_radius
@@ -112,7 +116,7 @@ class Button:
                                 root                       ,
                                 width  = self.canvas_width ,
                                 height = self.canvas_height, 
-                                bg     = bg_color          ,
+                                bg     = canvas_bg_color   ,
                                 highlightthickness = 0
                                )
         
@@ -125,6 +129,25 @@ class Button:
         ##############################################################################
 		# Initial Draw                                                               #
         ##############################################################################
+
+
+         # Draw Rectangles 
+        for rect_coords in self.rect_coords:
+            self.canvas.create_rectangle( 
+                                         rect_coords[0][0], rect_coords[0][1],
+                                         rect_coords[1][0], rect_coords[1][1],
+                                         fill    = self.bg_color,
+                                         outline = self.bg_color 
+                                        )
+
+        # Draw Corner ovals
+        for corner_coord in self.corner_coords:
+            self.canvas.create_oval(
+                                    corner_coord[0][0], corner_coord[0][1],
+                                    corner_coord[1][0], corner_coord[1][1],
+                                    fill    = self.bg_color,
+                                    outline = self.bg_color 
+                                   )
 
         # Straight lines
         for line_coords in self.button_coords:
@@ -185,7 +208,7 @@ class Button:
                                 self.width/2, self.height/2  , 
                                 text = self.text   , 
                                 font = 'Verdana 14', 
-                                fill =  self.bg_color 
+                                fill =  self.text_color_fg
                                )
 
     # Dehighlight the button when the mouse is moved away from the button
@@ -196,13 +219,15 @@ class Button:
             self.canvas.create_rectangle( 
                                          rect_coords[0][0], rect_coords[0][1],
                                          rect_coords[1][0], rect_coords[1][1],
-                                         fill = self.bg_color 
+                                         fill    = self.bg_color,
+                                         outline = self.bg_color
                                         )
         for corner_coord in self.corner_coords:
             self.canvas.create_oval(
                                     corner_coord[0][0], corner_coord[0][1],
                                     corner_coord[1][0], corner_coord[1][1],
-                                    fill = self.bg_color 
+                                    fill    = self.bg_color,
+                                    outline = self.bg_color
                                    )
         # Straight lines
         for line_coords in self.button_coords:
@@ -230,7 +255,7 @@ class Button:
         self.canvas.create_text( self.width/2, self.height/2, 
                                  text = self.text           , 
                                  font = 'Verdana 14'        , 
-                                 fill = self.fg_color 
+                                 fill = self.text_color 
                                )
 
     # Links callback to button press event 

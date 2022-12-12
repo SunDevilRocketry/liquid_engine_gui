@@ -18,6 +18,12 @@ import tkinter as tk
 
 
 ###############################################################
+# Project Imports                                             #
+###############################################################
+import buttons as SDR_buttons
+
+
+###############################################################
 # Global variables                                            #
 ###############################################################
 pad      = 10
@@ -134,35 +140,57 @@ class Buttons:
                                    )
 
 		# ON/OFF button widgets
-        self.off_button = tk.Button(
-                                   self.switch, 
-                                   text="OFF", 
-                                   width=12, 
-                                   command=self.actionOff, 
-                                   bg='#ed3b3b', 
-                                   fg='white', 
-                                   activebackground='#d42f2f', 
-                                   activeforeground='white'
-                                   )
-
-        self.on_button = tk.Button(
-                                  self.switch, 
-                                  text="ON", 
-                                  width=12, 
-                                  command=self.actionOn, 
-                                  bg='#41d94d', 
-                                  fg='white', 
-                                  activebackground='#28bd33', 
-                                  activeforeground='white'
-                                  )
+#        self.off_button = tk.Button(
+#                                   self.switch, 
+#                                   text="OFF", 
+#                                   width=12, 
+#                                   command=self.actionOff, 
+#                                   bg='#ed3b3b', 
+#                                   fg='white', 
+#                                   activebackground='#d42f2f', 
+#                                   activeforeground='white'
+#                                   )
+#
+#        self.on_button = tk.Button(
+#                                  self.switch, 
+#                                  text="ON", 
+#                                  width=12, 
+#                                  command=self.actionOn, 
+#                                  bg='#41d94d', 
+#                                  fg='white', 
+#                                  activebackground='#28bd33', 
+#                                  activeforeground='white'
+#                                  )
+        self.off_button = SDR_buttons.Button(
+                                             self.switch              ,
+                                             text          = "OFF"    ,
+                                             size          = (100, 20),
+                                             corner_r      = 0.2      ,
+                                             bg_color      = 'black'  ,
+                                             text_color    = '#ed3b3b', 
+                                             outline_color = '#ed3b3b', 
+                                             fg_color      = '#ed3b3b',
+                                             f_callback    = self.actionOff
+                                            )
+        self.on_button  = SDR_buttons.Button(
+                                             self.switch,
+                                             text          = "ON",
+                                             size          = (100, 20),
+                                             corner_r      = 0.2,
+                                             bg_color      = 'black',
+                                             text_color    = '#41d94d',
+                                             outline_color = '#41d94d', 
+                                             fg_color      = '#41d94d',
+                                             f_callback    = self.actionOn
+                                            )
 
 		#######################################################
 		# Initial draw                                        #
 		#######################################################
-        self.off_button.pack(side="right")
+        self.off_button.pack(side="right", padx = 5, pady = 5 )
         self.led.getWidget().pack(side="right")
-        self.on_button.pack(side="right")
-        self.switch.pack(side='left', padx=4*pad)
+        self.on_button.pack(side="right", padx = 5, pady = 5)
+        self.switch.pack(side='left', padx = 20 )
 
     def actionOff(self):
         self.led.setState(False)
