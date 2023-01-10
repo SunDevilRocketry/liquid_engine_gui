@@ -1,41 +1,46 @@
-###############################################################
-#                                                             #
-# main.py -- main interface program for SDR's liquid engine   #
-#                                                             #
-# Author: Nitish Chennoju, Colton Acosta                      #
-# Date: 6/12/2022                                             #
-# Sun Devil Rocketry Avionics                                 #
-#                                                             #
-###############################################################
+####################################################################################
+#                                                                                  #
+# main.py -- main interface program for SDR's liquid engine                        #
+#                                                                                  #
+# Author: Nitish Chennoju, Colton Acosta                                           #
+# Date: 6/12/2022                                                                  #
+# Sun Devil Rocketry Avionics                                                      #
+#                                                                                  #
+####################################################################################
 
 
-###############################################################
-# Developers                                                  #
-###############################################################
+####################################################################################
+# Developers                                                                       #
+####################################################################################
 __author__  =  "Nitish Chennoju"
 __credits__ = ["Colton Acosta"   ,
                "Katie Herrington",
                "Ian Chandra"      ]
 
 
-###############################################################
-# Standard Imports                                            #
-###############################################################
+####################################################################################
+# Standard Imports                                                                 #
+####################################################################################
+
+# General
 import time
 import os
 import sys
+
+# Serial (USB)
 import serial
 import serial.tools.list_ports
+from serial    import SerialException
+
+# Interface/GUI
 import tkinter as tk
-
-from tkinter  import ttk
-from serial   import SerialException
-from PIL      import Image, ImageTk
+from tkinter   import ttk
+from PIL       import Image, ImageTk
 
 
-###############################################################
-# Project Modules                                             #
-###############################################################
+####################################################################################
+# Project Modules                                                                  #
+####################################################################################
 
 # Setup path 
 sys.path.insert(0, './plumbing')
@@ -49,9 +54,9 @@ import sequence       as SDR_sequence
 import buttons        as SDR_buttons
 
 
-###############################################################
-# Callbacks                                                   #
-###############################################################
+####################################################################################
+# Callbacks                                                                        #
+####################################################################################
 
 # Close all GUI windows
 def close_window_callback():
@@ -61,14 +66,14 @@ def close_window_callback():
     exitFlag = True
 
 
-###############################################################
-# Main application entry point                                #
-###############################################################
+####################################################################################
+# Main application entry point                                                     #
+####################################################################################
 if __name__ == '__main__':
 
-	###########################################################
-	# Global variables                                        #
-	###########################################################
+    ################################################################################
+	# Global variables                                                             #
+    ################################################################################
 
 	# Declarations
     global exitFlag             # Flag set when window closes        
@@ -76,19 +81,18 @@ if __name__ == '__main__':
     # Initializations
     exitFlag = False
 
-
-	###########################################################
-	# Local variables                                         #
-	###########################################################
+    ################################################################################
+	# Local variables                                                              #
+    ################################################################################
 
     # Spacing constants within GUI
     pad     = 10 
     gridLen = 85
 
 
-	###########################################################
-	# Window frames                                           #
-	###########################################################
+    ################################################################################
+	# Window frames                                                                #
+    ################################################################################
 
 	# root window
     root = tk.Tk()         
@@ -119,26 +123,12 @@ if __name__ == '__main__':
                                   bg = 'black'
                                   )
 
+    # Valve button frame
+    valve_button_frame    = tk.Frame( root, bg = 'black' )
+
     # Valve button row frames
-    valve_button_row1   = tk.Frame(
-                                  root,       
-                                  bg = 'black'
-                                  ) 
-
-    valve_button_row2   = tk.Frame(
-                                  root,       
-                                  bg = 'black'
-                                  ) 
-
-    valve_button_row3   = tk.Frame(
-                                  root,       
-                                  bg = 'black'
-                                  ) 
-
-    valve_button_row4   = tk.Frame(
-                                  root,       
-                                  bg = 'black'
-                                  ) 
+    valve_button_col1     = tk.Frame( valve_button_frame, bg = 'black' ) 
+    valve_button_col2     = tk.Frame( valve_button_frame, bg = 'black' ) 
 
 	# Sequence button frames
     sequence_frame_row1 = tk.Frame(
@@ -158,9 +148,9 @@ if __name__ == '__main__':
                                   )
 
 
-	###########################################################
-	# Widget initializations                                  #
-	###########################################################
+    ################################################################################
+	# Widget initializations                                                       #
+    ################################################################################
 
     # P&ID diagram window
     plumbing = SDR_engine_display.Engine_Display(gridLen)  
@@ -183,51 +173,59 @@ if __name__ == '__main__':
 
 	# Valve buttons
     solenoid1_buttons = SDR_valve.Buttons(
-                                     valve_button_row1,
-                                     "LOX Pressurization (1)", 
+                                     valve_button_col1,
+                                     "LOX Pressure (1)",
+                                     'top'             ,
                                      plumbing.one
                                      )
 
     solenoid2_buttons = SDR_valve.Buttons(
-                                     valve_button_row2,
-                                     "LOX Vent (2)", 
+                                     valve_button_col1,
+                                     "LOX Vent (2)"   , 
+                                     'top'         ,
                                      plumbing.two
                                      )
 
     solenoid3_buttons = SDR_valve.Buttons(
-                                     valve_button_row3,
-                                     "LOX Purge (5)", 
+                                     valve_button_col1,
+                                     "LOX Purge (5)"  , 
+                                     'top'         ,
                                      plumbing.five
                                      )
 
     ball_valve1_buttons = SDR_valve.Buttons(
-                                    valve_button_row4,
+                                    valve_button_col1,
                                     "LOX Main"       ,
+                                    'top'            ,
                                     plumbing.s2
                                     )
 
     solenoid5_buttons = SDR_valve.Buttons(
-                                     valve_button_row1,
+                                     valve_button_col2,
                                      "Kerosene Pressure (3)", 
+                                     'top'                  ,
                                      plumbing.three
                                      )
 
     solenoid6_buttons = SDR_valve.Buttons(
-                                     valve_button_row2,
+                                     valve_button_col2,
                                      "Kerosene Vent (4)", 
+                                     'top'              ,
                                      plumbing.four
                                      )
 
     solenoid4_buttons = SDR_valve.Buttons(
-                                     valve_button_row3,
+                                     valve_button_col2   ,
                                      "Kerosene Purge (6)", 
+                                     'top'               ,
                                      plumbing.six
                                      )
 
 
     ball_valve2_buttons = SDR_valve.Buttons(
-                                    valve_button_row4,
+                                    valve_button_col2    ,
                                     "Kerosene Main Valve",
+                                     'top'               ,
                                     plumbing.s1
                                     )
 
@@ -312,9 +310,9 @@ if __name__ == '__main__':
     gauge8.setText("Nan", "LOX Temperature"        )
 
 
-	###########################################################
-	# Draw initial window                                     #
-	###########################################################
+    ################################################################################
+	# Draw initial window                                                          #
+    ################################################################################
 
 	# Main window title
     main_title_frame.pack()
@@ -322,10 +320,9 @@ if __name__ == '__main__':
     main_window_title.pack(pady=30, side='right')
 
 	# Valve buttons
-    valve_button_row1.pack()
-    valve_button_row2.pack()
-    valve_button_row3.pack()
-    valve_button_row4.pack()
+    valve_button_col1.pack( side = 'left'  )
+    valve_button_col2.pack( side = 'right' )
+    valve_button_frame.pack()
 
 	# Sequence button frames
     sequence_frame_row1.pack()
@@ -349,9 +346,9 @@ if __name__ == '__main__':
     gauge8.getWidget().pack(side='left')
 
 
-	###########################################################
-	# Main Program Loop                                       #
-	###########################################################
+    ################################################################################
+	# Main Program Loop                                                            #
+    ################################################################################
     prevCon = True
     while (not exitFlag):
         try:
@@ -380,6 +377,7 @@ if __name__ == '__main__':
 	# Clear the console to get rid of weird tk/tcl errors
     os.system('cls' if os.name == 'nt' else 'clear')
 
-###############################################################
-# END OF FILE                                                 #
-###############################################################
+
+####################################################################################
+# END OF FILE                                                                      #
+####################################################################################
