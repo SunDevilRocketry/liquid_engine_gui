@@ -202,21 +202,21 @@ if __name__ == '__main__':
 
     solenoid5_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
-                                     "Kerosene Pressure (3)", 
+                                     "Fuel Pressure (3)", 
                                      'top'                  ,
                                      plumbing.three
                                      )
 
     solenoid6_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
-                                     "Kerosene Vent (4)", 
+                                     "Fuel Vent (4)", 
                                      'top'              ,
                                      plumbing.four
                                      )
 
     solenoid4_buttons = SDR_valve.Buttons(
                                      valve_button_col2   ,
-                                     "Kerosene Purge (6)", 
+                                     "Fuel Purge (6)", 
                                      'top'               ,
                                      plumbing.six
                                      )
@@ -224,7 +224,7 @@ if __name__ == '__main__':
 
     ball_valve2_buttons = SDR_valve.Buttons(
                                     valve_button_col2    ,
-                                    "Kerosene Main Valve",
+                                    "Fuel Main Valve",
                                      'top'               ,
                                     plumbing.s1
                                     )
@@ -243,7 +243,7 @@ if __name__ == '__main__':
 	# All valves off button
     off_button   =   SDR_buttons.Button( 
                                         sequence_frame_row1      , 
-                                        text          = "ALL OFF",
+                                        text          = "ABORT"  ,
                                         bg_color      = 'black'  ,
                                         fg_color      = 'white'  ,
                                         outline_color = 'white'  ,
