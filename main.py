@@ -53,10 +53,13 @@ import valve          as SDR_valve
 import engine_display as SDR_engine_display
 import sequence       as SDR_sequence
 import buttons        as SDR_buttons
+import sensor         as SDR_sensor
 
-# Sdec
+# SDEC 
 import sdec
 import commands
+import hw_commands
+
 
 
 ####################################################################################
@@ -274,52 +277,52 @@ if __name__ == '__main__':
                                        )
 
 	# Sensor gauges
-    gauge1 =      SDR_gauge.gauge(
+    gauge1 =      SDR_gauge.gauge( # Fuel Tank Pressure
+                                 gauge_frame_row1    , 
+                                 background = 'black',
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt0"]
+                                 )
+
+    gauge2 =      SDR_gauge.gauge( # Fuel Flow Rate
                                  gauge_frame_row1, 
                                  background = 'black',
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt1"]
                                  )
 
-    gauge2 =      SDR_gauge.gauge(
+    gauge3 =      SDR_gauge.gauge( # Fuel Injection Pressure
                                  gauge_frame_row1, 
                                  background = 'black',
-                                 max_sensor_val =  5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt2"]
                                  )
 
-    gauge3 =      SDR_gauge.gauge(
-                                 gauge_frame_row1, 
-                                 background = 'black',
-                                 max_sensor_val =  5
-                                 )
-
-    gauge4 =      SDR_gauge.gauge(
+    gauge4 =      SDR_gauge.gauge( # Thrust
                                  gauge_frame_row1, 
                                  background = 'black', 
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["lc"]
                                  )
 
-    gauge5 =      SDR_gauge.gauge(
+    gauge5 =      SDR_gauge.gauge( # LOX Pressure
                                  gauge_frame_row2, 
                                  background = 'black', 
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt4"]
                                  )
 
-    gauge6 =      SDR_gauge.gauge(
+    gauge6 =      SDR_gauge.gauge( # LOX Flow Rate
                                  gauge_frame_row2, 
                                  background = 'black', 
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt5"]
                                  )
 
-    gauge7 =      SDR_gauge.gauge(
+    gauge7 =      SDR_gauge.gauge( # Engine Pressure
                                  gauge_frame_row2, 
                                  background = 'black', 
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt6"]
                                  )
 
-    gauge8 =      SDR_gauge.gauge(
+    gauge8 =      SDR_gauge.gauge( # LOX Temperature
                                  gauge_frame_row2, 
                                  background = 'black', 
-                                 max_sensor_val = 5
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["tc"]
                                  )
 
     gauge1.setText("Nan", "Fuel Tank Pressure"     )
@@ -374,21 +377,53 @@ if __name__ == '__main__':
     prevCon = True
     while (not exitFlag):
         try:
-		    # Update sensor gauge readings
-            gauge1.setText("Nan", "Fuel Tank Pressure"     )
-            gauge2.setText("Nan", "Fuel Flow Rate"         )
-            gauge3.setText("Nan", "Fuel Injection Pressure")
-            gauge4.setText("Nan", "Thrust"                 )
-            gauge5.setText("Nan", "LOX Pressure"           )
-            gauge6.setText("Nan", "LOX Flow Rate"          )
-            gauge7.setText("Nan", "Engine Pressure"        )
-            gauge8.setText("Nan", "LOX Temperature"        )
 
-		    # Update engine schematic
+            # Look for new serial connections 
+            if ( terminalSerObj.comport == None ):
+                avail_ports = serial.tools.list_ports.comports()
+                for port_num, port in enumerate( avail_ports ):
+                    if ( 'CP2102' in port.description ):
+                        # Connect
+                        port_num = port.device
+                        connect_args  = [ '-p', port_num]
+                        commands.connect( connect_args, terminalSerObj )
+            else:
+                # Get sensor data
+                sensor_args = ['dump']
+                hw_commands.sensor( sensor_args, terminalSerObj )
+                sensor_readouts_formatted = []
+                for sensor in terminalSerObj.sensor_readouts:
+                    sensor_readouts_formatted.append( SDR_sensor.format_sensor_readout(
+                        terminalSerObj.controller,
+                        sensor                   ,
+                        terminalSerObj.sensor_readouts[sensor]
+                    ) )
+
+                # Update sensor gauge readings
+                gauge1.setText( sensor_readouts_formatted[0], "Fuel Tank Pressure"     )
+                gauge2.setText( sensor_readouts_formatted[1], "Fuel Flow Rate"         )
+                gauge3.setText( sensor_readouts_formatted[2], "Fuel Injection Pressure")
+                gauge4.setText( sensor_readouts_formatted[9], "Thrust"                 )
+                gauge5.setText( sensor_readouts_formatted[4], "LOX Pressure"           )
+                gauge6.setText( sensor_readouts_formatted[5], "LOX Flow Rate"          )
+                gauge7.setText( sensor_readouts_formatted[6], "Engine Pressure"        )
+                gauge8.setText( sensor_readouts_formatted[8], "LOX Temperature"        )
+
+                gauge1.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                gauge2.setAngle( terminalSerObj.sensor_readouts["pt1"] )
+                gauge3.setAngle( terminalSerObj.sensor_readouts["pt2"] )
+                gauge4.setAngle( terminalSerObj.sensor_readouts["lc"]  )
+                gauge5.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                gauge6.setAngle( terminalSerObj.sensor_readouts["pt5"] )
+                gauge7.setAngle( terminalSerObj.sensor_readouts["pt6"] )
+                gauge8.setAngle( terminalSerObj.sensor_readouts["tc"] )
+
+            # Update engine schematic
             plumbing.updatePipeStatus()
 
             # Draw to main window
             root.update()
+            time.sleep( 0.1 )
 
             # Draw to plumbing window
             plumbing.getWindow().update()
