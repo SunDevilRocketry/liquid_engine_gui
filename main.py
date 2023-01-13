@@ -44,6 +44,7 @@ from PIL       import Image, ImageTk
 
 # Setup path 
 sys.path.insert(0, './plumbing')
+sys.path.insert(0, './sdec')
 
 # Imports
 import solenoid
@@ -52,6 +53,10 @@ import valve          as SDR_valve
 import engine_display as SDR_engine_display
 import sequence       as SDR_sequence
 import buttons        as SDR_buttons
+
+# Sdec
+import sdec
+import commands
 
 
 ####################################################################################
@@ -70,6 +75,23 @@ def close_window_callback():
 # Main application entry point                                                     #
 ####################################################################################
 if __name__ == '__main__':
+
+    ################################################################################
+	# Serial Port Setup                                                            #
+    ################################################################################
+
+    # Initialize Serial Port Object
+    terminalSerObj = sdec.terminalData()
+
+    # Look for possible connections
+    avail_ports = serial.tools.list_ports.comports()
+    for port_num, port in enumerate( avail_ports ):
+        if ( 'CP2102' in port.description ):
+            # Connect
+            port_num = port.device
+            connect_args  = [ '-p', port_num]
+            commands.connect( connect_args, terminalSerObj )
+
 
     ################################################################################
 	# Global variables                                                             #
