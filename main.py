@@ -403,11 +403,11 @@ if __name__ == '__main__':
                 gauge1.setText( sensor_readouts_formatted[0], "Fuel Tank Pressure"     )
                 gauge2.setText( sensor_readouts_formatted[1], "Fuel Flow Rate"         )
                 gauge3.setText( sensor_readouts_formatted[2], "Fuel Injection Pressure")
-                gauge4.setText( sensor_readouts_formatted[9], "Thrust"                 )
+                gauge4.setText( sensor_readouts_formatted[8], "Thrust"                 )
                 gauge5.setText( sensor_readouts_formatted[4], "LOX Pressure"           )
                 gauge6.setText( sensor_readouts_formatted[5], "LOX Flow Rate"          )
                 gauge7.setText( sensor_readouts_formatted[6], "Engine Pressure"        )
-                gauge8.setText( sensor_readouts_formatted[8], "LOX Temperature"        )
+                gauge8.setText( sensor_readouts_formatted[9], "LOX Temperature"        )
 
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt0"] )
                 gauge2.setAngle( terminalSerObj.sensor_readouts["pt1"] )
