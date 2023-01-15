@@ -1,3 +1,6 @@
 # Pycache
 __pycache__
 test/DAQexperimental/__pycache__
+
+# Output data
+output/*

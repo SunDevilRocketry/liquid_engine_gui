@@ -26,6 +26,7 @@ __credits__ = ["Colton Acosta"   ,
 import time
 import os
 import sys
+import datetime
 
 # Serial (USB)
 import serial
@@ -94,6 +95,27 @@ if __name__ == '__main__':
             port_num = port.device
             connect_args  = [ '-p', port_num]
             commands.connect( connect_args, terminalSerObj )
+    
+    ################################################################################
+	# Data logging setup                                                           #
+    ################################################################################
+
+    # Get Date
+    run_date = datetime.date.today()
+    run_date = run_date.strftime("%m-%d-%Y")
+
+    # Create Output directory
+    output_dir = "output/" + run_date
+    if ( not ( os.path.exists( output_dir ) ) ):
+        os.mkdir( "output/" + run_date )
+
+    # Determine output filename based on existing files
+    base_output_filename = output_dir + "/engine_data"
+    test_num             = 0
+    output_filename      = base_output_filename + str( test_num ) + ".txt"
+    while ( os.path.exists( output_filename ) ):
+        test_num        += 1
+        output_filename  = base_output_filename + str( test_num ) + ".txt"
 
 
     ################################################################################
@@ -393,7 +415,7 @@ if __name__ == '__main__':
                         commands.connect( connect_args, terminalSerObj )
 
             else:
-                    # Record ending time
+                # Record time of data reception
                 time_sec = time.perf_counter() - start_time
 
                 # Get sensor data
@@ -427,7 +449,7 @@ if __name__ == '__main__':
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc"] )
 
                 # Log Data
-                with open( "press_data.txt", "a" ) as file:
+                with open( output_filename, "a" ) as file:
                     file.write(str(time_sec) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
                     file.write("\n")
