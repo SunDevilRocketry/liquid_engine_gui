@@ -375,73 +375,77 @@ if __name__ == '__main__':
 	# Main Program Loop                                                            #
     ################################################################################
     prevCon = True
+
     # Start timer
     start_time = time.perf_counter()
+
+    # Update GUI
     while (not exitFlag):
-#        try:
+        try:
+            # Look for new serial connections 
+            if ( terminalSerObj.comport == None ):
+                avail_ports = serial.tools.list_ports.comports()
+                for port_num, port in enumerate( avail_ports ):
+                    if ( 'CP2102' in port.description ):
+                        # Connect
+                        port_num = port.device
+                        connect_args  = [ '-p', port_num]
+                        commands.connect( connect_args, terminalSerObj )
 
-        # Look for new serial connections 
-        if ( terminalSerObj.comport == None ):
-            avail_ports = serial.tools.list_ports.comports()
-            for port_num, port in enumerate( avail_ports ):
-                if ( 'CP2102' in port.description ):
-                    # Connect
-                    port_num = port.device
-                    connect_args  = [ '-p', port_num]
-                    commands.connect( connect_args, terminalSerObj )
+            else:
+                    # Record ending time
+                time_sec = time.perf_counter() - start_time
 
-        else:
-                # Record ending time
-            time_sec = time.perf_counter() - start_time
+                # Get sensor data
+                sensor_args = ['dump']
+                hw_commands.sensor( sensor_args, terminalSerObj )
+                sensor_readouts_formatted = []
+                for sensor in terminalSerObj.sensor_readouts:
+                    sensor_readouts_formatted.append( SDR_sensor.format_sensor_readout(
+                        terminalSerObj.controller,
+                        sensor                   ,
+                        terminalSerObj.sensor_readouts[sensor]
+                    ) )
 
-            # Get sensor data
-            sensor_args = ['dump']
-            hw_commands.sensor( sensor_args, terminalSerObj )
-            sensor_readouts_formatted = []
-            for sensor in terminalSerObj.sensor_readouts:
-                sensor_readouts_formatted.append( SDR_sensor.format_sensor_readout(
-                    terminalSerObj.controller,
-                    sensor                   ,
-                    terminalSerObj.sensor_readouts[sensor]
-                ) )
+                # Update sensor gauge readings
+                gauge1.setText( sensor_readouts_formatted[0], "Fuel Tank Pressure"     )
+                gauge2.setText( sensor_readouts_formatted[1], "Fuel Flow Rate"         )
+                gauge3.setText( sensor_readouts_formatted[2], "Fuel Injection Pressure")
+                gauge4.setText( sensor_readouts_formatted[8], "Thrust"                 )
+                gauge5.setText( sensor_readouts_formatted[4], "LOX Pressure"           )
+                gauge6.setText( sensor_readouts_formatted[5], "LOX Flow Rate"          )
+                gauge7.setText( sensor_readouts_formatted[6], "Engine Pressure"        )
+                gauge8.setText( sensor_readouts_formatted[9], "LOX Temperature"        )
 
-            # Update sensor gauge readings
-            gauge1.setText( sensor_readouts_formatted[0], "Fuel Tank Pressure"     )
-            gauge2.setText( sensor_readouts_formatted[1], "Fuel Flow Rate"         )
-            gauge3.setText( sensor_readouts_formatted[2], "Fuel Injection Pressure")
-            gauge4.setText( sensor_readouts_formatted[8], "Thrust"                 )
-            gauge5.setText( sensor_readouts_formatted[4], "LOX Pressure"           )
-            gauge6.setText( sensor_readouts_formatted[5], "LOX Flow Rate"          )
-            gauge7.setText( sensor_readouts_formatted[6], "Engine Pressure"        )
-            gauge8.setText( sensor_readouts_formatted[9], "LOX Temperature"        )
+                gauge1.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                gauge2.setAngle( terminalSerObj.sensor_readouts["pt1"] )
+                gauge3.setAngle( terminalSerObj.sensor_readouts["pt2"] )
+                gauge4.setAngle( terminalSerObj.sensor_readouts["lc"]  )
+                gauge5.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                gauge6.setAngle( terminalSerObj.sensor_readouts["pt5"] )
+                gauge7.setAngle( terminalSerObj.sensor_readouts["pt6"] )
+                gauge8.setAngle( terminalSerObj.sensor_readouts["tc"] )
 
-            gauge1.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-            gauge2.setAngle( terminalSerObj.sensor_readouts["pt1"] )
-            gauge3.setAngle( terminalSerObj.sensor_readouts["pt2"] )
-            gauge4.setAngle( terminalSerObj.sensor_readouts["lc"]  )
-            gauge5.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-            gauge6.setAngle( terminalSerObj.sensor_readouts["pt5"] )
-            gauge7.setAngle( terminalSerObj.sensor_readouts["pt6"] )
-            gauge8.setAngle( terminalSerObj.sensor_readouts["tc"] )
+                # Log Data
+                with open( "press_data.txt", "a" ) as file:
+                    file.write(str(time_sec) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
+                    file.write("\n")
 
-            # Log Data
-            with open( "press_data.txt", "a" ) as file:
-                file.write(str(time_sec) + " ")
-                file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
-                file.write("\n")
+            # Update engine schematic
+            plumbing.updatePipeStatus()
 
-        # Update engine schematic
-        plumbing.updatePipeStatus()
+            # Draw to main window
+            root.update()
+            time.sleep( 0.1 )
 
-        # Draw to main window
-        root.update()
-        time.sleep( 0.1 )
+            # Draw to plumbing window
+            plumbing.getWindow().update()
 
-        # Draw to plumbing window
-        plumbing.getWindow().update()
-        #except:
-        #    exitFlag = True
-        #    pass
+        # Exit App
+        except:
+            exitFlag = True
+            pass
 
 	# Clear the console to get rid of weird tk/tcl errors
     os.system('cls' if os.name == 'nt' else 'clear')
