@@ -448,7 +448,7 @@ if __name__ == '__main__':
                 gauge5.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge6.setAngle( terminalSerObj.sensor_readouts["pt5"] )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt6"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc"] )
+                gauge8.setAngle( terminalSerObj.sensor_readouts["tc"]  )
 
                 # Log Data
                 with open( output_filename, "a" ) as file:
@@ -461,7 +461,6 @@ if __name__ == '__main__':
 
             # Draw to main window
             root.update()
-            time.sleep( 0.1 )
 
             # Draw to plumbing window
             plumbing.getWindow().update()
