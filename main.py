@@ -105,6 +105,8 @@ if __name__ == '__main__':
     run_date = run_date.strftime("%m-%d-%Y")
 
     # Create Output directory
+    if ( not ( os.path.exists( "output" ) ) ):
+        os.mkdir( "output" )
     output_dir = "output/" + run_date
     if ( not ( os.path.exists( output_dir ) ) ):
         os.mkdir( "output/" + run_date )
