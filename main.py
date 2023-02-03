@@ -410,7 +410,8 @@ if __name__ == '__main__':
             if ( terminalSerObj.comport == None ):
                 avail_ports = serial.tools.list_ports.comports()
                 for port_num, port in enumerate( avail_ports ):
-                    if ( 'CP2102' in port.description ):
+                    if ( ( 'CP2102' in port.description ) or 
+                         ( 'CP210x' in port.description ) ):
                         # Connect
                         port_num = port.device
                         connect_args  = [ '-p', port_num]
