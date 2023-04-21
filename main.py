@@ -351,7 +351,7 @@ if __name__ == '__main__':
 
     gauge1.setText("Nan", "Fuel Tank Pressure"     )
     gauge2.setText("Nan", "Fuel Flow Rate"         )
-    gauge3.setText("Nan", "Fuel Injection Pressure")
+    gauge3.setText("Nan", "None"                   )
     gauge4.setText("Nan", "Thrust"                 )
     gauge5.setText("Nan", "LOX Pressure"           )
     gauge6.setText("Nan", "LOX Flow Rate"          )
@@ -424,32 +424,31 @@ if __name__ == '__main__':
                 # Get sensor data
                 sensor_args = ['dump']
                 hw_commands.sensor( sensor_args, terminalSerObj )
-                sensor_readouts_formatted = []
+                sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
-                    sensor_readouts_formatted.append( SDR_sensor.format_sensor_readout(
+                    sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor]
-                    ) )
+                        terminalSerObj.sensor_readouts[sensor] ) 
 
                 # Update sensor gauge readings
-                gauge1.setText( sensor_readouts_formatted[0], "Fuel Tank Pressure"     )
-                gauge2.setText( sensor_readouts_formatted[1], "Fuel Flow Rate"         )
-                gauge3.setText( sensor_readouts_formatted[2], "Fuel Injection Pressure")
-                gauge4.setText( sensor_readouts_formatted[8], "Thrust"                 )
-                gauge5.setText( sensor_readouts_formatted[3], "LOX Pressure"           )
-                gauge6.setText( sensor_readouts_formatted[4], "LOX Flow Rate"          )
-                gauge7.setText( sensor_readouts_formatted[5], "Engine Pressure"        )
-                gauge8.setText( sensor_readouts_formatted[9], "LOX Temperature"        )
+                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                gauge2.setText( sensor_readouts_formatted["pt6"], "Fuel Flow Rate"     )
+                gauge3.setText( "None" )
+                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                gauge6.setText( sensor_readouts_formatted["pt1"], "LOX Flow Rate"      )
+                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
 
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge2.setAngle( terminalSerObj.sensor_readouts["pt1"] )
-                gauge3.setAngle( terminalSerObj.sensor_readouts["pt2"] )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc"]  )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt3"] )
-                gauge6.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt5"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc"]  )
+                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                gauge2.setAngle( terminalSerObj.sensor_readouts["pt6"] )
+                gauge3.setAngle( 0 )
+                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                gauge6.setAngle( terminalSerObj.sensor_readouts["pt1"] )
+                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
 
                 # Log Data
                 with open( output_filename, "a" ) as file:
@@ -462,8 +461,8 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt5"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["pt6"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["lc"] ) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["tc"] ) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
                     file.write("\n")
 
             # Update engine schematic
