@@ -60,6 +60,7 @@ import sensor         as SDR_sensor
 import sdec
 import commands
 import hw_commands
+import sensor_conv
 
 
 
@@ -164,7 +165,7 @@ if __name__ == '__main__':
                               Image.Resampling.LANCZOS
                               )
     SDR = ImageTk.PhotoImage(SDRImage)
-    root.iconphoto(True, SDRlogo)
+    #root.iconphoto(True, SDRlogo)
 
     # Logo and dashboard label frame
     main_title_frame    = tk.Frame(
@@ -310,7 +311,7 @@ if __name__ == '__main__':
     gauge2 =      SDR_gauge.gauge( # Fuel Flow Rate
                                  gauge_frame_row1, 
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt1"]
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["ffr"]
                                  )
 
     gauge3 =      SDR_gauge.gauge( # Fuel Injection Pressure
@@ -334,7 +335,7 @@ if __name__ == '__main__':
     gauge6 =      SDR_gauge.gauge( # LOX Flow Rate
                                  gauge_frame_row2, 
                                  background = 'black', 
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt5"]
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["oxfr"]
                                  )
 
     gauge7 =      SDR_gauge.gauge( # Engine Pressure
@@ -431,22 +432,38 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Calculate Flow Rates
+                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                            terminalSerObj.sensor_readouts["pt1"] -
+                                            terminalSerObj.sensor_readouts["pt2"] )
+                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                            terminalSerObj.sensor_readouts["pt6"] -
+                                            terminalSerObj.sensor_readouts["pt5"] )
+                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                            terminalSerObj.controller, 
+                                            "oxfr"                   ,
+                                            ox_flow_rate   )
+                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                            terminalSerObj.controller, 
+                                            "ffr"                    , 
+                                            fuel_flow_rate )
+
                 # Update sensor gauge readings
                 gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( sensor_readouts_formatted["pt6"], "Fuel Flow Rate"     )
-                gauge3.setText( "None" )
+                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                gauge3.setText( "NaN"                           , "None"               )
                 gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
                 gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( sensor_readouts_formatted["pt1"], "LOX Flow Rate"      )
+                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
 
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( terminalSerObj.sensor_readouts["pt6"] )
+                gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
                 gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
                 gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( terminalSerObj.sensor_readouts["pt1"] )
+                gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
 
