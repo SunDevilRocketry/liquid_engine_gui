@@ -496,7 +496,7 @@ if __name__ == '__main__':
 
                 # Get sensor data
                 sensor_args = ['dump']
-                hw_commands.sensor( sensor_args, terminalSerObj )
+                hw_commands.sensor( sensor_args, terminalSerObj, show_readouts = False )
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
