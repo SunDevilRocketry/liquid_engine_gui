@@ -27,6 +27,7 @@ import time
 import os
 import sys
 import datetime
+import math
 
 # Serial (USB)
 import serial
@@ -185,6 +186,10 @@ if __name__ == '__main__':
                                   root,
 								  bg='black'
                                   )
+    sequence_frame_row2 = tk.Frame(
+                                  root,
+								  bg='black'
+                                  )
 
 	# Gauge row frames
     gauge_frame_row1    = tk.Frame(
@@ -279,27 +284,88 @@ if __name__ == '__main__':
                                     plumbing.s1
                                     )
 
-	# Startup button
-    startup_button = SDR_buttons.Button(
-                                        sequence_frame_row1      ,
-                                        text          = "STARTUP",
-                                        bg_color      = 'black'  ,
-                                        fg_color      = 'white'  ,
-                                        outline_color = 'white'  ,
-                                        text_color    = 'white'  ,
-                                        f_callback = SDR_sequence.startup
-                                       )
+	# Pre-Fire purge button
+    pre_fire_purge_button = SDR_buttons.Button(
+                            sequence_frame_row1      ,
+                            text          = "Pre-Fire Purge",
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'  ,
+                            outline_color = 'white'  ,
+                            text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = SDR_sequence.pre_fire_purge
+                                              )
+    
+    # Fill and chill button
+    fill_chill_button =     SDR_buttons.Button(
+                            sequence_frame_row1         ,
+                            text          = "Fill/Chill",
+                            bg_color      = 'black'     ,
+                            fg_color      = 'white'     ,
+                            outline_color = 'white'     ,
+                            text_color    = 'white'     ,
+                            size          = ( 135, 45 ) ,
+                            f_callback    = SDR_sequence.fill_and_chill
+                                              )
+    
+    # Standby button
+    standby_button =        SDR_buttons.Button(
+                            sequence_frame_row1         ,
+                            text          = "Standby",
+                            bg_color      = 'black'     ,
+                            fg_color      = 'white'     ,
+                            outline_color = 'white'     ,
+                            text_color    = 'white'     ,
+                            size          = ( 135, 45 ) ,
+                            f_callback    = SDR_sequence.standby
+                                              )
 
-	# All valves off button
-    off_button   =   SDR_buttons.Button( 
-                                        sequence_frame_row1      , 
-                                        text          = "ABORT"  ,
-                                        bg_color      = 'black'  ,
-                                        fg_color      = 'white'  ,
-                                        outline_color = 'white'  ,
-                                        text_color    = 'white'  ,
-                                        f_callback = SDR_sequence.allOff
-                                       )
+    # Standby button
+    ignite_button =         SDR_buttons.Button(
+                            sequence_frame_row1         ,
+                            text          = "Ignite"    ,
+                            bg_color      = 'black'     ,
+                            fg_color      = 'white'     ,
+                            outline_color = 'white'     ,
+                            text_color    = 'white'     ,
+                            size          = ( 135, 45 ) ,
+                            f_callback    = SDR_sequence.fire_engine
+                                              )
+
+	# Disarm button 
+    disarm_button =         SDR_buttons.Button( 
+                            sequence_frame_row2      , 
+                            text          = "Disarm" ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'  ,
+                            outline_color = 'white'  ,
+                            text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = SDR_sequence.disarm
+                                              )
+	# Get state button 
+    getstate_button =       SDR_buttons.Button( 
+                            sequence_frame_row2        , 
+                            text          = "Get State",
+                            bg_color      = 'black'    ,
+                            fg_color      = 'white'    ,
+                            outline_color = 'white'    ,
+                            text_color    = 'white'    ,
+                            size          = ( 135, 45 ),
+                            f_callback = SDR_sequence.get_state
+                                              )
+
+	# Abort button
+    abort_button =          SDR_buttons.Button( 
+                            sequence_frame_row2      , 
+                            text          = "ABORT"  ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'  ,
+                            outline_color = 'white'  ,
+                            text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = SDR_sequence.hotfire_abort
+                                              )
 
 	# Sensor gauges
     gauge1 =      SDR_gauge.gauge( # Fuel Tank Pressure
@@ -376,10 +442,16 @@ if __name__ == '__main__':
 
 	# Sequence button frames
     sequence_frame_row1.pack()
+    sequence_frame_row2.pack()
 
 	# Sequence frames
-    startup_button.pack( side = "left"  )
-    off_button.pack    ( side = "right" )
+    pre_fire_purge_button.pack( side = "left", padx = 30 )
+    fill_chill_button.pack    ( side = "left", padx = 30 )
+    standby_button.pack       ( side = "left", padx = 30 )
+    ignite_button.pack        ( side = "left", padx = 30 )
+    disarm_button.pack        ( side = "left", padx = 30 )
+    getstate_button.pack      ( side = "left", padx = 30 )
+    abort_button.pack         ( side = "left", padx = 30 )
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()
@@ -490,6 +562,8 @@ if __name__ == '__main__':
 
             # Draw to plumbing window
             plumbing.getWindow().update()
+
+            time.sleep( 0.1 )
 
         # Exit App
         except:
