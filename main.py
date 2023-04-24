@@ -64,6 +64,38 @@ import hw_commands
 import sensor_conv
 
 
+####################################################################################
+# Objects                                                                          #
+####################################################################################
+
+
+####################################################################################
+#                                                                                  #
+# OBJECT:                                                                          #
+# 		liquid_engine_state                                                        #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Contains state information on the liquid engine                            #
+#                                                                                  #
+####################################################################################
+class Liquid_Engine_State:
+
+    # Initialzation Function
+    def __init__( self ):
+        self.state = "Initialization State"
+    ## __init__ ##
+
+    # Get the engine state
+    def get_engine_state( self ):
+        return self.state
+    ## get_engine_state ##
+
+    # Set the engine state
+    def set_engine_state( self, new_engine_state ):
+        self.state = new_engine_state
+    ## set_engine_state ## 
+## liquid_engine_state ##
+
 
 ####################################################################################
 # Callbacks                                                                        #
@@ -75,6 +107,36 @@ def close_window_callback():
     root.destroy()
     plumbing.win.destroy()
     exitFlag = True
+
+# Sequencing callbacks
+def pre_fire_purge_callback():
+    SDR_sequence.pre_fire_purge( liquid_engine_state )
+
+def fill_and_chill_callback():
+    SDR_sequence.fill_and_chill( liquid_engine_state )
+
+def standby_callback():
+    SDR_sequence.standby       ( liquid_engine_state )
+
+def fire_engine_callback():
+    SDR_sequence.fire_engine   ( liquid_engine_state )
+
+def disarm_callback():
+    SDR_sequence.disarm        ( liquid_engine_state )
+
+def hotfire_abort_callback():
+    SDR_sequence.hotfire_abort ( liquid_engine_state )
+
+def get_state_callback():
+    SDR_sequence.get_state     ( liquid_engine_state )
+
+
+####################################################################################
+# Global Variables                                                                 #
+####################################################################################
+
+# State of the engine
+liquid_engine_state = Liquid_Engine_State()
 
 
 ####################################################################################
@@ -97,6 +159,9 @@ if __name__ == '__main__':
             port_num = port.device
             connect_args  = [ '-p', port_num]
             commands.connect( connect_args, terminalSerObj )
+
+            # Enter the ready state
+            liquid_engine_state.set_engine_state( "Ready State" )
     
     ################################################################################
 	# Data logging setup                                                           #
@@ -293,7 +358,7 @@ if __name__ == '__main__':
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = SDR_sequence.pre_fire_purge
+                            f_callback = pre_fire_purge_callback
                                               )
     
     # Fill and chill button
@@ -305,7 +370,7 @@ if __name__ == '__main__':
                             outline_color = 'white'     ,
                             text_color    = 'white'     ,
                             size          = ( 135, 45 ) ,
-                            f_callback    = SDR_sequence.fill_and_chill
+                            f_callback    = fill_and_chill_callback
                                               )
     
     # Standby button
@@ -317,7 +382,7 @@ if __name__ == '__main__':
                             outline_color = 'white'     ,
                             text_color    = 'white'     ,
                             size          = ( 135, 45 ) ,
-                            f_callback    = SDR_sequence.standby
+                            f_callback    = standby_callback 
                                               )
 
     # Standby button
@@ -329,7 +394,7 @@ if __name__ == '__main__':
                             outline_color = 'white'     ,
                             text_color    = 'white'     ,
                             size          = ( 135, 45 ) ,
-                            f_callback    = SDR_sequence.fire_engine
+                            f_callback    = fire_engine_callback 
                                               )
 
 	# Disarm button 
@@ -341,7 +406,7 @@ if __name__ == '__main__':
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = SDR_sequence.disarm
+                            f_callback = disarm_callback
                                               )
 	# Get state button 
     getstate_button =       SDR_buttons.Button( 
@@ -352,7 +417,7 @@ if __name__ == '__main__':
                             outline_color = 'white'    ,
                             text_color    = 'white'    ,
                             size          = ( 135, 45 ),
-                            f_callback = SDR_sequence.get_state
+                            f_callback = get_state_callback
                                               )
 
 	# Abort button
@@ -364,7 +429,7 @@ if __name__ == '__main__':
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = SDR_sequence.hotfire_abort
+                            f_callback = hotfire_abort_callback 
                                               )
 
 	# Sensor gauges
@@ -489,6 +554,9 @@ if __name__ == '__main__':
                         port_num = port.device
                         connect_args  = [ '-p', port_num]
                         commands.connect( connect_args, terminalSerObj )
+
+                        # Transition into the ready state
+                        liquid_engine_state.set_engine_state( "Ready State" )
 
             else:
                 # Record time of data reception
