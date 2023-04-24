@@ -17,6 +17,12 @@ import sys
 
 
 ####################################################################################
+# Project Imports                                                                  #
+####################################################################################
+import engineController
+
+
+####################################################################################
 # Sequencing Functions                                                             #
 ####################################################################################
 
@@ -186,9 +192,9 @@ def hotfire_abort( engine_state ):
 # 		Gets the state of the hotfire                                              #
 #                                                                                  #
 ####################################################################################
-def get_state( engine_state ):
-    ## TODO:Implement
-    print( "Getstate" )
+def get_state( engine_state, serObj ):
+    engineController.hotfire_getstate( [], serObj )
+    engine_state.set_engine_state( serObj.get_engine_state() )
 ## get_state ## 
 
 

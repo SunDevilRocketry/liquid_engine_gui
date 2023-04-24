@@ -128,7 +128,7 @@ def hotfire_abort_callback():
     SDR_sequence.hotfire_abort ( liquid_engine_state )
 
 def get_state_callback():
-    SDR_sequence.get_state     ( liquid_engine_state )
+    SDR_sequence.get_state     ( liquid_engine_state, terminalSerObj )
 
 
 ####################################################################################
