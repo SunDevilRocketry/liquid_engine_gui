@@ -121,14 +121,17 @@ def standby_callback():
 def fire_engine_callback():
     SDR_sequence.fire_engine   ( liquid_engine_state, terminalSerObj )
 
-def disarm_callback():
-    SDR_sequence.disarm        ( liquid_engine_state, terminalSerObj )
-
 def hotfire_abort_callback():
     SDR_sequence.hotfire_abort ( liquid_engine_state, terminalSerObj )
 
 def get_state_callback():
     SDR_sequence.get_state     ( liquid_engine_state, terminalSerObj )
+
+def stop_hotfire_callback():
+    SDR_sequence.stop_hotfire  ( liquid_engine_state, terminalSerObj )
+
+def stop_purge_callback():
+    SDR_sequence.stop_purge    ( liquid_engine_state, terminalSerObj )
 
 
 ####################################################################################
@@ -245,6 +248,7 @@ if __name__ == '__main__':
     # Valve button row frames
     valve_button_col1     = tk.Frame( valve_button_frame, bg = 'black' ) 
     valve_button_col2     = tk.Frame( valve_button_frame, bg = 'black' ) 
+    valve_button_col3     = tk.Frame( valve_button_frame, bg = 'black' )
 
 	# Sequence button frames
     sequence_frame_row1 = tk.Frame(
@@ -387,7 +391,7 @@ if __name__ == '__main__':
 
     # Standby button
     ignite_button =         SDR_buttons.Button(
-                            sequence_frame_row1         ,
+                            sequence_frame_row2         ,
                             text          = "Ignite"    ,
                             bg_color      = 'black'     ,
                             fg_color      = 'white'     ,
@@ -397,20 +401,9 @@ if __name__ == '__main__':
                             f_callback    = fire_engine_callback 
                                               )
 
-	# Disarm button 
-    disarm_button =         SDR_buttons.Button( 
-                            sequence_frame_row2      , 
-                            text          = "Disarm" ,
-                            bg_color      = 'black'  ,
-                            fg_color      = 'white'  ,
-                            outline_color = 'white'  ,
-                            text_color    = 'white'  ,
-                            size          = ( 135, 45 ),
-                            f_callback = disarm_callback
-                                              )
 	# Get state button 
     getstate_button =       SDR_buttons.Button( 
-                            sequence_frame_row2        , 
+                            valve_button_col3          , 
                             text          = "Get State",
                             bg_color      = 'black'    ,
                             fg_color      = 'white'    ,
@@ -419,15 +412,37 @@ if __name__ == '__main__':
                             size          = ( 135, 45 ),
                             f_callback = get_state_callback
                                               )
-
-	# Abort button
-    abort_button =          SDR_buttons.Button( 
+    # Stop hotfire button
+    stop_hotfire_button =   SDR_buttons.Button( 
                             sequence_frame_row2      , 
-                            text          = "ABORT"  ,
+                            text          = "Stop Hotfire" ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'  ,
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = stop_hotfire_callback 
+                                              )
+    # Stop purge button
+    stop_purge_button =     SDR_buttons.Button( 
+                            sequence_frame_row2      , 
+                            text          = "Stop Purge" ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'  ,
+                            outline_color = 'white'  ,
+                            text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = stop_purge_callback
+                                              )
+
+	# Abort button
+    abort_button =          SDR_buttons.Button( 
+                            valve_button_col3        , 
+                            text          = "ABORT"  ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'red'    ,
+                            outline_color = 'red'    ,
+                            text_color    = 'red'    ,
                             size          = ( 135, 45 ),
                             f_callback = hotfire_abort_callback 
                                               )
@@ -501,8 +516,9 @@ if __name__ == '__main__':
     main_window_title.pack(pady=30, side='right')
 
 	# Valve buttons
-    valve_button_col1.pack( side = 'left'  )
-    valve_button_col2.pack( side = 'right' )
+    valve_button_col1.pack( side = 'left' )
+    valve_button_col2.pack( side = 'left' )
+    valve_button_col3.pack( side = 'left' )
     valve_button_frame.pack()
 
 	# Sequence button frames
@@ -514,9 +530,10 @@ if __name__ == '__main__':
     fill_chill_button.pack    ( side = "left", padx = 30 )
     standby_button.pack       ( side = "left", padx = 30 )
     ignite_button.pack        ( side = "left", padx = 30 )
-    disarm_button.pack        ( side = "left", padx = 30 )
-    getstate_button.pack      ( side = "left", padx = 30 )
-    abort_button.pack         ( side = "left", padx = 30 )
+    getstate_button.pack      ( side = "top" , padx = 30 )
+    abort_button.pack         ( side = "top" , padx = 30 )
+    stop_hotfire_button.pack  ( side = "left", padx = 30 )
+    stop_purge_button.pack    ( side = "left", padx = 30 )
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()

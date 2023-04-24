@@ -142,33 +142,6 @@ def fire_engine( engine_state, serialObj ):
 ####################################################################################
 #                                                                                  #
 # PROCEDURE:                                                                       #
-# 		disarm                                                                     #
-#                                                                                  #
-# DESCRIPTION:                                                                     #
-# 		Disarms the engine post hotfire                                            #
-#                                                                                  #
-####################################################################################
-def disarm( engine_state, serialObj ):
-
-    # Verify correct state
-    state = engine_state.get_engine_state()
-    if ( state != "Fire State" ):
-        print( "Error. Cannot disarm the engine. The engine controller must be " +
-               "in the Fire state in order to disarm. The current state is: " )
-        print( state )
-        return
-
-    # Put the engine into the disarm state
-    # TODO: Implement
-
-    # Set the new engine state
-    engine_state.set_engine_state( "Disarm State" )
-## disarm ## 
-
-
-####################################################################################
-#                                                                                  #
-# PROCEDURE:                                                                       #
 # 		hotfire_abort                                                              #
 #                                                                                  #
 # DESCRIPTION:                                                                     #
@@ -198,6 +171,59 @@ def get_state( engine_state, serObj ):
     engineController.hotfire_getstate( [], serObj )
     engine_state.set_engine_state( serObj.get_engine_state() )
 ## get_state ## 
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		stop_hotfire                                                               #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Stops the engine hotfire                                                   #
+#                                                                                  #
+####################################################################################
+def stop_hotfire( engine_state, serialObj ):
+
+    # Verify correct state
+    state = engine_state.get_state()
+    if ( state != "Fire State" ):
+        print( "Error: Cannot stop the engine hotfire. The engine controller " +
+                "must be in the Fire State in order to stop the hotfire. The " +
+                "current state is: " )
+        print( state )
+        return
+    
+    # Issue the stop hotfire command 
+    engineController.stop_hotfire( [], serialObj )
+## stop_hotfire ## 
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		stop_purge                                                                 #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Halts the post-hotfire purge                                               #
+#                                                                                  #
+####################################################################################
+def stop_purge( engine_state, serialObj ):
+
+    # Verify correct state
+    state = engine_state.get_state()
+    if ( state != "Fire State" ):
+        print( "Error: Cannot stop the engine purge. The engine controller " +
+                "must be in the Fire State in order to stop the purge. The " +
+                "current state is: " )
+        print( state )
+        return
+    
+    # Issue the stop purge command
+    engineController.stop_purge( [], serialObj )
+
+    # Set the new engine state
+    engine_state.set_engine_state( serialObj.get_engine_state() )
+## stop_purge ##
 
 
 ####################################################################################
