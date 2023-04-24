@@ -110,22 +110,22 @@ def close_window_callback():
 
 # Sequencing callbacks
 def pre_fire_purge_callback():
-    SDR_sequence.pre_fire_purge( liquid_engine_state )
+    SDR_sequence.pre_fire_purge( liquid_engine_state, terminalSerObj )
 
 def fill_and_chill_callback():
-    SDR_sequence.fill_and_chill( liquid_engine_state )
+    SDR_sequence.fill_and_chill( liquid_engine_state, terminalSerObj )
 
 def standby_callback():
-    SDR_sequence.standby       ( liquid_engine_state )
+    SDR_sequence.standby       ( liquid_engine_state, terminalSerObj )
 
 def fire_engine_callback():
-    SDR_sequence.fire_engine   ( liquid_engine_state )
+    SDR_sequence.fire_engine   ( liquid_engine_state, terminalSerObj )
 
 def disarm_callback():
-    SDR_sequence.disarm        ( liquid_engine_state )
+    SDR_sequence.disarm        ( liquid_engine_state, terminalSerObj )
 
 def hotfire_abort_callback():
-    SDR_sequence.hotfire_abort ( liquid_engine_state )
+    SDR_sequence.hotfire_abort ( liquid_engine_state, terminalSerObj )
 
 def get_state_callback():
     SDR_sequence.get_state     ( liquid_engine_state, terminalSerObj )

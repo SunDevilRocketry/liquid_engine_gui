@@ -36,7 +36,7 @@ import engineController
 # 		Initiates the pre-hotfire purge of the engine                              #
 #                                                                                  #
 ####################################################################################
-def pre_fire_purge( engine_state ):
+def pre_fire_purge( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state()
@@ -46,11 +46,12 @@ def pre_fire_purge( engine_state ):
                 "state is: ")
         print( state )
         return
-    ## TODO: Implement
-    print( "Pre-fire purge" ) 
+
+    # Initiate the pre-fire purge
+    engineController.pfpurge( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( "Pre-Fire Purge State" )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## pre_fire_purge ##
 
 
@@ -63,7 +64,7 @@ def pre_fire_purge( engine_state ):
 # 		Initiates the fill and chill engine sequence                               #
 #                                                                                  #
 ####################################################################################
-def fill_and_chill( engine_state ):
+def fill_and_chill( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state()
@@ -74,11 +75,11 @@ def fill_and_chill( engine_state ):
         print( state )
         return
 
-    ## TODO: Implement
-    print( "Fill and Chill" )
+    # Initiate the fill and chill sequence
+    engineController.fillchill( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( "Fill and Chill State" )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## fill_and_chill ## 
 
 
@@ -91,7 +92,7 @@ def fill_and_chill( engine_state ):
 # 		Puts the engine controller into the standby state                          #
 #                                                                                  #
 ####################################################################################
-def standby( engine_state ):
+def standby( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state() 
@@ -102,11 +103,11 @@ def standby( engine_state ):
         print( state )
         return
 
-    ## TODO: Implement
-    print( "Standby" )
+    # Put the engine in standby state
+    engineController.standby( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( "Standby State" )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## standby ## 
 
 
@@ -119,7 +120,7 @@ def standby( engine_state ):
 # 		Initiates the engine ignition sequence                                     #
 #                                                                                  #
 ####################################################################################
-def fire_engine( engine_state ):
+def fire_engine( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state()
@@ -130,11 +131,11 @@ def fire_engine( engine_state ):
         print( state )
         return
 
-    ## TODO: Implement
-    print( "FIRE" )
+    # Initiate the hotfire
+    engineController.hotfire( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( "Fire State" )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## fire_engine ## 
 
 
@@ -147,7 +148,7 @@ def fire_engine( engine_state ):
 # 		Disarms the engine post hotfire                                            #
 #                                                                                  #
 ####################################################################################
-def disarm( engine_state ):
+def disarm( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state()
@@ -157,8 +158,8 @@ def disarm( engine_state ):
         print( state )
         return
 
-    ## TODO: Implement
-    print( "DISARM" )
+    # Put the engine into the disarm state
+    # TODO: Implement
 
     # Set the new engine state
     engine_state.set_engine_state( "Disarm State" )
@@ -174,12 +175,13 @@ def disarm( engine_state ):
 # 		Aborts the hotfire sequence                                                #
 #                                                                                  #
 ####################################################################################
-def hotfire_abort( engine_state ):
-    ## TODO: Implement
-    print( "ABORT" )
+def hotfire_abort( engine_state, serialObj ):
+
+    # Issue the abort command
+    engineController.hotfire_abort( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( "Abort State" )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## hotfire_abort ##
 
 
