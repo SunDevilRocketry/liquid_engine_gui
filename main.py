@@ -592,9 +592,12 @@ if __name__ == '__main__':
                         # Transition into the ready state
                         liquid_engine_state.set_engine_state( "Ready State" )
 
+            # Connection is made
             else:
                 # Record time of data reception
                 time_sec = time.perf_counter() - start_time
+
+                # Event loops, based on state of the engine
 
 
             # Update engine schematic
