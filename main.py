@@ -598,156 +598,148 @@ if __name__ == '__main__':
 
     # Update GUI
     while (not exitFlag):
-        try:
-            # Look for new serial connections 
-            if ( terminalSerObj.comport == None ):
-                avail_ports = serial.tools.list_ports.comports()
-                for port_num, port in enumerate( avail_ports ):
-                    if ( ( 'CP2102' in port.description ) or 
-                         ( 'CP210x' in port.description ) ):
-                        # Connect
-                        port_num = port.device
-                        connect_args  = [ '-p', port_num]
-                        commands.connect( connect_args, terminalSerObj )
+        # Look for new serial connections 
+        if ( terminalSerObj.comport == None ):
+            avail_ports = serial.tools.list_ports.comports()
+            for port_num, port in enumerate( avail_ports ):
+                if ( ( 'CP2102' in port.description ) or 
+                        ( 'CP210x' in port.description ) ):
+                    # Connect
+                    port_num = port.device
+                    connect_args  = [ '-p', port_num]
+                    commands.connect( connect_args, terminalSerObj )
 
-                        # Transition into the ready state
-                        liquid_engine_state.set_engine_state( "Ready State" )
-
-            # Connection is made
-            else:
-                # Record time of data reception
-                time_sec = time.perf_counter() - start_time
-
-                ####################################################################
-                # Ready State                                                      #
-                ####################################################################
-                if ( liquid_engine_state.get_engine_state() == "Ready State" ):
-                    # Get telemetry
-                    engineController.telreq( [], terminalSerObj, show_output = False )
-                    sensor_readouts_formatted = {}
-                    for sensor in terminalSerObj.sensor_readouts:
-                        sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
-                            terminalSerObj.controller,
-                            sensor                   ,
-                            terminalSerObj.sensor_readouts[sensor] ) 
-
-                    # Calculate Flow Rates
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                                terminalSerObj.sensor_readouts["pt1"] -
-                                                terminalSerObj.sensor_readouts["pt2"] )
-                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                                terminalSerObj.sensor_readouts["pt6"] -
-                                                terminalSerObj.sensor_readouts["pt5"] )
-                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "oxfr"                   ,
-                                                ox_flow_rate   )
-                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
-                                                fuel_flow_rate )
-
-                    # Update GUI
-                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                    gauge3.setText( "NaN"                           , "None"               )
-                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
-                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                    gauge2.setAngle( fuel_flow_rate                        )
-                    gauge3.setAngle( 0 )
-                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                    gauge6.setAngle( ox_flow_rate                          )
-                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
-
-                    # Log Data
-                    base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
-                    output_filename      = base_output_filename + str( test_num ) + ".txt"
-                    with open( output_filename, "a" ) as file:
-                        file.write(str(time_sec) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt1"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt2"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt3"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt4"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt5"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt6"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
-                        file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
-                        file.write("\n")
-
-                ####################################################################
-                # Pre-Fire Engine Purge                                            #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Pre-Fire Purge State" ):
-                    pass
-
-                ####################################################################
-                # Fill and Chill                                                   #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Fill and Chill State"):
-                    pass
-
-                ####################################################################
-                # Standby                                                          #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Standby State"):
-                    pass
-
-                ####################################################################
-                # Engine Hotfire                                                   #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Fire State"):
-                    pass
-
-                ####################################################################
-                # Disarm Sequence                                                  #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Disarm State" ):
-                    pass
-
-                ####################################################################
-                # Post-Fire Engine State                                           #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Post-Fire State"):
-                    pass
-
-                ####################################################################
-                # Manual State                                                     #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Manual State"):
-                    pass
-
-                ####################################################################
-                # Abort State                                                      #
-                ####################################################################
-                elif ( liquid_engine_state.get_engine_state() == "Abort State" ):
-                    pass
+                    # Transition into the ready state
+                    liquid_engine_state.set_engine_state( "Ready State" )
 
 
-            # Update engine schematic
-            plumbing.updatePipeStatus()
+        # Connection is made
+        else:
+            # Record time of data reception
+            time_sec = time.perf_counter() - start_time
 
-            # Draw to main window
-            root.update()
+            ####################################################################
+            # Ready State                                                      #
+            ####################################################################
+            if ( liquid_engine_state.get_engine_state() == "Ready State" ):
+                # Get telemetry
+                engineController.telreq( [], terminalSerObj, show_output = False )
+                sensor_readouts_formatted = {}
+                for sensor in terminalSerObj.sensor_readouts:
+                    sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                        terminalSerObj.controller,
+                        sensor                   ,
+                        terminalSerObj.sensor_readouts[sensor] ) 
 
-            # Draw to plumbing window
-            plumbing.getWindow().update()
+                # Calculate Flow Rates
+                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                            terminalSerObj.sensor_readouts["pt1"] -
+                                            terminalSerObj.sensor_readouts["pt2"] )
+                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                            terminalSerObj.sensor_readouts["pt6"] -
+                                            terminalSerObj.sensor_readouts["pt5"] )
+                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                            terminalSerObj.controller, 
+                                            "oxfr"                   ,
+                                            ox_flow_rate   )
+                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                            terminalSerObj.controller, 
+                                            "ffr"                    , 
+                                            fuel_flow_rate )
 
-        # Exit App
-        except:
-            exitFlag = True
-            pass
+                # Update GUI
+                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                gauge3.setText( "NaN"                           , "None"               )
+                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
 
-	# Clear the console to get rid of weird tk/tcl errors
-    os.system('cls' if os.name == 'nt' else 'clear')
+                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                gauge2.setAngle( fuel_flow_rate                        )
+                gauge3.setAngle( 0 )
+                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                gauge6.setAngle( ox_flow_rate                          )
+                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+
+                # Log Data
+                base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
+                output_filename      = base_output_filename + str( test_num ) + ".txt"
+                with open( output_filename, "a" ) as file:
+                    file.write(str(time_sec) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt1"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt2"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt3"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt4"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt5"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt6"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
+                    file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write("\n")
+
+            ####################################################################
+            # Pre-Fire Engine Purge                                            #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Pre-Fire Purge State" ):
+                pass
+
+            ####################################################################
+            # Fill and Chill                                                   #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Fill and Chill State"):
+                pass
+
+            ####################################################################
+            # Standby                                                          #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Standby State"):
+                pass
+
+            ####################################################################
+            # Engine Hotfire                                                   #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Fire State"):
+                pass
+
+            ####################################################################
+            # Disarm Sequence                                                  #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Disarm State" ):
+                pass
+
+            ####################################################################
+            # Post-Fire Engine State                                           #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Post-Fire State"):
+                pass
+
+            ####################################################################
+            # Manual State                                                     #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Manual State"):
+                pass
+
+            ####################################################################
+            # Abort State                                                      #
+            ####################################################################
+            elif ( liquid_engine_state.get_engine_state() == "Abort State" ):
+                pass
+
+
+        # Update engine schematic
+        plumbing.updatePipeStatus()
+
+        # Draw to main window
+        root.update()
+
+        # Draw to plumbing window
+        plumbing.getWindow().update()
 
 
 ####################################################################################
