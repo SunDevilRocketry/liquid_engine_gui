@@ -133,6 +133,9 @@ def stop_hotfire_callback():
 def stop_purge_callback():
     SDR_sequence.stop_purge    ( liquid_engine_state, terminalSerObj )
 
+def kbottle_close_callback():
+    SDR_sequence.kbottle_close ( liquid_engine_state, terminalSerObj )
+
 
 ####################################################################################
 # Global Variables                                                                 #
@@ -391,7 +394,7 @@ if __name__ == '__main__':
 
     # Standby button
     ignite_button =         SDR_buttons.Button(
-                            sequence_frame_row2         ,
+                            sequence_frame_row1         ,
                             text          = "Ignite"    ,
                             bg_color      = 'black'     ,
                             fg_color      = 'white'     ,
@@ -401,17 +404,6 @@ if __name__ == '__main__':
                             f_callback    = fire_engine_callback 
                                               )
 
-	# Get state button 
-    getstate_button =       SDR_buttons.Button( 
-                            valve_button_col3          , 
-                            text          = "Get State",
-                            bg_color      = 'black'    ,
-                            fg_color      = 'white'    ,
-                            outline_color = 'white'    ,
-                            text_color    = 'white'    ,
-                            size          = ( 135, 45 ),
-                            f_callback = get_state_callback
-                                              )
     # Stop hotfire button
     stop_hotfire_button =   SDR_buttons.Button( 
                             sequence_frame_row2      , 
@@ -433,6 +425,30 @@ if __name__ == '__main__':
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
                             f_callback = stop_purge_callback
+                                              )
+    
+    # Kbottle close button
+    kbottle_close_button =  SDR_buttons.Button( 
+                            sequence_frame_row2      , 
+                            text          = "KBottle Close" ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'  ,
+                            outline_color = 'white'  ,
+                            text_color    = 'white'  ,
+                            size          = ( 135, 45 ),
+                            f_callback = kbottle_close_callback 
+                                              )
+
+	# Get state button 
+    getstate_button =       SDR_buttons.Button( 
+                            valve_button_col3          , 
+                            text          = "Get State",
+                            bg_color      = 'black'    ,
+                            fg_color      = 'white'    ,
+                            outline_color = 'white'    ,
+                            text_color    = 'white'    ,
+                            size          = ( 135, 45 ),
+                            f_callback = get_state_callback
                                               )
 
 	# Abort button
@@ -534,6 +550,7 @@ if __name__ == '__main__':
     abort_button.pack         ( side = "top" , padx = 30 )
     stop_hotfire_button.pack  ( side = "left", padx = 30 )
     stop_purge_button.pack    ( side = "left", padx = 30 )
+    kbottle_close_button.pack ( side = "left", padx = 30 )
 
 	# Gauge frame rows 
     gauge_frame_row1.pack()

@@ -210,7 +210,7 @@ def stop_hotfire( engine_state, serialObj ):
 def stop_purge( engine_state, serialObj ):
 
     # Verify correct state
-    state = engine_state.get_state()
+    state = engine_state.get_engine_state()
     if ( state != "Fire State" ):
         print( "Error: Cannot stop the engine purge. The engine controller " +
                 "must be in the Fire State in order to stop the purge. The " +
@@ -224,6 +224,34 @@ def stop_purge( engine_state, serialObj ):
     # Set the new engine state
     engine_state.set_engine_state( serialObj.get_engine_state() )
 ## stop_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		kbottle_close                                                              #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Indicate that the kbottle has been closed                                  #
+#                                                                                  #
+####################################################################################
+def kbottle_close( engine_state, serialObj ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( state != "Disarm State" ):
+        print( "Cannot send the K-Bottle close command. The engine controller " +
+               "must be in the Disarm State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the kbottle close command
+    engineController.kbottle_close( [], serialObj )
+
+    # Set the new engine state
+    engine_state.set_engine_state( serialObj.get_engine_set() )
+## kbottle_close ##
 
 
 ####################################################################################
