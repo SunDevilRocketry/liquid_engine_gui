@@ -161,7 +161,7 @@ def lox_vent_callback():
         solenoid2_buttons.updateColor()
         solenoid2_buttons.configButton()
 
-def lox_purge_callback():
+def manual_lox_purge_callback():
     SDR_sequence.manual_lox_purge( liquid_engine_state, terminalSerObj, solenoid3_buttons.state )
     if ( ( solenoid3_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
         solenoid3_buttons.state = not solenoid3_buttons.state 
@@ -424,7 +424,7 @@ if __name__ == '__main__':
                                      "LOX Purge (5)"  , 
                                      'top'         ,
                                      plumbing.five,
-                                     f_callback = lox_purge_callback
+                                     f_callback = manual_lox_purge_callback
                                      )
 
     ball_valve1_buttons = SDR_valve.Buttons(
