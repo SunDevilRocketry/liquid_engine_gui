@@ -250,8 +250,33 @@ def kbottle_close( engine_state, serialObj ):
     engineController.kbottle_close( [], serialObj )
 
     # Set the new engine state
-    engine_state.set_engine_state( serialObj.get_engine_set() )
+    engine_state.set_engine_state( serialObj.get_engine_state() )
 ## kbottle_close ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		lox_purge                                                                  #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Initiate the LOX tank purge                                                #
+#                                                                                  #
+####################################################################################
+def lox_purge( engine_state, serialObj ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Disarm State" ) and ( state != "Fire State" ) ):
+        print( "Cannot send the LOX purge close command. The engine controller " +
+               "must be in the Disarm State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the kbottle close command
+    engineController.lox_purge( [], serialObj )
+## lox_purge ##
 
 
 ####################################################################################
