@@ -140,6 +140,82 @@ def lox_purge_callback():
 def kbottle_close_callback():
     SDR_sequence.kbottle_close ( liquid_engine_state, terminalSerObj )
 
+def manual_mode_callback():
+    SDR_sequence.manual        ( liquid_engine_state, terminalSerObj )
+
+def lox_press_callback():
+    SDR_sequence.manual_lox_press ( liquid_engine_state, terminalSerObj, solenoid1_buttons.state )
+    if ( ( solenoid1_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid1_buttons.state = not solenoid1_buttons.state 
+        solenoid1_buttons.symbol.setState( solenoid1_buttons.state )
+        solenoid1_buttons.updateText()
+        solenoid1_buttons.updateColor()
+        solenoid1_buttons.configButton()
+
+def lox_vent_callback():
+    SDR_sequence.manual_lox_vent ( liquid_engine_state, terminalSerObj, solenoid2_buttons.state )
+    if ( ( solenoid2_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid2_buttons.state = not solenoid2_buttons.state 
+        solenoid2_buttons.symbol.setState( solenoid2_buttons.state )
+        solenoid2_buttons.updateText()
+        solenoid2_buttons.updateColor()
+        solenoid2_buttons.configButton()
+
+def lox_purge_callback():
+    SDR_sequence.manual_lox_purge( liquid_engine_state, terminalSerObj, solenoid3_buttons.state )
+    if ( ( solenoid3_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid3_buttons.state = not solenoid3_buttons.state 
+        solenoid3_buttons.symbol.setState( solenoid3_buttons.state )
+        solenoid3_buttons.updateText()
+        solenoid3_buttons.updateColor()
+        solenoid3_buttons.configButton()
+
+def fuel_purge_callback():
+    SDR_sequence.manual_fuel_purge( liquid_engine_state, terminalSerObj, solenoid4_buttons.state )
+    if ( ( solenoid4_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid4_buttons.state = not solenoid4_buttons.state 
+        solenoid4_buttons.symbol.setState( solenoid4_buttons.state )
+        solenoid4_buttons.updateText()
+        solenoid4_buttons.updateColor()
+        solenoid4_buttons.configButton()
+
+def fuel_press_callback():
+    SDR_sequence.manual_fuel_press( liquid_engine_state, terminalSerObj, solenoid5_buttons.state )
+    if ( ( solenoid5_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid5_buttons.state = not solenoid5_buttons.state 
+        solenoid5_buttons.symbol.setState( solenoid5_buttons.state )
+        solenoid5_buttons.updateText()
+        solenoid5_buttons.updateColor()
+        solenoid5_buttons.configButton()
+
+def fuel_vent_callback():
+    SDR_sequence.manual_fuel_vent( liquid_engine_state, terminalSerObj, solenoid6_buttons.state )
+    if ( ( solenoid6_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        solenoid6_buttons.state = not solenoid6_buttons.state 
+        solenoid6_buttons.symbol.setState( solenoid6_buttons.state )
+        solenoid6_buttons.updateText()
+        solenoid6_buttons.updateColor()
+        solenoid6_buttons.configButton()
+
+def lox_main_callback():
+    SDR_sequence.manual_lox_main( liquid_engine_state, terminalSerObj, ball_valve1_buttons.state )
+    if ( ( ball_valve1_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        ball_valve1_buttons.state = not ball_valve1_buttons.state 
+        ball_valve1_buttons.symbol.setState( ball_valve1_buttons.state )
+        ball_valve1_buttons.updateText()
+        ball_valve1_buttons.updateColor()
+        ball_valve1_buttons.configButton()
+
+def fuel_main_callback():
+    SDR_sequence.manual_fuel_main( liquid_engine_state, terminalSerObj, ball_valve2_buttons.state )
+    if ( ( ball_valve2_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
+        ball_valve2_buttons.state = not ball_valve2_buttons.state 
+        ball_valve2_buttons.symbol.setState( ball_valve2_buttons.state )
+        ball_valve2_buttons.updateText()
+        ball_valve2_buttons.updateColor()
+        ball_valve2_buttons.configButton()
+
+
 
 ####################################################################################
 # Global Variables                                                                 #
@@ -331,49 +407,56 @@ if __name__ == '__main__':
                                      valve_button_col1,
                                      "LOX Pressure (1)",
                                      'top'             ,
-                                     plumbing.one
+                                     plumbing.one, 
+                                     f_callback = lox_press_callback
                                      )
 
     solenoid2_buttons = SDR_valve.Buttons(
                                      valve_button_col1,
                                      "LOX Vent (2)"   , 
                                      'top'         ,
-                                     plumbing.two
+                                     plumbing.two,
+                                     f_callback = lox_vent_callback
                                      )
 
     solenoid3_buttons = SDR_valve.Buttons(
                                      valve_button_col1,
                                      "LOX Purge (5)"  , 
                                      'top'         ,
-                                     plumbing.five
+                                     plumbing.five,
+                                     f_callback = lox_purge_callback
                                      )
 
     ball_valve1_buttons = SDR_valve.Buttons(
                                     valve_button_col1,
                                     "LOX Main"       ,
                                     'top'            ,
-                                    plumbing.s2
+                                    plumbing.s2,
+                                    f_callback = lox_main_callback
                                     )
 
     solenoid5_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
                                      "Fuel Pressure (3)", 
                                      'top'                  ,
-                                     plumbing.three
+                                     plumbing.three,
+                                     f_callback = fuel_press_callback
                                      )
 
     solenoid6_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
                                      "Fuel Vent (4)", 
                                      'top'              ,
-                                     plumbing.four
+                                     plumbing.four,
+                                     f_callback = fuel_vent_callback
                                      )
 
     solenoid4_buttons = SDR_valve.Buttons(
                                      valve_button_col2   ,
                                      "Fuel Purge (6)", 
                                      'top'               ,
-                                     plumbing.six
+                                     plumbing.six,
+                                     f_callback = fuel_purge_callback
                                      )
 
 
@@ -381,7 +464,8 @@ if __name__ == '__main__':
                                     valve_button_col2    ,
                                     "Fuel Main Valve",
                                      'top'               ,
-                                    plumbing.s1
+                                    plumbing.s1,
+                                    f_callback = fuel_main_callback
                                     )
 
 	# Pre-Fire purge button
@@ -502,6 +586,18 @@ if __name__ == '__main__':
                             f_callback = hotfire_abort_callback 
                                               )
 
+	# Abort button
+    manual_mode_button =    SDR_buttons.Button( 
+                            valve_button_col3        , 
+                            text          = "Manual"  ,
+                            bg_color      = 'black'  ,
+                            fg_color      = 'white'    ,
+                            outline_color = 'white'    ,
+                            text_color    = 'white'    ,
+                            size          = ( 135, 45 ),
+                            f_callback = manual_mode_callback 
+                                              )
+
 	# Sensor gauges
     gauge1 =      SDR_gauge.gauge( # Fuel Tank Pressure
                                  gauge_frame_row1    , 
@@ -586,6 +682,7 @@ if __name__ == '__main__':
     standby_button.pack       ( side = "left", padx = 30 )
     ignite_button.pack        ( side = "left", padx = 30 )
     getstate_button.pack      ( side = "top" , padx = 30 )
+    manual_mode_button.pack   ( side = "top" , padx = 30 )
     abort_button.pack         ( side = "top" , padx = 30 )
     stop_hotfire_button.pack  ( side = "left", padx = 30 )
     stop_purge_button.pack    ( side = "left", padx = 30 )

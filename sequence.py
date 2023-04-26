@@ -20,6 +20,7 @@ import sys
 # Project Imports                                                                  #
 ####################################################################################
 import engineController
+import valveController
 
 
 ####################################################################################
@@ -277,6 +278,266 @@ def lox_purge( engine_state, serialObj ):
     # Issue the kbottle close command
     engineController.lox_purge( [], serialObj )
 ## lox_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual                                                                     #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Put the engine into manual mode                                            #
+#                                                                                  #
+####################################################################################
+def manual( engine_state, serialObj ):
+
+    # Issue the manual command
+    engineController.manual( [], serialObj )
+
+    # Update the engine state
+    engine_state.set_engine_state( serialObj.get_engine_state() )
+## lox_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_lox_press                                                           #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the LOX pressure solenoid                                 #
+#                                                                                  #
+####################################################################################
+def manual_lox_press( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the LOX pressure valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'oxPress'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'oxPress'], serialObj )
+## lox_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_fuel_press                                                          #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the Fuel pressure solenoid                                #
+#                                                                                  #
+####################################################################################
+def manual_fuel_press( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'fuelPress'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'fuelPress'], serialObj )
+## lox_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_lox_vent                                                            #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the LOX vent solenoid                                     #
+#                                                                                  #
+####################################################################################
+def manual_lox_vent( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'oxVent'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'oxVent'], serialObj )
+## manual_lox_vent ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_fuel_vent                                                           #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the LOX vent solenoid                                     #
+#                                                                                  #
+####################################################################################
+def manual_fuel_vent( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'fuelVent'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'fuelVent'], serialObj )
+## manual_fuel_vent ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_lox_purge                                                           #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the LOX purge solenoid                                    #
+#                                                                                  #
+####################################################################################
+def manual_lox_purge( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'oxPurge'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'oxPurge'], serialObj )
+## manual_lox_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_fuel_purge                                                          #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the Fuel purge solenoid                                   #
+#                                                                                  #
+####################################################################################
+def manual_fuel_purge( engine_state, serialObj, solenoid_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( solenoid_state ):
+        # Close solenoid
+        valveController.sol( ['close', '-n', 'fuelPurge'], serialObj )
+    else:
+        # Open solenoid
+        valveController.sol( ['open', '-n', 'fuelPurge'], serialObj )
+## manual_fuel_purge ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_lox_main                                                            #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the LOX main valve                                        #
+#                                                                                  #
+####################################################################################
+def manual_lox_main( engine_state, serialObj, valve_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( valve_state ):
+        # Close solenoid
+        valveController.valve( ['close', '-n', 'ox'], serialObj )
+    else:
+        # Open solenoid
+        valveController.valve( ['open', '-n', 'ox'], serialObj )
+## manual_lox_main ##
+
+
+####################################################################################
+#                                                                                  #
+# PROCEDURE:                                                                       #
+# 		manual_fuel_main                                                           #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Manually actuate the main fuel valve                                       #
+#                                                                                  #
+####################################################################################
+def manual_fuel_main( engine_state, serialObj, valve_state ):
+
+    # Verify correct state
+    state = engine_state.get_engine_state()
+    if ( ( state != "Manual State" ) ):
+        print( "Cannot acutate the valve. The engine controller " +
+               "must be in the Manual State in order to issue the command. The " +
+               "current state is: " )
+        print( state )
+        return
+    
+    # Issue the actuation command
+    if ( valve_state ):
+        # Close solenoid
+        valveController.valve( ['close', '-n', 'fuel'], serialObj )
+    else:
+        # Open solenoid
+        valveController.valve( ['open', '-n', 'fuel'], serialObj )
+## manual_fuel_main ##
+
 
 
 ####################################################################################

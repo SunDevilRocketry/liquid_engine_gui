@@ -44,7 +44,8 @@ class Buttons:
                 root,          # frame to attach button to
                 text,          # valve button frame label,
                 side,          # Where to place the widget in root 
-                symbol=None    # link to engine schematic symbol
+                symbol=None,   # link to engine schematic symbol
+                f_callback  = None
                 ):
 
         ############################################################################
@@ -83,17 +84,31 @@ class Buttons:
                                    )
 	
         # Button Widgets
-        self.button  = SDR_buttons.Button(
-                                          self.switch,
-                                          text          = self.text , 
-                                          size          = (100, 20) ,
-                                          corner_r      = 0.2       ,
-                                          bg_color      = 'black'   ,
-                                          text_color    = self.color,
-                                          outline_color = self.color, 
-                                          fg_color      = self.color,
-                                          f_callback    = self.action
-                                          )
+        if ( f_callback != None ):
+            self.button  = SDR_buttons.Button(
+                                            self.switch,
+                                            text          = self.text , 
+                                            size          = (100, 20) ,
+                                            corner_r      = 0.2       ,
+                                            bg_color      = 'black'   ,
+                                            text_color    = self.color,
+                                            outline_color = self.color, 
+                                            fg_color      = self.color,
+                                            f_callback    = f_callback 
+                                            )
+        else:
+            self.button  = SDR_buttons.Button(
+                                            self.switch,
+                                            text          = self.text , 
+                                            size          = (100, 20) ,
+                                            corner_r      = 0.2       ,
+                                            bg_color      = 'black'   ,
+                                            text_color    = self.color,
+                                            outline_color = self.color, 
+                                            fg_color      = self.color,
+                                            f_callback    = self.action 
+                                            )
+
 
         ############################################################################
 		# Initial draw                                                             #
