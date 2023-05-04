@@ -66,6 +66,15 @@ import engineController
 
 
 ####################################################################################
+# Defines                                                                          #
+####################################################################################
+
+# Valve open/close states
+VALVE_OPEN   = True
+VALVE_CLOSED = False
+
+
+####################################################################################
 # Objects                                                                          #
 ####################################################################################
 
@@ -109,7 +118,7 @@ def close_window_callback():
     plumbing.win.destroy()
     exitFlag = True
 
-# Sequencing callbacks
+# Sequencing/Control callbacks
 def pre_fire_purge_callback():
     SDR_sequence.pre_fire_purge( liquid_engine_state, terminalSerObj )
 
@@ -215,6 +224,85 @@ def fuel_main_callback():
         ball_valve2_buttons.updateColor()
         ball_valve2_buttons.configButton()
 
+
+####################################################################################
+# Procedures #
+####################################################################################
+
+# Update the valves state after telreq
+def update_valve_states( valve_states ):
+    # LOX Pressure
+    if ( valve_states["oxPress"] == "OPEN" ):
+        solenoid1_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["oxPress"] == "CLOSED" ):
+        solenoid1_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid1_buttons.updateText()
+    solenoid1_buttons.updateColor()
+    solenoid1_buttons.configButton()
+
+    # LOX Vent
+    if ( valve_states["oxVent"] == "OPEN" ):
+        solenoid2_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["oxVent"] == "CLOSED" ):
+        solenoid2_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid2_buttons.updateText()
+    solenoid2_buttons.updateColor()
+    solenoid2_buttons.configButton()
+    
+    # LOX Purge
+    if ( valve_states["oxPurge"] == "OPEN" ):
+        solenoid3_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["oxPurge"] == "CLOSED" ):
+        solenoid3_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid3_buttons.updateText()
+    solenoid3_buttons.updateColor()
+    solenoid3_buttons.configButton()
+
+    # Fuel Purge
+    if ( valve_states["fuelPurge"] == "OPEN" ):
+        solenoid4_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["fuelPurge"] == "CLOSED" ):
+        solenoid4_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid4_buttons.updateText()
+    solenoid4_buttons.updateColor()
+    solenoid4_buttons.configButton()
+
+    # Fuel Pressure
+    if ( valve_states["fuelPress"] == "OPEN" ):
+        solenoid5_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["fuelPress"] == "CLOSED" ):
+        solenoid5_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid5_buttons.updateText()
+    solenoid5_buttons.updateColor()
+    solenoid5_buttons.configButton()
+
+    # Fuel Vent
+    if ( valve_states["fuelVent"] == "OPEN" ):
+        solenoid6_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["fuelVent"] == "CLOSED" ):
+        solenoid6_buttons.symbol.setState( VALVE_CLOSED )
+    solenoid6_buttons.updateText()
+    solenoid6_buttons.updateColor()
+    solenoid6_buttons.configButton()
+
+    # LOX Main
+    if ( valve_states["oxMain"] == "OPEN" ):
+        ball_valve1_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["oxMain"] == "CLOSED" ):
+        ball_valve1_buttons.symbol.setState( VALVE_CLOSED )
+    ball_valve1_buttons.updateText()
+    ball_valve1_buttons.updateColor()
+    ball_valve1_buttons.configButton()
+
+    # Fuel Main
+    if ( valve_states["fuelMain"] == "OPEN" ):
+        ball_valve2_buttons.symbol.setState( VALVE_OPEN )
+    elif ( valve_states["fuelMain"] == "CLOSED" ):
+        ball_valve2_buttons.symbol.setState( VALVE_CLOSED )
+    ball_valve2_buttons.updateText()
+    ball_valve2_buttons.updateColor()
+    ball_valve2_buttons.configButton()
+## update_valve_states ##
 
 
 ####################################################################################
@@ -772,7 +860,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -781,6 +868,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -797,6 +885,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -837,7 +933,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -846,6 +941,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -862,6 +958,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -905,7 +1009,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -914,6 +1017,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -930,6 +1034,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -970,7 +1082,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -979,6 +1090,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -995,6 +1107,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -1035,7 +1155,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -1044,6 +1163,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -1060,6 +1180,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -1103,7 +1231,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -1112,6 +1239,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -1128,6 +1256,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
@@ -1168,7 +1304,6 @@ if __name__ == '__main__':
                 gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
                 gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
                 gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-
                 gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
                 gauge2.setAngle( fuel_flow_rate                        )
                 gauge3.setAngle( 0 )
@@ -1177,6 +1312,7 @@ if __name__ == '__main__':
                 gauge6.setAngle( ox_flow_rate                          )
                 gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
                 gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -1193,6 +1329,14 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
+                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
+                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
+                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
                     file.write("\n")
 
             ####################################################################
