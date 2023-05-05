@@ -108,6 +108,62 @@ class Liquid_Engine_State:
 
 
 ####################################################################################
+#                                                                                  #
+# OBJECT:                                                                          #
+# 		Sensor_Data_Buffer                                                         #
+#                                                                                  #
+# DESCRIPTION:                                                                     #
+# 		Contains a queue of previous sensor data for filtering of gauge readouts   #
+#                                                                                  #
+####################################################################################
+class Sensor_Data_Buffer:
+
+    # Initialization
+    # max_buffer_size: size of the FIFO buffer
+    # tau            : time constant of low-pass filter
+    def __init__( self, max_buffer_size = 10, tau = 1 ):
+        self.data_buffer     = []
+        self.filter_buffer   = []
+        self.buffer_size     = 0
+        self.max_buffer_size = max_buffer_size
+        self.tau             = tau
+        self.sensors         = [ "pt0", "pt1", "pt2", "pt3", "pt4", "pt5", "pt6", 
+                                 "pt7", "lc", "tc"]
+    ## __init__ ##
+
+    # Add data to the buffer 
+    def add_data( self, sensor_data ):
+        if ( self.buffer_size < self.max_buffer_size ):
+            self.data_buffer.append( sensor_data )
+            self.buffer_size += 1
+            if ( self.buffer_size == 1 ):
+                self.filter_buffer.append( sensor_data )
+            else:
+                self.filter_buffer.append( self.filter_data() ) 
+        else:
+            self.data_buffer.pop( 0 )
+            self.data_buffer.append( sensor_data )
+            self.filter_buffer.append( self.filter_data() )
+    ## add_data ##
+
+    # Filter incoming data 
+    def filter_data( self ):
+        # Calculate filter coefficients
+        T     = self.data_buffer[-1]["t"] - self.data_buffer[-2]["t"] # Time period
+        alpha = 2*self.tau + T
+        beta  = T - 2*self.tau
+
+        # Difference equation
+        filtered_readouts = {}
+        for sensor in self.sensors:
+            filtered_readouts[sensor] = ( (T/alpha)*( self.data_buffer[-1][sensor] +
+            self.data_buffer[-2][sensor] ) - (beta/alpha)*(self.filter_buffer[-1][sensor]) )
+        return filtered_readouts
+    ## filter_data ##
+## Sensor_Data_Buffer ##
+
+
+####################################################################################
 # Callbacks                                                                        #
 ####################################################################################
 
@@ -311,6 +367,9 @@ def update_valve_states( valve_states ):
 
 # State of the engine
 liquid_engine_state = Liquid_Engine_State()
+
+# Buffer for filtering data prior to displaying on gauges
+sensor_data_buffer = Sensor_Data_Buffer( tau = 10 )
 
 # File Name outputs
 engine_state_filenames = {
