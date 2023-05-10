@@ -73,6 +73,9 @@ import engineController
 VALVE_OPEN   = True
 VALVE_CLOSED = False
 
+# Filter enable for gauge readouts
+GAUGE_FILTER_ENABLED = True
+
 
 ####################################################################################
 # Objects                                                                          #
@@ -160,6 +163,10 @@ class Sensor_Data_Buffer:
             self.data_buffer[-2][sensor] ) - (beta/alpha)*(self.filter_buffer[-1][sensor]) )
         return filtered_readouts
     ## filter_data ##
+
+    ## Get the most recent filter data
+    def get_data( self ):
+        return self.filter_buffer[-1]
 ## Sensor_Data_Buffer ##
 
 
@@ -290,8 +297,10 @@ def update_valve_states( valve_states ):
     # LOX Pressure
     if ( valve_states["oxPress"] == "OPEN" ):
         solenoid1_buttons.symbol.setState( VALVE_OPEN )
+        solenoid1_buttons.state = VALVE_OPEN
     elif ( valve_states["oxPress"] == "CLOSED" ):
         solenoid1_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid1_buttons.state = VALVE_CLOSED
     solenoid1_buttons.updateText()
     solenoid1_buttons.updateColor()
     solenoid1_buttons.configButton()
@@ -887,6 +896,7 @@ if __name__ == '__main__':
             if ( liquid_engine_state.get_engine_state() == "Ready State" ):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -894,40 +904,86 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
+
 
                 # Log Data
                 base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
@@ -960,6 +1016,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Pre-Fire Purge State" ):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -967,39 +1024,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1036,6 +1138,7 @@ if __name__ == '__main__':
 
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1043,39 +1146,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1109,6 +1257,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Standby State"):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1116,39 +1265,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1182,6 +1376,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Fire State"):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1189,39 +1384,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1258,6 +1498,7 @@ if __name__ == '__main__':
 
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1265,39 +1506,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1331,6 +1617,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Post-Fire State"):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1338,39 +1625,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
@@ -1404,6 +1736,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Manual State"):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1411,65 +1744,86 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
-                # Log Data
-                base_output_filename = output_dir + "/" + engine_state_filenames[liquid_engine_state.state]
-                output_filename      = base_output_filename + str( test_num ) + ".txt"
-                with open( output_filename, "a" ) as file:
-                    file.write(str(time_sec) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt0"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt1"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt2"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt3"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt4"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt5"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt6"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["pt7"]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["lc" ]) + " ")
-                    file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
-                    file.write(terminalSerObj.valve_states["oxPress"  ]   + " ")
-                    file.write(terminalSerObj.valve_states["oxVent"   ]   + " ")
-                    file.write(terminalSerObj.valve_states["oxPurge"  ]   + " ")
-                    file.write(terminalSerObj.valve_states["fuelPress"]   + " ")
-                    file.write(terminalSerObj.valve_states["fuelVent" ]   + " ")
-                    file.write(terminalSerObj.valve_states["fuelPurge"]   + " ")
-                    file.write(terminalSerObj.valve_states["oxMain"   ]   + " ")
-                    file.write(terminalSerObj.valve_states["fuelMain" ]   + " ")
-                    file.write("\n")
 
             ####################################################################
             # Abort State                                                      #
@@ -1477,6 +1831,7 @@ if __name__ == '__main__':
             elif ( liquid_engine_state.get_engine_state() == "Abort State" ):
                 # Get telemetry
                 engineController.telreq( [], terminalSerObj, show_output = False )
+                terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
@@ -1484,39 +1839,84 @@ if __name__ == '__main__':
                         sensor                   ,
                         terminalSerObj.sensor_readouts[sensor] ) 
 
+                # Filter the data
+                if ( GAUGE_FILTER_ENABLED ):
+                    sensor_data_buffer.add_data( terminalSerObj.sensor_readouts )
+                    sensor_data_filtered = sensor_data_buffer.get_data()
+                    filtered_sensor_readouts_formatted = {}
+                    for sensor in sensor_data_filtered:
+                        filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
+                            terminalSerObj.controller,
+                            sensor                   ,
+                            sensor_data_filtered[sensor] ) 
+
                 # Calculate Flow Rates
-                ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
-                                            terminalSerObj.sensor_readouts["pt1"] -
-                                            terminalSerObj.sensor_readouts["pt2"] )
-                fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
-                                            terminalSerObj.sensor_readouts["pt6"] -
-                                            terminalSerObj.sensor_readouts["pt5"] )
-                ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "oxfr"                   ,
-                                            ox_flow_rate   )
-                fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                            terminalSerObj.controller, 
-                                            "ffr"                    , 
-                                            fuel_flow_rate )
+                if ( GAUGE_FILTER_ENABLED ):
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                sensor_data_filtered["pt1"] -
+                                                sensor_data_filtered["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                sensor_data_filtered["pt6"] -
+                                                sensor_data_filtered["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
+                else:
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                                                terminalSerObj.sensor_readouts["pt1"] -
+                                                terminalSerObj.sensor_readouts["pt2"] )
+                    fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
+                                                terminalSerObj.sensor_readouts["pt6"] -
+                                                terminalSerObj.sensor_readouts["pt5"] )
+                    ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "oxfr"                   ,
+                                                ox_flow_rate   )
+                    fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
+                                                terminalSerObj.controller, 
+                                                "ffr"                    , 
+                                                fuel_flow_rate )
 
                 # Update GUI
-                gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
-                gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
-                gauge3.setText( "NaN"                           , "None"               )
-                gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
-                gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
-                gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
-                gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
-                gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
-                gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
-                gauge2.setAngle( fuel_flow_rate                        )
-                gauge3.setAngle( 0 )
-                gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
-                gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
-                gauge6.setAngle( ox_flow_rate                          )
-                gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
-                gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
+                if ( GAUGE_FILTER_ENABLED ):
+                    gauge1.setText( filtered_sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( filtered_sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( filtered_sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( filtered_sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( filtered_sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( sensor_data_filtered["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( sensor_data_filtered["lc" ] )
+                    gauge5.setAngle( sensor_data_filtered["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( sensor_data_filtered["pt4"] )
+                    gauge8.setAngle( sensor_data_filtered["tc" ] )
+                else:
+                    gauge1.setText( sensor_readouts_formatted["pt7"], "Fuel Tank Pressure" )
+                    gauge2.setText( fuel_flow_rate_formatted        , "Fuel Flow Rate"     )
+                    gauge3.setText( "NaN"                           , "None"               )
+                    gauge4.setText( sensor_readouts_formatted["lc"] , "Thrust"             )
+                    gauge5.setText( sensor_readouts_formatted["pt0"], "LOX Pressure"       )
+                    gauge6.setText( ox_flow_rate_formatted          , "LOX Flow Rate"      )
+                    gauge7.setText( sensor_readouts_formatted["pt4"], "Engine Pressure"    )
+                    gauge8.setText( sensor_readouts_formatted["tc" ], "LOX Temperature"    )
+                    gauge1.setAngle( terminalSerObj.sensor_readouts["pt7"] )
+                    gauge2.setAngle( fuel_flow_rate                        )
+                    gauge3.setAngle( 0 )
+                    gauge4.setAngle( terminalSerObj.sensor_readouts["lc" ] )
+                    gauge5.setAngle( terminalSerObj.sensor_readouts["pt0"] )
+                    gauge6.setAngle( ox_flow_rate                          )
+                    gauge7.setAngle( terminalSerObj.sensor_readouts["pt4"] )
+                    gauge8.setAngle( terminalSerObj.sensor_readouts["tc" ] )
                 update_valve_states( terminalSerObj.valve_states )
 
                 # Log Data
