@@ -308,8 +308,10 @@ def update_valve_states( valve_states ):
     # LOX Vent
     if ( valve_states["oxVent"] == "OPEN" ):
         solenoid2_buttons.symbol.setState( VALVE_OPEN )
+        solenoid2_buttons.state = VALVE_OPEN
     elif ( valve_states["oxVent"] == "CLOSED" ):
         solenoid2_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid2_buttons.state = VALVE_CLOSED
     solenoid2_buttons.updateText()
     solenoid2_buttons.updateColor()
     solenoid2_buttons.configButton()
@@ -317,8 +319,10 @@ def update_valve_states( valve_states ):
     # LOX Purge
     if ( valve_states["oxPurge"] == "OPEN" ):
         solenoid3_buttons.symbol.setState( VALVE_OPEN )
+        solenoid3_buttons.state = VALVE_OPEN
     elif ( valve_states["oxPurge"] == "CLOSED" ):
         solenoid3_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid3_buttons.state = VALVE_CLOSED
     solenoid3_buttons.updateText()
     solenoid3_buttons.updateColor()
     solenoid3_buttons.configButton()
@@ -326,8 +330,10 @@ def update_valve_states( valve_states ):
     # Fuel Purge
     if ( valve_states["fuelPurge"] == "OPEN" ):
         solenoid4_buttons.symbol.setState( VALVE_OPEN )
+        solenoid4_buttons.state = VALVE_OPEN
     elif ( valve_states["fuelPurge"] == "CLOSED" ):
         solenoid4_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid4_buttons.state = VALVE_CLOSED
     solenoid4_buttons.updateText()
     solenoid4_buttons.updateColor()
     solenoid4_buttons.configButton()
@@ -335,8 +341,10 @@ def update_valve_states( valve_states ):
     # Fuel Pressure
     if ( valve_states["fuelPress"] == "OPEN" ):
         solenoid5_buttons.symbol.setState( VALVE_OPEN )
+        solenoid5_buttons.state = VALVE_OPEN
     elif ( valve_states["fuelPress"] == "CLOSED" ):
         solenoid5_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid5_buttons.state = VALVE_CLOSED
     solenoid5_buttons.updateText()
     solenoid5_buttons.updateColor()
     solenoid5_buttons.configButton()
@@ -344,8 +352,10 @@ def update_valve_states( valve_states ):
     # Fuel Vent
     if ( valve_states["fuelVent"] == "OPEN" ):
         solenoid6_buttons.symbol.setState( VALVE_OPEN )
+        solenoid6_buttons.state = VALVE_OPEN
     elif ( valve_states["fuelVent"] == "CLOSED" ):
         solenoid6_buttons.symbol.setState( VALVE_CLOSED )
+        solenoid6_buttons.state = VALVE_CLOSED
     solenoid6_buttons.updateText()
     solenoid6_buttons.updateColor()
     solenoid6_buttons.configButton()
@@ -353,8 +363,10 @@ def update_valve_states( valve_states ):
     # LOX Main
     if ( valve_states["oxMain"] == "OPEN" ):
         ball_valve1_buttons.symbol.setState( VALVE_OPEN )
+        ball_valve1_buttons.state = VALVE_OPEN
     elif ( valve_states["oxMain"] == "CLOSED" ):
         ball_valve1_buttons.symbol.setState( VALVE_CLOSED )
+        ball_valve1_buttons.state = VALVE_CLOSED
     ball_valve1_buttons.updateText()
     ball_valve1_buttons.updateColor()
     ball_valve1_buttons.configButton()
@@ -362,8 +374,10 @@ def update_valve_states( valve_states ):
     # Fuel Main
     if ( valve_states["fuelMain"] == "OPEN" ):
         ball_valve2_buttons.symbol.setState( VALVE_OPEN )
+        ball_valve2_buttons.state = VALVE_OPEN
     elif ( valve_states["fuelMain"] == "CLOSED" ):
         ball_valve2_buttons.symbol.setState( VALVE_CLOSED )
+        ball_valve2_buttons.state = VALVE_CLOSED
     ball_valve2_buttons.updateText()
     ball_valve2_buttons.updateColor()
     ball_valve2_buttons.configButton()
@@ -378,7 +392,7 @@ def update_valve_states( valve_states ):
 liquid_engine_state = Liquid_Engine_State()
 
 # Buffer for filtering data prior to displaying on gauges
-sensor_data_buffer = Sensor_Data_Buffer( tau = 10 )
+sensor_data_buffer = Sensor_Data_Buffer( tau = 1 )
 
 # File Name outputs
 engine_state_filenames = {
@@ -391,7 +405,7 @@ engine_state_filenames = {
                         "Disarm State"        : "disarm"  ,
                         "Post-Fire State"     : "postfire",
                         "Manual State"        : "manual"  ,
-                        "Abort"               : "abort"
+                        "Abort State"         : "abort"
                          }
 
 
