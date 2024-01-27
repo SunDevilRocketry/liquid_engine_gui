@@ -29,8 +29,9 @@ class gauge:
     def __init__(self,          # gauge class 
                  root,          # window to draw gauge on
                  background,    # background color
-                 max_sensor_val # maximum value to display on 
+                 max_sensor_val, # maximum value to display on 
                                 # gauge
+                 size = 180
                  ):
 		
 		# simple variables
@@ -40,12 +41,12 @@ class gauge:
                                               # guage angle
         self.max_sensor_val =  max_sensor_val # maximum display 
                                               # value
-        size                =  180            # size of gauge
+        self.size                =  size            # size of gauge
 
 		# Canvas widget for drawing
         self.canvas = Canvas(root,          # parent window 
-                             width=190,     # canvas dimensions
-                             height=200, 
+                             width=150,     # canvas dimensions
+                             height=150, 
                              bg=background, # background color 
                              highlightthickness=0 
                             )
@@ -54,7 +55,7 @@ class gauge:
         self.gauge_arc = self.canvas.create_arc(
 						30, 20,                 # upper left corner
                                                 # coordinates 
-						size - 10, size - 10,   # lower right corner
+						self.size - 10, self.size - 10,   # lower right corner
                                                 # coordinates 
 						style="arc", width=20,  # arc width 
 						start=self.startAngle,  # minimum drawing 
@@ -69,7 +70,7 @@ class gauge:
         self.gauge_fill_arc = self.canvas.create_arc(
 						30, 20,                 # upper left corner
                                                 # coordinates 
-						size - 10, size - 10,   # lower right corner
+						self.size - 10, self.size - 10,   # lower right corner
 												# coordinates 
 						width=20, style="arc",  # arc width 
 						start=90,               # minimum drawing angle 
@@ -81,9 +82,9 @@ class gauge:
 
         # Gauge text for sensor value
         self.readout = self.canvas.create_text(
-                        100, 85,               # x-y coordinates
+                        80, 75,               # x-y coordinates
                         font=("Arial",         # font properties
-                               int(size / 10), 
+                               int(self.size / 10), 
                                'bold'), 
                         fill="white",          # text color
                         text=''                # text contents
@@ -91,9 +92,9 @@ class gauge:
 
         # Gauge text for sensor name
         self.label = self.canvas.create_text(
-						100, 150,             # x-y coordinates
+						80, 125,             # x-y coordinates
 						font=("Arial",        # font properties
-                              int(size / 15), 
+                              int(self.size / 15), 
 							  'bold'), 
                         fill="white",         # text color
                         text=''               # text contents
