@@ -240,36 +240,36 @@ if __name__ == '__main__':
     #root.iconphoto(True, SDRlogo)
 
     # Logo and dashboard label frame
-    main_title_frame    = tk.Frame(
+    main_title_frame    = tk.Label(
                                   root,
                                   bg = 'black'
                                   )
 
     # Valve button frame
-    valve_button_frame    = tk.Frame( root, bg = 'black' )
+    valve_button_frame    = tk.Label( root, bg = 'black' )
 
     # Valve button row frames
-    valve_button_col1     = tk.Frame( valve_button_frame, bg = 'black' ) 
-    valve_button_col2     = tk.Frame( valve_button_frame, bg = 'black' ) 
-    valve_button_col3     = tk.Frame( valve_button_frame, bg = 'black' )
+    valve_button_col1     = tk.Label( valve_button_frame, bg = 'black' ) 
+    valve_button_col2     = tk.Label( valve_button_frame, bg = 'black' ) 
+    valve_button_col3     = tk.Label( valve_button_frame, bg = 'black' )
 
 	# Sequence button frames
-    sequence_frame_row1 = tk.Frame(
+    sequence_frame_row1 = tk.Label(
                                   root,
 								  bg='black'
                                   )
-    sequence_frame_row2 = tk.Frame(
+    sequence_frame_row2 = tk.Label(
                                   root,
 								  bg='black'
                                   )
 
 	# Gauge row frames
-    gauge_frame_row1    = tk.Frame(
+    gauge_frame_row1    = tk.Label(
                                   root, 
                                   bg='black'
                                   )
 
-    gauge_frame_row2    = tk.Frame(
+    gauge_frame_row2    = tk.Label(
                                   root, 
                                   bg='black'
                                   )
@@ -283,20 +283,20 @@ if __name__ == '__main__':
     plumbing = SDR_engine_display.Engine_Display(gridLen)  
 
     # SDR logo
-    SDRlabel =                tk.Label(
-                                      main_title_frame,
-                                      image = SDR, 
-                                      bg = 'black'
-                                      )
+    #SDRlabel =                tk.Label(
+    #                                  main_title_frame,
+     #                                 image = SDR, 
+    #                                  bg = 'black'
+     #                                 )
 
 	# Main window label
-    main_window_title =       tk.Label(
-                                      main_title_frame, 
-                                      text="Engine Dashboard", 
-                                      bg="black", 
-                                      fg="white", 
-                                      font="Arial 30"
-                                      )
+    #main_window_title =       tk.Label(
+    #                                  main_title_frame, 
+     #                                 text="Engine Dashboard", 
+     #                                 bg="black", 
+    #                                fg="white", 
+    #                                font="Arial 30"
+     #                                 )
 
 	# Valve buttons
     solenoid1_buttons = SDR_valve.Buttons(
@@ -528,8 +528,8 @@ if __name__ == '__main__':
 
 	# Main window title
     main_title_frame.pack()
-    SDRlabel.pack(side='left', padx=30)
-    main_window_title.pack(pady=30, side='right')
+    #SDRlabel.pack(side='left', padx=30)
+    #main_window_title.pack(pady=30, side='right')
 
 	# Valve buttons
     valve_button_col1.pack( side = 'left' )
@@ -656,7 +656,7 @@ if __name__ == '__main__':
                     file.write(str(terminalSerObj.sensor_readouts["tc" ]) + " ")
                     file.write("\n")
 
-            # Update engine schematic
+            # Update engin  e schematic
             plumbing.updatePipeStatus()
 
             # Draw to main window
@@ -674,7 +674,6 @@ if __name__ == '__main__':
 
 	# Clear the console to get rid of weird tk/tcl errors
     os.system('cls' if os.name == 'nt' else 'clear')
-
 
 ####################################################################################
 # END OF FILE                                                                      #
