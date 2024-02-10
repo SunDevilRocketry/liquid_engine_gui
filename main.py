@@ -865,7 +865,7 @@ if __name__ == '__main__':
     stop_purge_button.pack    ( side = "left", padx = 30 )
     lox_purge_button.pack     ( side = "left", padx = 30 )
     kbottle_close_button.pack ( side = "left", padx = 30 )
-    reset_button.pack         (side = "top", padx = 30)
+    # reset_button.pack         (side = "top", padx = 30)
 
 	# Gauge frame rows
     gauge_frame_row1.pack()
