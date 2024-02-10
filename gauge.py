@@ -31,7 +31,6 @@ class gauge:
                  background,    # background color
                  max_sensor_val, # maximum value to display on 
                                 # gauge
-                 size = 180
                  ):
 		
 		# simple variables
@@ -41,12 +40,12 @@ class gauge:
                                               # guage angle
         self.max_sensor_val =  max_sensor_val # maximum display 
                                               # value
-        self.size                =  size            # size of gauge
+        self.size                =  180            # size of gauge
 
 		# Canvas widget for drawing
         self.canvas = Canvas(root,          # parent window 
-                             width=150,     # canvas dimensions
-                             height=150, 
+                             width=190,     # canvas dimensions
+                             height=200, 
                              bg=background, # background color 
                              highlightthickness=0 
                             )
@@ -82,7 +81,7 @@ class gauge:
 
         # Gauge text for sensor value
         self.readout = self.canvas.create_text(
-                        80, 75,               # x-y coordinates
+                        100, 85,               # x-y coordinates
                         font=("Arial",         # font properties
                                int(self.size / 10), 
                                'bold'), 
@@ -92,7 +91,7 @@ class gauge:
 
         # Gauge text for sensor name
         self.label = self.canvas.create_text(
-						80, 125,             # x-y coordinates
+						100, 150,             # x-y coordinates
 						font=("Arial",        # font properties
                               int(self.size / 15), 
 							  'bold'), 
