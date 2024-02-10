@@ -44,7 +44,7 @@ from PIL       import Image, ImageTk
 # Project Modules                                                                  #
 ####################################################################################
 
-# Setup path 
+# Setup path
 sys.path.insert(0, './plumbing')
 sys.path.insert(0, './sdec')
 
@@ -57,7 +57,7 @@ import sequence       as SDR_sequence
 import buttons        as SDR_buttons
 import sensor         as SDR_sensor
 
-# SDEC 
+# SDEC
 import sdec
 import commands
 import hw_commands
@@ -106,7 +106,7 @@ class Liquid_Engine_State:
     # Set the engine state
     def set_engine_state( self, new_engine_state ):
         self.state = new_engine_state
-    ## set_engine_state ## 
+    ## set_engine_state ##
 ## liquid_engine_state ##
 
 
@@ -130,11 +130,11 @@ class Sensor_Data_Buffer:
         self.buffer_size     = 0
         self.max_buffer_size = max_buffer_size
         self.tau             = tau
-        self.sensors         = [ "pt0", "pt1", "pt2", "pt3", "pt4", "pt5", "pt6", 
+        self.sensors         = [ "pt0", "pt1", "pt2", "pt3", "pt4", "pt5", "pt6",
                                  "pt7", "lc", "tc"]
     ## __init__ ##
 
-    # Add data to the buffer 
+    # Add data to the buffer
     def add_data( self, sensor_data ):
         if ( self.buffer_size < self.max_buffer_size ):
             self.data_buffer.append( sensor_data )
@@ -142,14 +142,14 @@ class Sensor_Data_Buffer:
             if ( self.buffer_size == 1 ):
                 self.filter_buffer.append( sensor_data )
             else:
-                self.filter_buffer.append( self.filter_data() ) 
+                self.filter_buffer.append( self.filter_data() )
         else:
             self.data_buffer.pop( 0 )
             self.data_buffer.append( sensor_data )
             self.filter_buffer.append( self.filter_data() )
     ## add_data ##
 
-    # Filter incoming data 
+    # Filter incoming data
     def filter_data( self ):
         # Calculate filter coefficients
         T     = self.data_buffer[-1]["t"] - self.data_buffer[-2]["t"] # Time period
@@ -215,10 +215,13 @@ def kbottle_close_callback():
 def manual_mode_callback():
     SDR_sequence.manual        ( liquid_engine_state, terminalSerObj )
 
+def reset_callback():
+    pass
+
 def lox_press_callback():
     SDR_sequence.manual_lox_press ( liquid_engine_state, terminalSerObj, solenoid1_buttons.state )
     if ( ( solenoid1_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid1_buttons.state = not solenoid1_buttons.state 
+        solenoid1_buttons.state = not solenoid1_buttons.state
         solenoid1_buttons.symbol.setState( solenoid1_buttons.state )
         solenoid1_buttons.updateText()
         solenoid1_buttons.updateColor()
@@ -227,7 +230,7 @@ def lox_press_callback():
 def lox_vent_callback():
     SDR_sequence.manual_lox_vent ( liquid_engine_state, terminalSerObj, solenoid2_buttons.state )
     if ( ( solenoid2_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid2_buttons.state = not solenoid2_buttons.state 
+        solenoid2_buttons.state = not solenoid2_buttons.state
         solenoid2_buttons.symbol.setState( solenoid2_buttons.state )
         solenoid2_buttons.updateText()
         solenoid2_buttons.updateColor()
@@ -236,7 +239,7 @@ def lox_vent_callback():
 def manual_lox_purge_callback():
     SDR_sequence.manual_lox_purge( liquid_engine_state, terminalSerObj, solenoid3_buttons.state )
     if ( ( solenoid3_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid3_buttons.state = not solenoid3_buttons.state 
+        solenoid3_buttons.state = not solenoid3_buttons.state
         solenoid3_buttons.symbol.setState( solenoid3_buttons.state )
         solenoid3_buttons.updateText()
         solenoid3_buttons.updateColor()
@@ -245,7 +248,7 @@ def manual_lox_purge_callback():
 def fuel_purge_callback():
     SDR_sequence.manual_fuel_purge( liquid_engine_state, terminalSerObj, solenoid4_buttons.state )
     if ( ( solenoid4_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid4_buttons.state = not solenoid4_buttons.state 
+        solenoid4_buttons.state = not solenoid4_buttons.state
         solenoid4_buttons.symbol.setState( solenoid4_buttons.state )
         solenoid4_buttons.updateText()
         solenoid4_buttons.updateColor()
@@ -254,7 +257,7 @@ def fuel_purge_callback():
 def fuel_press_callback():
     SDR_sequence.manual_fuel_press( liquid_engine_state, terminalSerObj, solenoid5_buttons.state )
     if ( ( solenoid5_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid5_buttons.state = not solenoid5_buttons.state 
+        solenoid5_buttons.state = not solenoid5_buttons.state
         solenoid5_buttons.symbol.setState( solenoid5_buttons.state )
         solenoid5_buttons.updateText()
         solenoid5_buttons.updateColor()
@@ -263,7 +266,7 @@ def fuel_press_callback():
 def fuel_vent_callback():
     SDR_sequence.manual_fuel_vent( liquid_engine_state, terminalSerObj, solenoid6_buttons.state )
     if ( ( solenoid6_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        solenoid6_buttons.state = not solenoid6_buttons.state 
+        solenoid6_buttons.state = not solenoid6_buttons.state
         solenoid6_buttons.symbol.setState( solenoid6_buttons.state )
         solenoid6_buttons.updateText()
         solenoid6_buttons.updateColor()
@@ -272,7 +275,7 @@ def fuel_vent_callback():
 def lox_main_callback():
     SDR_sequence.manual_lox_main( liquid_engine_state, terminalSerObj, ball_valve1_buttons.state )
     if ( ( ball_valve1_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        ball_valve1_buttons.state = not ball_valve1_buttons.state 
+        ball_valve1_buttons.state = not ball_valve1_buttons.state
         ball_valve1_buttons.symbol.setState( ball_valve1_buttons.state )
         ball_valve1_buttons.updateText()
         ball_valve1_buttons.updateColor()
@@ -281,7 +284,7 @@ def lox_main_callback():
 def fuel_main_callback():
     SDR_sequence.manual_fuel_main( liquid_engine_state, terminalSerObj, ball_valve2_buttons.state )
     if ( ( ball_valve2_buttons.symbol != None ) and ( liquid_engine_state.state == "Manual State" ) ):
-        ball_valve2_buttons.state = not ball_valve2_buttons.state 
+        ball_valve2_buttons.state = not ball_valve2_buttons.state
         ball_valve2_buttons.symbol.setState( ball_valve2_buttons.state )
         ball_valve2_buttons.updateText()
         ball_valve2_buttons.updateColor()
@@ -315,7 +318,7 @@ def update_valve_states( valve_states ):
     solenoid2_buttons.updateText()
     solenoid2_buttons.updateColor()
     solenoid2_buttons.configButton()
-    
+
     # LOX Purge
     if ( valve_states["oxPurge"] == "OPEN" ):
         solenoid3_buttons.symbol.setState( VALVE_OPEN )
@@ -432,7 +435,7 @@ if __name__ == '__main__':
 
             # Enter the ready state
             liquid_engine_state.set_engine_state( "Ready State" )
-    
+
     ################################################################################
 	# Data logging setup                                                           #
     ################################################################################
@@ -461,7 +464,7 @@ if __name__ == '__main__':
 
     # Create an initial File
     with open( output_filename, "a" ) as file:
-        file.write( "Initialization State" ) 
+        file.write( "Initialization State" )
 
 
     ################################################################################
@@ -469,7 +472,7 @@ if __name__ == '__main__':
     ################################################################################
 
 	# Declarations
-    global exitFlag             # Flag set when window closes        
+    global exitFlag             # Flag set when window closes
 
     # Initializations
     exitFlag = False
@@ -482,7 +485,7 @@ if __name__ == '__main__':
     ################################################################################
 
     # Spacing constants within GUI
-    pad     = 10 
+    pad     = 10
     gridLen = 85
 
 
@@ -491,7 +494,7 @@ if __name__ == '__main__':
     ################################################################################
 
 	# root window
-    root = tk.Tk()         
+    root = tk.Tk()
     root.title("Engine Dashboard")
     root.configure(
                   background="black",
@@ -525,9 +528,11 @@ if __name__ == '__main__':
     valve_button_frame    = tk.Label( root, bg = 'black' )
 
     # Valve button row frames
-    valve_button_col1     = tk.Label( valve_button_frame, bg = 'black' ) 
-    valve_button_col2     = tk.Label( valve_button_frame, bg = 'black' ) 
+    valve_button_col1     = tk.Label( valve_button_frame, bg = 'black' )
+    valve_button_col2     = tk.Label( valve_button_frame, bg = 'black' )
     valve_button_col3     = tk.Label( valve_button_frame, bg = 'black' )
+    valve_button_col4     = tk.Label( valve_button_frame, bg = 'black' )
+
 
 	# Sequence button frames
     sequence_frame_row1 = tk.Label(
@@ -541,12 +546,12 @@ if __name__ == '__main__':
 
 	# Gauge row frames
     gauge_frame_row1    = tk.Label(
-                                  root, 
+                                  root,
                                   bg='black'
                                   )
 
     gauge_frame_row2    = tk.Label(
-                                  root, 
+                                  root,
                                   bg='black'
                                   )
 
@@ -556,21 +561,21 @@ if __name__ == '__main__':
     ################################################################################
 
     # P&ID diagram window
-    plumbing = SDR_engine_display.Engine_Display(gridLen)  
+    plumbing = SDR_engine_display.Engine_Display(gridLen)
 
     # SDR logo
     #SDRlabel =                tk.Label(
     #                                  main_title_frame,
-     #                                 image = SDR, 
+     #                                 image = SDR,
     #                                  bg = 'black'
      #                                 )
 
 	# Main window label
     #main_window_title =       tk.Label(
-    #                                  main_title_frame, 
-     #                                 text="Engine Dashboard", 
-     #                                 bg="black", 
-    #                                fg="white", 
+    #                                  main_title_frame,
+     #                                 text="Engine Dashboard",
+     #                                 bg="black",
+    #                                fg="white",
     #                                font="Arial 30"
      #                                 )
 
@@ -579,13 +584,13 @@ if __name__ == '__main__':
                                      valve_button_col1,
                                      "LOX Pressure (1)",
                                      'top'             ,
-                                     plumbing.one, 
+                                     plumbing.one,
                                      f_callback = lox_press_callback
                                      )
 
     solenoid2_buttons = SDR_valve.Buttons(
                                      valve_button_col1,
-                                     "LOX Vent (2)"   , 
+                                     "LOX Vent (2)"   ,
                                      'top'         ,
                                      plumbing.two,
                                      f_callback = lox_vent_callback
@@ -593,7 +598,7 @@ if __name__ == '__main__':
 
     solenoid3_buttons = SDR_valve.Buttons(
                                      valve_button_col1,
-                                     "LOX Purge (5)"  , 
+                                     "LOX Purge (5)"  ,
                                      'top'         ,
                                      plumbing.five,
                                      f_callback = manual_lox_purge_callback
@@ -609,7 +614,7 @@ if __name__ == '__main__':
 
     solenoid5_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
-                                     "Fuel Pressure (3)", 
+                                     "Fuel Pressure (3)",
                                      'top'                  ,
                                      plumbing.three,
                                      f_callback = fuel_press_callback
@@ -617,7 +622,7 @@ if __name__ == '__main__':
 
     solenoid6_buttons = SDR_valve.Buttons(
                                      valve_button_col2,
-                                     "Fuel Vent (4)", 
+                                     "Fuel Vent (4)",
                                      'top'              ,
                                      plumbing.four,
                                      f_callback = fuel_vent_callback
@@ -625,7 +630,7 @@ if __name__ == '__main__':
 
     solenoid4_buttons = SDR_valve.Buttons(
                                      valve_button_col2   ,
-                                     "Fuel Purge (6)", 
+                                     "Fuel Purge (6)",
                                      'top'               ,
                                      plumbing.six,
                                      f_callback = fuel_purge_callback
@@ -651,7 +656,7 @@ if __name__ == '__main__':
                             size          = ( 135, 45 ),
                             f_callback = pre_fire_purge_callback
                                               )
-    
+
     # Fill and chill button
     fill_chill_button =     SDR_buttons.Button(
                             sequence_frame_row1         ,
@@ -663,7 +668,7 @@ if __name__ == '__main__':
                             size          = ( 135, 45 ) ,
                             f_callback    = fill_and_chill_callback
                                               )
-    
+
     # Standby button
     standby_button =        SDR_buttons.Button(
                             sequence_frame_row1         ,
@@ -673,7 +678,7 @@ if __name__ == '__main__':
                             outline_color = 'white'     ,
                             text_color    = 'white'     ,
                             size          = ( 135, 45 ) ,
-                            f_callback    = standby_callback 
+                            f_callback    = standby_callback
                                               )
 
     # Standby button
@@ -685,23 +690,23 @@ if __name__ == '__main__':
                             outline_color = 'white'     ,
                             text_color    = 'white'     ,
                             size          = ( 135, 45 ) ,
-                            f_callback    = fire_engine_callback 
+                            f_callback    = fire_engine_callback
                                               )
 
     # Stop hotfire button
-    stop_hotfire_button =   SDR_buttons.Button( 
-                            sequence_frame_row2      , 
+    stop_hotfire_button =   SDR_buttons.Button(
+                            sequence_frame_row2      ,
                             text          = "Stop Hotfire" ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'  ,
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = stop_hotfire_callback 
+                            f_callback = stop_hotfire_callback
                                               )
     # Stop purge button
-    stop_purge_button =     SDR_buttons.Button( 
-                            sequence_frame_row2      , 
+    stop_purge_button =     SDR_buttons.Button(
+                            sequence_frame_row2      ,
                             text          = "Disarm" ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'  ,
@@ -711,32 +716,32 @@ if __name__ == '__main__':
                             f_callback = stop_purge_callback
                                               )
     # LOX purge button
-    lox_purge_button =      SDR_buttons.Button( 
-                            sequence_frame_row2      , 
+    lox_purge_button =      SDR_buttons.Button(
+                            sequence_frame_row2      ,
                             text          = "LOX Purge" ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'  ,
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = lox_purge_callback 
+                            f_callback = lox_purge_callback
                                               )
-    
+
     # Kbottle close button
-    kbottle_close_button =  SDR_buttons.Button( 
-                            sequence_frame_row2      , 
+    kbottle_close_button =  SDR_buttons.Button(
+                            sequence_frame_row2      ,
                             text          = "KBottle Close" ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'  ,
                             outline_color = 'white'  ,
                             text_color    = 'white'  ,
                             size          = ( 135, 45 ),
-                            f_callback = kbottle_close_callback 
+                            f_callback = kbottle_close_callback
                                               )
 
-	# Get state button 
-    getstate_button =       SDR_buttons.Button( 
-                            valve_button_col3          , 
+	# Get state button
+    getstate_button =       SDR_buttons.Button(
+                            valve_button_col3          ,
                             text          = "Get State",
                             bg_color      = 'black'    ,
                             fg_color      = 'white'    ,
@@ -747,74 +752,74 @@ if __name__ == '__main__':
                                               )
 
 	# Abort button
-    abort_button =          SDR_buttons.Button( 
-                            valve_button_col3        , 
+    abort_button =          SDR_buttons.Button(
+                            valve_button_col4        ,
                             text          = "ABORT"  ,
                             bg_color      = 'black'  ,
                             fg_color      = 'red'    ,
                             outline_color = 'red'    ,
                             text_color    = 'red'    ,
                             size          = ( 135, 45 ),
-                            f_callback = hotfire_abort_callback 
+                            f_callback = hotfire_abort_callback
                                               )
 
 	# Abort button
-    manual_mode_button =    SDR_buttons.Button( 
-                            valve_button_col3        , 
+    manual_mode_button =    SDR_buttons.Button(
+                            valve_button_col3        ,
                             text          = "Manual"  ,
                             bg_color      = 'black'  ,
                             fg_color      = 'white'    ,
                             outline_color = 'white'    ,
                             text_color    = 'white'    ,
                             size          = ( 135, 45 ),
-                            f_callback = manual_mode_callback 
+                            f_callback = manual_mode_callback
                                               )
 	# Sensor gauges
     gauge1 =      SDR_gauge.gauge( # Fuel Tank Pressure
-                                 gauge_frame_row1    , 
+                                 gauge_frame_row1    ,
                                  background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["pt0"],
                                  )
 
     gauge2 =      SDR_gauge.gauge( # Fuel Flow Rate
-                                 gauge_frame_row1, 
+                                 gauge_frame_row1,
                                  background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["ffr"],
                                  )
 
     gauge3 =      SDR_gauge.gauge( # Fuel Injection Pressure
-                                 gauge_frame_row1, 
+                                 gauge_frame_row1,
                                  background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["pt2"],
                                  )
 
     gauge4 =      SDR_gauge.gauge( # Thrust
-                                 gauge_frame_row1, 
-                                 background = 'black', 
+                                 gauge_frame_row1,
+                                 background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["lc"],
                                  )
 
     gauge5 =      SDR_gauge.gauge( # LOX Pressure
-                                 gauge_frame_row2, 
-                                 background = 'black', 
+                                 gauge_frame_row2,
+                                 background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["pt4"],
                                  )
 
     gauge6 =      SDR_gauge.gauge( # LOX Flow Rate
-                                 gauge_frame_row2, 
-                                 background = 'black', 
+                                 gauge_frame_row2,
+                                 background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["oxfr"],
                                  )
 
     gauge7 =      SDR_gauge.gauge( # Engine Pressure
-                                 gauge_frame_row2, 
-                                 background = 'black', 
+                                 gauge_frame_row2,
+                                 background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["pt6"],
                                  )
 
     gauge8 =      SDR_gauge.gauge( # LOX Temperature
-                                 gauge_frame_row2, 
-                                 background = 'black', 
+                                 gauge_frame_row2,
+                                 background = 'black',
                                  max_sensor_val = SDR_sensor.max_sensor_vals["tc"],
                                  )
 
@@ -841,6 +846,7 @@ if __name__ == '__main__':
     valve_button_col1.pack( side = 'left' )
     valve_button_col2.pack( side = 'left' )
     valve_button_col3.pack( side = 'left' )
+    valve_button_col4.pack(side='left')
     valve_button_frame.pack()
 
 	# Sequence button frames
@@ -859,8 +865,9 @@ if __name__ == '__main__':
     stop_purge_button.pack    ( side = "left", padx = 30 )
     lox_purge_button.pack     ( side = "left", padx = 30 )
     kbottle_close_button.pack ( side = "left", padx = 30 )
+    reset_button.pack         (side = "top", padx = 30)
 
-	# Gauge frame rows 
+	# Gauge frame rows
     gauge_frame_row1.pack()
     gauge_frame_row2.pack()
 
@@ -885,11 +892,11 @@ if __name__ == '__main__':
 
     # Update GUI
     while (not exitFlag):
-        # Look for new serial connections 
+        # Look for new serial connections
         if ( terminalSerObj.comport == None ):
             avail_ports = serial.tools.list_ports.comports()
             for port_num, port in enumerate( avail_ports ):
-                if ( ( 'CP2102' in port.description ) or 
+                if ( ( 'CP2102' in port.description ) or
                         ( 'CP210x' in port.description ) ):
                     # Connect
                     port_num = port.device
@@ -917,7 +924,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -928,38 +935,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
@@ -1037,7 +1044,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -1048,38 +1055,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
@@ -1159,7 +1166,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -1170,38 +1177,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
@@ -1278,7 +1285,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -1289,38 +1296,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
@@ -1397,7 +1404,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -1408,38 +1415,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
@@ -1519,7 +1526,7 @@ if __name__ == '__main__':
                     sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                         terminalSerObj.controller,
                         sensor                   ,
-                        terminalSerObj.sensor_readouts[sensor] ) 
+                        terminalSerObj.sensor_readouts[sensor] )
 
                 # Filter the data
                 if ( GAUGE_FILTER_ENABLED ):
@@ -1530,38 +1537,38 @@ if __name__ == '__main__':
                         filtered_sensor_readouts_formatted[sensor] = SDR_sensor.format_sensor_readout(
                             terminalSerObj.controller,
                             sensor                   ,
-                            sensor_data_filtered[sensor] ) 
+                            sensor_data_filtered[sensor] )
 
                 # Calculate Flow Rates
                 if ( GAUGE_FILTER_ENABLED ):
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 sensor_data_filtered["pt1"] -
                                                 sensor_data_filtered["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 sensor_data_filtered["pt6"] -
                                                 sensor_data_filtered["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
                 else:
-                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow( 
+                    ox_flow_rate   = sensor_conv.ox_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt1"] -
                                                 terminalSerObj.sensor_readouts["pt2"] )
                     fuel_flow_rate = sensor_conv.fuel_pressure_to_flow(
                                                 terminalSerObj.sensor_readouts["pt6"] -
                                                 terminalSerObj.sensor_readouts["pt5"] )
                     ox_flow_rate_formatted   = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
+                                                terminalSerObj.controller,
                                                 "oxfr"                   ,
                                                 ox_flow_rate   )
                     fuel_flow_rate_formatted = SDR_sensor.format_sensor_readout(
-                                                terminalSerObj.controller, 
-                                                "ffr"                    , 
+                                                terminalSerObj.controller,
+                                                "ffr"                    ,
                                                 fuel_flow_rate )
 
                 # Update GUI
