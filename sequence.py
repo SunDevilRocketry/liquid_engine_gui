@@ -55,35 +55,6 @@ def pre_fire_purge( engine_state, serialObj ):
     engine_state.set_engine_state( serialObj.get_engine_state() )
 ## pre_fire_purge ##
 
-
-####################################################################################
-#                                                                                  #
-# PROCEDURE:                                                                       #
-# 		fill_and_chill                                                             #
-#                                                                                  #
-# DESCRIPTION:                                                                     #
-# 		Initiates the fill and chill engine sequence                               #
-#                                                                                  #
-####################################################################################
-def fill_and_chill( engine_state, serialObj ):
-
-    # Verify correct state
-    state = engine_state.get_engine_state()
-    if ( state != "Pre-Fire Purge State" ):
-        print( "Error: Cannot initiate the Fill and Chill sequence. The engine " + 
-               "controller must be in the Pre-Fire Purge state to initiate the " +
-               "Fill and Chill sequence. The current state is: " )
-        print( state )
-        return
-
-    # Initiate the fill and chill sequence
-    engineController.fillchill( [], serialObj )
-
-    # Set the new engine state
-    engine_state.set_engine_state( serialObj.get_engine_state() )
-## fill_and_chill ## 
-
-
 ####################################################################################
 #                                                                                  #
 # PROCEDURE:                                                                       #
@@ -97,9 +68,9 @@ def standby( engine_state, serialObj ):
 
     # Verify correct state
     state = engine_state.get_engine_state() 
-    if ( state != "Fill and Chill State" ):
+    if ( state != "Pre-Fire Purge State" ):
         print( "Error: Cannot initiate the standby sequence. The engine controller " +
-                "must be in the Fill and Chill state to transition into Standby. The current "   +
+                "must be in the Pre-Fire Purge State to transition into Standby. The current "   +
                 "state is: ")
         print( state )
         return
