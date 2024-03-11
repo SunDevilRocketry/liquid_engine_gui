@@ -561,89 +561,89 @@ if __name__ == '__main__':
     ################################################################################
 
     # P&ID diagram window
-    plumbing = SDR_engine_display.Engine_Display(gridLen)
+    # plumbing = SDR_engine_display.Engine_Display(gridLen)
 
-    # SDR logo
-    #SDRlabel =                tk.Label(
-    #                                  main_title_frame,
-     #                                 image = SDR,
-    #                                  bg = 'black'
-     #                                 )
+    # # SDR logo
+    # #SDRlabel =                tk.Label(
+    # #                                  main_title_frame,
+    #  #                                 image = SDR,
+    # #                                  bg = 'black'
+    #  #                                 )
 
-	# Main window label
-    #main_window_title =       tk.Label(
-    #                                  main_title_frame,
-     #                                 text="Engine Dashboard",
-     #                                 bg="black",
-    #                                fg="white",
-    #                                font="Arial 30"
-     #                                 )
+	# # Main window label
+    # #main_window_title =       tk.Label(
+    # #                                  main_title_frame,
+    #  #                                 text="Engine Dashboard",
+    #  #                                 bg="black",
+    # #                                fg="white",
+    # #                                font="Arial 30"
+    #  #                                 )
 
-	# Valve buttons
-    solenoid1_buttons = SDR_valve.Buttons(
-                                     valve_button_col1,
-                                     "LOX Pressure (1)",
-                                     'top'             ,
-                                     plumbing.one,
-                                     f_callback = lox_press_callback
-                                     )
+	# # Valve buttons
+    # solenoid1_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col1,
+    #                                  "LOX Pressure (1)",
+    #                                  'top'             ,
+    #                                  plumbing.one,
+    #                                  f_callback = lox_press_callback
+    #                                  )
 
-    solenoid2_buttons = SDR_valve.Buttons(
-                                     valve_button_col1,
-                                     "LOX Vent (2)"   ,
-                                     'top'         ,
-                                     plumbing.two,
-                                     f_callback = lox_vent_callback
-                                     )
+    # solenoid2_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col1,
+    #                                  "LOX Vent (2)"   ,
+    #                                  'top'         ,
+    #                                  plumbing.two,
+    #                                  f_callback = lox_vent_callback
+    #                                  )
 
-    solenoid3_buttons = SDR_valve.Buttons(
-                                     valve_button_col1,
-                                     "LOX Purge (5)"  ,
-                                     'top'         ,
-                                     plumbing.five,
-                                     f_callback = manual_lox_purge_callback
-                                     )
+    # solenoid3_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col1,
+    #                                  "LOX Purge (5)"  ,
+    #                                  'top'         ,
+    #                                  plumbing.five,
+    #                                  f_callback = manual_lox_purge_callback
+    #                                  )
 
-    ball_valve1_buttons = SDR_valve.Buttons(
-                                    valve_button_col1,
-                                    "LOX Main"       ,
-                                    'top'            ,
-                                    plumbing.s2,
-                                    f_callback = lox_main_callback
-                                    )
+    # ball_valve1_buttons = SDR_valve.Buttons(
+    #                                 valve_button_col1,
+    #                                 "LOX Main"       ,
+    #                                 'top'            ,
+    #                                 plumbing.s2,
+    #                                 f_callback = lox_main_callback
+    #                                 )
 
-    solenoid5_buttons = SDR_valve.Buttons(
-                                     valve_button_col2,
-                                     "Fuel Pressure (3)",
-                                     'top'                  ,
-                                     plumbing.three,
-                                     f_callback = fuel_press_callback
-                                     )
+    # solenoid5_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col2,
+    #                                  "Fuel Pressure (3)",
+    #                                  'top'                  ,
+    #                                  plumbing.three,
+    #                                  f_callback = fuel_press_callback
+    #                                  )
 
-    solenoid6_buttons = SDR_valve.Buttons(
-                                     valve_button_col2,
-                                     "Fuel Vent (4)",
-                                     'top'              ,
-                                     plumbing.four,
-                                     f_callback = fuel_vent_callback
-                                     )
+    # solenoid6_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col2,
+    #                                  "Fuel Vent (4)",
+    #                                  'top'              ,
+    #                                  plumbing.four,
+    #                                  f_callback = fuel_vent_callback
+    #                                  )
 
-    solenoid4_buttons = SDR_valve.Buttons(
-                                     valve_button_col2   ,
-                                     "Fuel Purge (6)",
-                                     'top'               ,
-                                     plumbing.six,
-                                     f_callback = fuel_purge_callback
-                                     )
+    # solenoid4_buttons = SDR_valve.Buttons(
+    #                                  valve_button_col2   ,
+    #                                  "Fuel Purge (6)",
+    #                                  'top'               ,
+    #                                  plumbing.six,
+    #                                  f_callback = fuel_purge_callback
+    #                                  )
 
 
-    ball_valve2_buttons = SDR_valve.Buttons(
-                                    valve_button_col2    ,
-                                    "Fuel Main Valve",
-                                     'top'               ,
-                                    plumbing.s1,
-                                    f_callback = fuel_main_callback
-                                    )
+    # ball_valve2_buttons = SDR_valve.Buttons(
+    #                                 valve_button_col2    ,
+    #                                 "Fuel Main Valve",
+    #                                  'top'               ,
+    #                                 plumbing.s1,
+    #                                 f_callback = fuel_main_callback
+    #                                 )
 
 	# Pre-Fire purge button
     pre_fire_purge_button = SDR_buttons.Button(
@@ -1860,13 +1860,13 @@ if __name__ == '__main__':
 
 
         # Update engine schematic
-        plumbing.updatePipeStatus()
+        # plumbing.updatePipeStatus()
 
         # Draw to main window
         root.update()
 
         # Draw to plumbing window
-        plumbing.getWindow().update()
+        # plumbing.getWindow().update()
 
 ####################################################################################
 # END OF FILE                                                                      #
