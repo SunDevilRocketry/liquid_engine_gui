@@ -531,6 +531,8 @@ if __name__ == '__main__':
     valve_button_col1     = tk.Label( valve_button_frame, bg = 'black' )
     valve_button_col2     = tk.Label( valve_button_frame, bg = 'black' )
     valve_button_col3     = tk.Label( valve_button_frame, bg = 'black' )
+    valve_button_col4     = tk.Label( valve_button_frame, bg = 'black' )
+
 
 	# Sequence button frames
     sequence_frame_row1 = tk.Label(
@@ -751,7 +753,7 @@ if __name__ == '__main__':
 
 	# Abort button
     abort_button =          SDR_buttons.Button(
-                            valve_button_col3        ,
+                            valve_button_col4        ,
                             text          = "ABORT"  ,
                             bg_color      = 'black'  ,
                             fg_color      = 'red'    ,
@@ -775,7 +777,7 @@ if __name__ == '__main__':
 
     # New Button
     reset_button =    SDR_buttons.Button(
-                            valve_button_col3,
+                            valve_button_col4,
                             text =          "Reset",
                             bg_color =      "black",
                             fg_color =      "white",
@@ -790,57 +792,49 @@ if __name__ == '__main__':
     gauge1 =      SDR_gauge.gauge( # Fuel Tank Pressure
                                  gauge_frame_row1    ,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt0"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt0"]
                                  )
 
     gauge2 =      SDR_gauge.gauge( # Fuel Flow Rate
                                  gauge_frame_row1,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["ffr"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["ffr"]
                                  )
 
     gauge3 =      SDR_gauge.gauge( # Fuel Injection Pressure
                                  gauge_frame_row1,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt2"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt2"]
                                  )
 
     gauge4 =      SDR_gauge.gauge( # Thrust
                                  gauge_frame_row1,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["lc"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["lc"]
                                  )
 
     gauge5 =      SDR_gauge.gauge( # LOX Pressure
                                  gauge_frame_row2,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt4"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt4"]
                                  )
 
     gauge6 =      SDR_gauge.gauge( # LOX Flow Rate
                                  gauge_frame_row2,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["oxfr"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["oxfr"]
                                  )
 
     gauge7 =      SDR_gauge.gauge( # Engine Pressure
                                  gauge_frame_row2,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt6"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["pt6"]
                                  )
 
     gauge8 =      SDR_gauge.gauge( # LOX Temperature
                                  gauge_frame_row2,
                                  background = 'black',
-                                 max_sensor_val = SDR_sensor.max_sensor_vals["tc"],
-                                 size = gauges_size
+                                 max_sensor_val = SDR_sensor.max_sensor_vals["tc"]
                                  )
 
     gauge1.setText("Nan", "Fuel Tank Pressure"     )
@@ -866,6 +860,7 @@ if __name__ == '__main__':
     valve_button_col1.pack( side = 'left' )
     valve_button_col2.pack( side = 'left' )
     valve_button_col3.pack( side = 'left' )
+    valve_button_col4.pack(side='left')
     valve_button_frame.pack()
 
 	# Sequence button frames
