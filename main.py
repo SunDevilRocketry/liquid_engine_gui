@@ -17,6 +17,11 @@ __credits__ = ["Colton Acosta"   ,
                "Katie Herrington",
                "Ian Chandra"      ]
 
+__credits_2023__ = ["Nick Nguyen"       ,
+                    "Anton Sazonov"     ,
+                    "Brian Lew"         ,
+                    "Alexander Linderman"]
+
 
 ####################################################################################
 # Standard Imports                                                                 #
