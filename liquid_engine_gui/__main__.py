@@ -33,6 +33,7 @@ import os
 import sys
 import datetime
 import math
+from importlib.resources import files
 
 # Serial (USB)
 import serial
@@ -54,20 +55,17 @@ sys.path.insert(0, './plumbing')
 sys.path.insert(0, './sdec')
 
 # Imports
-import solenoid
-import gauge          as SDR_gauge
-import valve          as SDR_valve
-import engine_display as SDR_engine_display
-import sequence       as SDR_sequence
-import buttons        as SDR_buttons
-import sensor         as SDR_sensor
+from liquid_engine_gui.plumbing import solenoid
+from liquid_engine_gui import gauge              as SDR_gauge
+from liquid_engine_gui import valve              as SDR_valve
+from liquid_engine_gui import engine_display     as SDR_engine_display
+from liquid_engine_gui import sequence           as SDR_sequence
+from liquid_engine_gui import buttons            as SDR_buttons
+from liquid_engine_gui import sensor             as SDR_sensor
 
 # SDEC
-import sdec
-import commands
-import hw_commands
-import sensor_conv
-import engineController
+import sdec.__main__ as sdec
+from sdec import commands, hw_commands, sensor_conv, engineController
 
 
 ####################################################################################
@@ -514,8 +512,10 @@ if __name__ == '__main__':
                  )
 
 	# Program icon
-    SDRlogo  = tk.PhotoImage(file='images/SDRLogo5.png')
-    SDRImage = Image.open("images/SDRlogont2.png")
+    # SDRlogo  = tk.PhotoImage(file='images/SDRLogo5.png')
+    # SDRImage = Image.open("images/SDRlogont2.png")
+    SDRlogo  = tk.PhotoImage(files("liquid_engine_gui").joinpath("images").joinpath("SDRLogo5.png"))
+    SDRImage = Image.open(files("liquid_engine_gui").joinpath("images").joinpath("SDRlogont2.png"))
     SDRImage = SDRImage.resize(
                               (int(0.8*140),int(0.8*125)),
                               Image.Resampling.LANCZOS
