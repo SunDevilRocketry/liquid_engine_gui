@@ -1,12 +1,17 @@
 # Rocket Engine GUI
 This branch has the goal of creating an easy executable installer for the liquid_engine_gui.
 
+## Important Notice
+This branch should **NOT** be merged until:
+1. The new directory structure has been verified to introduce no new bugs.
+2. The Windows installer is functional.
+
 ## TODO
 
 - [x]  Change directory structure to conventional Python3 module
 - [x]  Create pysetup.toml
 - [x]  Remove sdec submodule and update documentation saying that sdec is installed with pip.
-- [ ]  Setup packaging (perhaps through something as simple as pyinstall to make one EXE, but it could also be an installer that 1. sets up a Python environment, 2. installs SDR software, 3. Installs a .BAT that executes our applications with the installed Python)
+- [ ] (Currently WIP) Setup packaging (perhaps through something as simple as pyinstall to make one EXE, but it could also be an installer that 1. sets up a Python environment, 2. installs SDR software, 3. Installs a .BAT that executes our applications with the installed Python)
 
 ## Packing Project getting started
 1) Navigate into project folder.
