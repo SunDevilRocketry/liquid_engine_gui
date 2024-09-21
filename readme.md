@@ -1,26 +1,7 @@
 # Rocket Engine GUI
-This branch has the goal of creating an easy executable installer for the liquid_engine_gui.
+![A screenshot of the sdec gui](liquid_engine_gui/images/engine_gui_2023.png)
 
-## TODO
-
-- [x]  Change directory structure to conventional Python3 module
-- [x]  Create pysetup.toml
-- [x]  Remove sdec submodule and update documentation saying that sdec is installed with pip.
-- [ ]  Setup packaging (perhaps through something as simple as pyinstall to make one EXE, but it could also be an installer that 1. sets up a Python environment, 2. installs SDR software, 3. Installs a .BAT that executes our applications with the installed Python)
-
-## Packing Project getting started
-1) Navigate into project folder.
-2) Install dependencies, which are Pillow and sdec (technically there are others, but they're all required by sdec as well). ```pip3 install pillow git+https://github.com/SunDevilRocketry/sdec```
-3) Run the GUI with the following command: ```python3 -m liquid_engine_gui```
-
-## NOTE: The docs below are very out of date and need updating.
-
-## Getting Started
-1) Open cmd / terminal
-2) Navigate into the project folder
-3) Ensure all required libraries are downloaded (pip install -r requirements.txt)
-4) Run main program (python SDR_LiquidGUI.py)
-5) Connect Arduino running SDR_DataLogger_Analog.ino via USB port
+The Liquid Engine GUI is a visual control and monitoring software for the SDR Liquid Engine Valve controller, written in Python using Tk and our [sdec](https://github.com/SunDevilRocketry/sdec) library.
 
 The following code on this repository has been designed to control the SDR Liquid Engine Switchbox to:
 - Automate Rocket Engine Startup
@@ -28,6 +9,19 @@ The following code on this repository has been designed to control the SDR Liqui
 - Log Sensor Data
 - Have Pre-programmed actions to execute (i.e. Startup)
 
-## GUI Layout
-<img src="images/engine_gui_2023.png">
+## Installation
+> In the near future, we intend to have an installer application for, at the minimum, Microsoft Windows. For now, the installation process 
+1. Make sure you have a working Python installation with pip.
+2. Install the GUI with pip.
+
+        pip install git+https://github.com/SunDevilRocketry/liquid_engine_gui
+3. Run the GUI with the following command:
+
+        python -m liquid_engine_gui
+> If you are developing the software, make sure you don't execute this command in the same directory as the repository, or you may experience bugs.
+
+## Development
+The source code is under the directory liquid_engine_gui. The versioning convention is the same as SDEC.
+
+This project uses Tk and sdec as a library.
 
