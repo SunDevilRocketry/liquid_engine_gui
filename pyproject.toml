@@ -19,6 +19,6 @@ authors = [
 version = "2024.9.0+packagingdev"
 dependencies = [
     "pillow",
-    "sdec@git+https://github.com/SunDevilRocketry/sdec@pip-packaging"
+    "sdec@git+https://github.com/SunDevilRocketry/sdec"
 ]
 readme = "readme.md"
