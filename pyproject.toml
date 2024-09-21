@@ -16,7 +16,7 @@ authors = [
     {name = "Colton Acosta"},
     {name = "Nick Nguyen"}
 ]
-version = "2024.9+packagingdev"
+version = "2024.9.0+packagingdev"
 dependencies = [
     "pillow",
     "sdec@git+https://github.com/SunDevilRocketry/sdec@pip-packaging"
