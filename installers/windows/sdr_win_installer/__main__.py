@@ -5,6 +5,7 @@ import ctypes
 from re import escape
 from pathlib import Path
 from zipfile import ZipFile
+import time
 
 from tkinter import *
 from tkinter import ttk
@@ -15,6 +16,26 @@ def create_root_window():
     root_window.geometry("400x300")
 
     return root_window
+
+def extract_file(install_path, install_progress, installing_label):
+    installer_data = None
+    # Get zip file object
+    # Different things have to be done based on if it's running in development mode or the final exe, so it does different things accordingly
+    # See https://pyinstaller.org/en/stable/runtime-information.html#run-time-information
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        installer_data = ZipFile(Path(__file__).resolve().with_name('sdr_win_installer_data.zip'), 'r')
+    else:
+        installer_data = ZipFile('sdr_win_installer_data.zip', 'r')
+
+    # Extract zip
+    installer_data.extractall(path=install_path)
+
+    install_progress.set(33)
+
+    installing_label.config( text = "Creating Shortcuts..." )
+
+    # TODO Create shortcuts and registry values as well as uninstaller logic
+    
 
 def installer_page_2(installer_root_window, install_type): # TODO add argument that tells this whether it'll be doing a user or a system install (or maybe just do it based on the --skip flag)
     # This page will do the actual install operations. For now,
@@ -30,7 +51,7 @@ def installer_page_2(installer_root_window, install_type): # TODO add argument t
     installing_progress_bar = ttk.Progressbar(installing_frame, length=380, variable=install_progress)
     installing_progress_bar.grid(column=0, row=1)
 
-    install_progress.set(50)
+    install_progress.set(0)
 
     # Initialize variable for extraction path
     install_path = None
@@ -39,6 +60,9 @@ def installer_page_2(installer_root_window, install_type): # TODO add argument t
         install_path = "C:/Program Files/Sun Devil Rocketry"
     else:
         install_path = os.path.expandvars("$LOCALAPPDATA") + "/Sun Devil Rocketry"
+
+
+    installer_root_window.after(1000, lambda: extract_file(install_path, install_progress, installing_label))
 
 def please_uninstall(installer_root_window):
     # Frame with message to uninstall previously-existing SDEC before installing new version
