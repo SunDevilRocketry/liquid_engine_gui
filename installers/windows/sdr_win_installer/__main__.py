@@ -4,6 +4,7 @@ import os
 import ctypes
 from re import escape
 from pathlib import Path
+from zipfile import ZipFile
 
 from tkinter import *
 from tkinter import ttk
@@ -15,7 +16,7 @@ def create_root_window():
 
     return root_window
 
-def installer_page_2(installer_root_window): # TODO add argument that tells this whether it'll be doing a user or a system install (or maybe just do it based on the --skip flag)
+def installer_page_2(installer_root_window, install_type): # TODO add argument that tells this whether it'll be doing a user or a system install (or maybe just do it based on the --skip flag)
     # This page will do the actual install operations. For now,
     installing_frame = ttk.Frame(installer_root_window, padding=10)
     installing_frame.grid()
@@ -30,6 +31,14 @@ def installer_page_2(installer_root_window): # TODO add argument that tells this
     installing_progress_bar.grid(column=0, row=1)
 
     install_progress.set(50)
+
+    # Initialize variable for extraction path
+    install_path = None
+
+    if install_type == "system":
+        install_path = "C:/Program Files/Sun Devil Rocketry"
+    else:
+        install_path = os.path.expandvars("$LOCALAPPDATA") + "/Sun Devil Rocketry"
 
 def please_uninstall(installer_root_window):
     # Frame with message to uninstall previously-existing SDEC before installing new version
@@ -64,13 +73,19 @@ def installer_page_1(installer_root_window):
                 ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " -m sdr_win_installer --skip", os.getcwd(), 0)
             
             installer_root_window.destroy()
+        else:
+            installer_page_2(installer_root_window, "system")
+
+    def user_install():
+        welcome_frame.destroy()
+        installer_page_2(installer_root_window, "user")
 
     # System-wide Installation Button
     system_installation_button = ttk.Button(welcome_frame, text="System-Wide Installation", command=check_admin)
     system_installation_button.grid(column=0, row=1)
 
     # User installation Button
-    user_installation_button = ttk.Button(welcome_frame, text="User Installation") # TODO Hook up to a function that opens page 2 to do a user install
+    user_installation_button = ttk.Button(welcome_frame, text="User Installation", command=user_install) # TODO Hook up to a function that opens page 2 to do a user install
     user_installation_button.grid(column = 0, row=2)
 
 # Function for running the Windows installation
@@ -79,10 +94,10 @@ def installer(admin_access):
     installer_root_window = create_root_window()
 
     # Check if there is an existing installation of SDEC/Liquids GUI
-    if not Path("C:/Program Files/Sun Devil Rocketry").exists() and not Path(os.path.expandvars("$APPDATA") + "/Sun Devil Rocketry").exists() and not "--skip" in sys.argv:
+    if not Path("C:/Program Files/Sun Devil Rocketry").exists() and not Path(os.path.expandvars("$LOCALAPPDATA") + "/Sun Devil Rocketry").exists() and not "--skip" in sys.argv:
         installer_page_1(installer_root_window)
-    elif "--skip" in sys.argv:
-        installer_page_2(installer_root_window)
+    elif not Path("C:/Program Files/Sun Devil Rocketry").exists() and not Path(os.path.expandvars("$LOCALAPPDATA") + "/Sun Devil Rocketry").exists() and "--skip" in sys.argv:
+        installer_page_2(installer_root_window, "system")
     else:
         please_uninstall(installer_root_window)
 
