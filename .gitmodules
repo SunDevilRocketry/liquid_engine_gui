@@ -1,0 +1,4 @@
+[submodule "sdec"]
+	path = sdec
+	url = https://github.com/SunDevilRocketry/sdec
+	branch = pip-packaging
