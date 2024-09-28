@@ -23,5 +23,9 @@ The following code on this repository has been designed to control the SDR Liqui
 ## Development
 The source code is under the directory liquid_engine_gui. The versioning convention is the same as SDEC.
 
+Normally, sdec is automatically pulled with pip. However, it is also included as a submodule in this repo should you be working on sdec development. To test changes to sdec and/or liquids gui, pull your submodules, then use the repo as the current directory and run:
+
+```python3 -m liquid_engine_gui```
+
 This project uses Tk and sdec as a library.
 
