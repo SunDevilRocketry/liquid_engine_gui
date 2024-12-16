@@ -19,16 +19,16 @@ import tkinter as tk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import component_template
-import solenoid        as SDR_solenoid
-import ball_valve      as SDR_ball_valve
-import orifice         as SDR_orifice
-import pressure_sensor as SDR_pressure_sensor
-import temp_sensor     as SDR_temp_sensor
-import tank            as SDR_tank
-import pipe            as SDR_pipe
-import nozzle          as SDR_nozzle
-import main
+from liquid_engine_gui.plumbing import component_template
+from liquid_engine_gui.plumbing import solenoid        as SDR_solenoid
+from liquid_engine_gui.plumbing import ball_valve      as SDR_ball_valve
+from liquid_engine_gui.plumbing import orifice         as SDR_orifice
+from liquid_engine_gui.plumbing import pressure_sensor as SDR_pressure_sensor
+from liquid_engine_gui.plumbing import temp_sensor     as SDR_temp_sensor
+from liquid_engine_gui.plumbing import tank            as SDR_tank
+from liquid_engine_gui.plumbing import pipe            as SDR_pipe
+from liquid_engine_gui.plumbing import nozzle          as SDR_nozzle
+# import main
 
 
 ###############################################################

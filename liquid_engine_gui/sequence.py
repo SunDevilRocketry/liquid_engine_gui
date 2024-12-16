@@ -19,8 +19,8 @@ import sys
 ####################################################################################
 # Project Imports                                                                  #
 ####################################################################################
-import engineController
-import valveController
+from sdec import engineController
+from sdec import valveController
 
 
 ####################################################################################

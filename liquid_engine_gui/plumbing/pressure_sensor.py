@@ -13,7 +13,7 @@
 ###############################################################
 # Standard Imports                                            #
 ###############################################################
-import component_template as SDR_component_template
+from liquid_engine_gui.plumbing import component_template as SDR_component_template
 
 
 class PressureSensor(SDR_component_template.Component):

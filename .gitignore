@@ -4,3 +4,6 @@ test/DAQexperimental/__pycache__
 
 # Output data
 output/*
+
+build/*
+liquid_engine_gui.egg-info
