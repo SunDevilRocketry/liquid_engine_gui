@@ -1777,7 +1777,7 @@ if __name__ == '__main__':
             ####################################################################
             elif ( liquid_engine_state.get_engine_state() == "Manual State"):
                 # Get telemetry
-                engineController.telreq( [], terminalSerObj, show_output = False )
+                engineController.telreq( [], terminalSerObj, show_output = True )
                 terminalSerObj.sensor_readouts["t"] = time_sec
                 sensor_readouts_formatted = {}
                 for sensor in terminalSerObj.sensor_readouts:
