@@ -59,13 +59,13 @@ class Buttons:
         self.state  = VALVE_CLOSED 
 
         # OPEN/CLOSED colors
-        self.closed_color = '#41d94d'
-        self.open_color   = '#ed3b3b'
+        self.closed_color = '#ed3b3b'
+        self.open_color   = '#41d94d' 
         self.color        = self.closed_color
 
         # OPEN/CLOSED texts
-        self.closed_text = "OPEN"
-        self.open_text   = "CLOSE"
+        self.closed_text = "CLOSE"
+        self.open_text   = "OPEN"
         self.text        = self.closed_text 
 
         ############################################################################
