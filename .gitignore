@@ -4,3 +4,5 @@ test/DAQexperimental/__pycache__
 
 # Output data
 output/*
+
+.vscode
