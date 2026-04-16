@@ -6,3 +6,5 @@ test/DAQexperimental/__pycache__
 output/*
 
 .vscode
+
+poll_data
