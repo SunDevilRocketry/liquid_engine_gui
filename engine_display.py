@@ -19,16 +19,15 @@ import tkinter as tk
 ###############################################################
 # Project Modules                                             #
 ###############################################################
-import component_template
-import solenoid        as SDR_solenoid
-import ball_valve      as SDR_ball_valve
-import orifice         as SDR_orifice
-import pressure_sensor as SDR_pressure_sensor
-import temp_sensor     as SDR_temp_sensor
-import tank            as SDR_tank
-import pipe            as SDR_pipe
-import nozzle          as SDR_nozzle
-import main
+from plumbing import component_template
+from plumbing import solenoid        as SDR_solenoid
+from plumbing import ball_valve      as SDR_ball_valve
+from plumbing import orifice         as SDR_orifice
+from plumbing import pressure_sensor as SDR_pressure_sensor
+from plumbing import temp_sensor     as SDR_temp_sensor
+from plumbing import tank            as SDR_tank
+from plumbing import pipe            as SDR_pipe
+from plumbing import nozzle          as SDR_nozzle
 
 
 ###############################################################
